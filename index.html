@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Course Grading System - Dashboard</title>
+    <link rel="stylesheet" href="Grade.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+        <div class="globe globe-3"></div>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div class="header-icon">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <h1 class="dashboard-title">University Grading System</h1>
+            <p class="dashboard-subtitle">Select your university to access the course grade calculator</p>
+        </div>
+
+        <div class="dashboard-card">
+
+            
+            <div class="university-selector">
+                <label>
+                    <i class="fa-solid fa-school"></i>
+                    Select University
+                </label>
+                <div class="custom-dropdown" id="universityDropdown">
+                    <div class="dropdown-selected" onclick="toggleDropdown()">
+                        <span id="selectedName">-- Choose a University --</span>
+                        <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+                    </div>
+                    <div class="dropdown-options-container" id="dropdownOptions">
+                        <div class="dropdown-search">
+                            <div class="dropdown-search-wrapper">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="uniSearch" placeholder="Search university..." oninput="filterUniversities()">
+                            </div>
+                            <div class="go-to-calc" onclick="goToCalculator()">
+                                <span>Go to Calculator</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </div>
+                        </div>
+                        <ul class="dropdown-options-list">
+                            <li data-value="Ahsanullah International University Bangladesh" onclick="selectUniversity('Ahsanullah International University Bangladesh', 'Ahsanullah International University Bangladesh')">Ahsanullah International University Bangladesh</li>
+                            <li data-value="American International University-Bangladesh" onclick="selectUniversity('American International University-Bangladesh', 'American International University-Bangladesh')">American International University-Bangladesh</li>
+                            <li data-value="Bangladesh Rural Advancement Committee University" onclick="selectUniversity('Bangladesh Rural Advancement Committee University', 'Bangladesh Rural Advancement Committee University')">Bangladesh Rural Advancement Committee University</li>
+                            <li data-value="Bangladesh University of Business & Technology" onclick="selectUniversity('Bangladesh University of Business & Technology', 'Bangladesh University of Business & Technology')">Bangladesh University of Business & Technology</li>
+                            <li data-value="BGMEA University of Fashion and Technology" onclick="selectUniversity('BGMEA University of Fashion and Technology', 'BGMEA University of Fashion and Technology')">BGMEA University of Fashion and Technology</li>
+                            <li data-value="Daffodil International University" onclick="selectUniversity('Daffodil International University', 'Daffodil International University')">Daffodil International University</li>
+                            <li data-value="Dhaka University" onclick="selectUniversity('Dhaka University', 'Dhaka University')">Dhaka University</li>
+                            <li data-value="East West University" onclick="selectUniversity('East West University', 'East West University')">East West University</li>
+                            <li data-value="Green University" onclick="selectUniversity('Green University', 'Green University')">Green University</li>
+                            <li data-value="Independent University Bangladesh" onclick="selectUniversity('Independent University Bangladesh', 'Independent University Bangladesh')">Independent University Bangladesh</li>
+                            <li data-value="International University of Business Agriculture & Technology" onclick="selectUniversity('International University of Business Agriculture & Technology', 'International University of Business Agriculture & Technology')">International University of Business Agriculture & Technology</li>
+                            <li data-value="Islamic University of Technology" onclick="selectUniversity('Islamic University of Technology', 'Islamic University of Technology')">Islamic University of Technology</li>
+                            <li data-value="Jahangirnagar University" onclick="selectUniversity('Jahangirnagar University', 'Jahangirnagar University')">Jahangirnagar University</li>
+                            <li data-value="North South University" onclick="selectUniversity('North South University', 'North South University')">North South University</li>
+                            <li data-value="Northern University Bangladesh" onclick="selectUniversity('Northern University Bangladesh', 'Northern University Bangladesh')">Northern University Bangladesh</li>
+                            <li data-value="Shanto Mariam University of Creative Technology" onclick="selectUniversity('Shanto Mariam University of Creative Technology', 'Shanto Mariam University of Creative Technology')">Shanto Mariam University of Creative Technology</li>
+                            <li data-value="Southeast University" onclick="selectUniversity('Southeast University', 'Southeast University')">Southeast University</li>
+                            <li data-value="United International University" onclick="selectUniversity('United International University', 'United International University')">United International University</li>
+                            <li data-value="University of Liberal Arts Bangladesh" onclick="selectUniversity('University of Liberal Arts Bangladesh', 'University of Liberal Arts Bangladesh')">University of Liberal Arts Bangladesh</li>
+                            <li data-value="Uttara University" onclick="selectUniversity('Uttara University', 'Uttara University')">Uttara University</li>
+                            <li data-value="World University of Bangladesh" onclick="selectUniversity('World University of Bangladesh', 'World University of Bangladesh')">World University of Bangladesh</li>
+                        </ul>
+                    </div>
+                </div>
+                <input type="hidden" id="selectedUniversityValue" value="">
+            </div>
+
+            <button class="dashboard-btn" onclick="goToCalculator()">
+                <span>Go to Calculator</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <div class="dashboard-features">
+                <div class="feature-item">
+                    <i class="fa-solid fa-calculator"></i>
+                    <span>Grade Calculator</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Grade Targets</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fa-solid fa-trophy"></i>
+                    <span>Achievement Tracking</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-footer">
+            <p>
+                <i class="fa-solid fa-circle-info"></i>
+                Calculate your course grades with precision and track your academic progress
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function toggleDropdown() {
+            const options = document.getElementById('dropdownOptions');
+            const arrow = document.querySelector('.dropdown-arrow');
+            options.classList.toggle('show');
+            arrow.classList.toggle('rotate');
+            
+            if (options.classList.contains('show')) {
+                document.getElementById('uniSearch').focus();
+            }
+        }
+
+        function selectUniversity(value, name) {
+            document.getElementById('selectedName').textContent = name;
+            document.getElementById('selectedUniversityValue').value = value;
+            document.getElementById('selectedName').classList.add('selected');
+            
+            toggleDropdown();
+        }
+
+        function filterUniversities() {
+            const input = document.getElementById('uniSearch');
+            const filter = input.value.toLowerCase();
+            const li = document.querySelectorAll('.dropdown-options-list li');
+
+            li.forEach(item => {
+                const text = item.textContent || item.innerText;
+                if (text.toLowerCase().indexOf(filter) > -1) {
+                    item.style.display = "";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        }
+
+        // Close dropdown when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropdown-selected') && !event.target.matches('.dropdown-selected *') && !event.target.matches('#uniSearch')) {
+                const options = document.getElementById('dropdownOptions');
+                const arrow = document.querySelector('.dropdown-arrow');
+                if (options.classList.contains('show')) {
+                    options.classList.remove('show');
+                    arrow.classList.remove('rotate');
+                }
+            }
+        }
+
+        function goToCalculator() {
+            const selectedUniversity = document.getElementById('selectedUniversityValue').value;
+            const dropdown = document.getElementById('universityDropdown');
+            
+            if (!selectedUniversity) {
+                showToast('Please select a university first!');
+                dropdown.classList.add('error-shake');
+                setTimeout(() => dropdown.classList.remove('error-shake'), 500);
+                return;
+            }
+            
+            // Add loading animation
+            const btn = document.querySelector('.dashboard-btn');
+            btn.classList.add('loading');
+            
+            // Navigate to the selected university's calculator page
+            setTimeout(() => {
+                window.location.href = `${selectedUniversity}/Course.html`;
+            }, 300);
+        }
+
+        function showToast(message) {
+            const existingToast = document.querySelector('.dashboard-toast');
+            if (existingToast) {
+                existingToast.remove();
+            }
+            
+            const toast = document.createElement('div');
+            toast.className = 'dashboard-toast';
+            toast.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${message}`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

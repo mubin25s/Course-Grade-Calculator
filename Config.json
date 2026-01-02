@@ -1,0 +1,172 @@
+{
+    "universities": [
+        {
+            "id": "Ahsanullah International University Bangladesh",
+            "name": "Ahsanullah International University Bangladesh",
+            "folder": "Ahsanullah International University Bangladesh",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "American International University-Bangladesh",
+            "name": "American International University-Bangladesh",
+            "folder": "American International University-Bangladesh",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "Bangladesh Rural Advancement Committee University",
+            "name": "Bangladesh Rural Advancement Committee University",
+            "folder": "Bangladesh Rural Advancement Committee University",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "Bangladesh University of Business & Technology",
+            "name": "Bangladesh University of Business & Technology",
+            "folder": "Bangladesh University of Business & Technology",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "BGMEA University of Fashion and Technology",
+            "name": "BGMEA University of Fashion and Technology",
+            "folder": "BGMEA University of Fashion and Technology",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "Daffodil International University",
+            "name": "Daffodil International University",
+            "folder": "Daffodil International University",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "Dhaka University",
+            "name": "Dhaka University",
+            "folder": "Dhaka University",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "East West University",
+            "name": "East West University",
+            "folder": "East West University",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "Green University",
+            "name": "Green University",
+            "folder": "Green University",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "Independent University Bangladesh",
+            "name": "Independent University Bangladesh",
+            "folder": "Independent University Bangladesh",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "International University of Business Agriculture & Technology",
+            "name": "International University of Business Agriculture & Technology",
+            "folder": "International University of Business Agriculture & Technology",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "Islamic University of Technology",
+            "name": "Islamic University of Technology",
+            "folder": "Islamic University of Technology",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "Jahangirnagar University",
+            "name": "Jahangirnagar University",
+            "folder": "Jahangirnagar University",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "North South University",
+            "name": "North South University",
+            "folder": "North South University",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "Northern University Bangladesh",
+            "name": "Northern University Bangladesh",
+            "folder": "Northern University Bangladesh",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "Shanto Mariam University of Creative Technology",
+            "name": "Shanto Mariam University of Creative Technology",
+            "folder": "Shanto Mariam University of Creative Technology",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "Southeast University",
+            "name": "Southeast University",
+            "folder": "Southeast University",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "United International University",
+            "name": "United International University",
+            "folder": "United International University",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "University of Liberal Arts Bangladesh",
+            "name": "University of Liberal Arts Bangladesh",
+            "folder": "University of Liberal Arts Bangladesh",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "Uttara University",
+            "name": "Uttara University",
+            "folder": "Uttara University",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "World University of Bangladesh",
+            "name": "World University of Bangladesh",
+            "folder": "World University of Bangladesh",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        }
+    ]
+}
