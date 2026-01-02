@@ -992,6 +992,28 @@ input.error {
     color: var(--primary);
 }
 
+.developer-credit {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.dev-name {
+    background: linear-gradient(to right, #c084fc, #6366f1, #a855f7);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
 .dashboard-toast {
     position: fixed;
     top: 20px;
