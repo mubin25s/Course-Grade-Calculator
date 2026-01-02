@@ -211,7 +211,48 @@ header p {
 
 .inputs-row {
     display: flex;
+    flex-wrap: wrap; /* Allow wrapping for many quizzes */
     gap: 0.5rem;
+}
+
+.quiz-controls {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    justify-content: flex-end;
+}
+
+.add-quiz-btn, .remove-quiz-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text-main);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+.add-quiz-btn:hover {
+    background: rgba(168, 85, 247, 0.2);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(168, 85, 247, 0.2);
+}
+
+.remove-quiz-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.2);
+}
+
+.add-quiz-btn:active, .remove-quiz-btn:active {
+    transform: translateY(0);
 }
 
 .input-group {
@@ -586,24 +627,25 @@ input.error {
 
 
 .university-selector {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.5rem; /* Increased spacing */
 }
 
 .university-selector label {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin-bottom: 0.5rem;
-    font-weight: 500;
+    gap: 0.75rem;
+    font-size: 1.1rem; /* Increased font size */
+    color: var(--text-main); /* Brighter color */
+    margin-bottom: 1rem; /* More space */
+    font-weight: 700; /* Bolder */
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1.5px; /* More breathing room */
+    opacity: 0.9;
 }
 
 .university-selector label i {
     color: var(--primary);
-    font-size: 1rem;
+    font-size: 1.4rem; /* Larger icon */
 }
 
 .custom-dropdown {
@@ -613,12 +655,12 @@ input.error {
 }
 
 .dropdown-selected {
-    background: rgba(255, 255, 255, 0.15); /* More visible pill */
-    border: 1.5px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.15); 
+    border: 2px solid rgba(255, 255, 255, 0.3);
     color: #ffffff;
-    padding: 1.1rem 1.75rem;
-    border-radius: 24px;
-    font-size: 1.1rem;
+    padding: 1.4rem 2rem; /* Larger padding */
+    border-radius: 28px;
+    font-size: 1.25rem; /* Larger font */
     cursor: pointer;
     display: flex;
     justify-content: space-between;
@@ -626,7 +668,7 @@ input.error {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 600;
     backdrop-filter: blur(15px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
 .dropdown-selected.selected {
@@ -742,7 +784,7 @@ input.error {
 
 .dropdown-options-list {
     list-style: none;
-    max-height: 165px; /* Adjusted to show exactly ~3 items */
+    max-height: 155px; /* Fine-tuned for exactly 3 items */
     overflow-y: auto;
     padding-bottom: 10px; /* Space at the bottom */
 }
@@ -821,10 +863,10 @@ input.error {
     background: linear-gradient(135deg, var(--primary), var(--secondary));
     border: none;
     color: white;
-    padding: 1rem 1.5rem;
-    border-radius: 14px;
-    font-size: 1.05rem;
-    font-weight: 600;
+    padding: 1.25rem 2rem; /* Taller button */
+    border-radius: 18px;
+    font-size: 1.2rem; /* Larger font */
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
@@ -904,8 +946,9 @@ input.error {
 }
 
 .feature-item:hover {
-    background: rgba(255, 255, 255, 0.05);
-    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .feature-item i {
@@ -927,12 +970,13 @@ input.error {
 
 .dashboard-footer {
     text-align: center;
-    margin-top: 1.5rem;
-    padding: 1rem 1.5rem;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
+    margin-top: 2rem;
+    padding: 1.25rem 2rem;
+    background: rgba(255, 255, 255, 0.08); /* Light glass */
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .dashboard-footer p {

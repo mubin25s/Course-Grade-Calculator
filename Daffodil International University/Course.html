@@ -30,21 +30,14 @@
             <section class="card quiz-section">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-pen-to-square"></i> Quizzes</h2>
-                    <span class="badge">10 Marks</span>
+                    <span class="badge">Best 3 of Max 10 (15 Marks)</span>
                 </div>
-                <div class="inputs-row">
-                    <div class="input-group">
-                        <label>Quiz 1</label>
-                        <input type="number" id="quiz1" placeholder="10" min="0" max="10">
-                    </div>
-                    <div class="input-group">
-                        <label>Quiz 2</label>
-                        <input type="number" id="quiz2" placeholder="10" min="0" max="10">
-                    </div>
-                    <div class="input-group">
-                        <label>Quiz 3</label>
-                        <input type="number" id="quiz3" placeholder="10" min="0" max="10">
-                    </div>
+                <div id="quiz-inputs-container" class="inputs-row">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="quiz-controls">
+                    <button class="remove-quiz-btn" onclick="removeQuiz()" title="Remove Quiz"><i class="fa-solid fa-minus"></i></button>
+                    <button class="add-quiz-btn" onclick="addQuiz()" title="Add Quiz"><i class="fa-solid fa-plus"></i></button>
                 </div>
                 <div class="result-display" id="quiz-avg-display">Avg: 0.00</div>
             </section>
@@ -97,11 +90,11 @@
             <section class="card mid-section">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-star-half-stroke"></i> Mid Term</h2>
-                    <span class="badge">30 Marks</span>
+                    <span class="badge">25 Marks</span>
                 </div>
                 <div class="input-group full-width">
                     <label>Marks Obtained</label>
-                    <input type="number" id="mid-term" placeholder="Max 30" min="0" max="30">
+                    <input type="number" id="mid-term" placeholder="Max 25" min="0" max="25">
                 </div>
             </section>
 
@@ -164,7 +157,7 @@
                 <div class="status-value" id="grade-status">-</div>
             </div>
             <div class="needed-score">
-                <div class="status-label">To Pass (Final)</div>
+                <div class="status-label">Next Milestone</div>
                 <div class="status-value" id="needed-pass">-</div>
             </div>
         </footer>

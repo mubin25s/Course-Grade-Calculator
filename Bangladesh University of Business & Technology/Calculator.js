@@ -17,31 +17,30 @@ window.addEventListener('DOMContentLoaded', function() {
 
 // Grade thresholds
 const gradeThresholds = [
-    { grade: 'A+', min: 80, max: 100, gp: 4.00 },
-    { grade: 'A', min: 75, max: 79, gp: 3.75 },
-    { grade: 'A-', min: 70, max: 74, gp: 3.50 },
-    { grade: 'B+', min: 65, max: 69, gp: 3.25 },
-    { grade: 'B', min: 60, max: 64, gp: 3.00 },
-    { grade: 'B-', min: 55, max: 59, gp: 2.75 },
-    { grade: 'C+', min: 50, max: 54, gp: 2.50 },
-    { grade: 'C', min: 45, max: 49, gp: 2.25 },
-    { grade: 'D', min: 40, max: 44, gp: 2.00 },
-    { grade: 'F', min: 0, max: 39, gp: 0.00 }
+    { grade: 'A+', min: 80, max: 100, gp: 4.00, remark: 'Outstanding' },
+    { grade: 'A', min: 75, max: 79, gp: 3.75, remark: 'Excellent' },
+    { grade: 'A-', min: 70, max: 74, gp: 3.50, remark: 'VeryGood' },
+    { grade: 'B+', min: 65, max: 69, gp: 3.25, remark: 'Good' },
+    { grade: 'B', min: 60, max: 64, gp: 3.00, remark: 'Satisfactory' },
+    { grade: 'B-', min: 55, max: 59, gp: 2.75, remark: 'Fair' },
+    { grade: 'C+', min: 50, max: 54, gp: 2.50, remark: 'Average' },
+    { grade: 'C', min: 45, max: 49, gp: 2.25, remark: 'BelowAverage' },
+    { grade: 'D', min: 40, max: 44, gp: 2.00, remark: 'Weak' },
+    { grade: 'F', min: 0, max: 39, gp: 0.00, remark: 'Unsatisfactory' }
 ];
 
+let quizCount = 3; // Initial number of quizzes
+
 function initializeCalculator() {
-    // Add input listeners for real-time calculation and validation
-    const inputs = ['quiz1', 'quiz2', 'quiz3', 'mid-term', 'attendance-percent', 'final-exam'];
+    // Add input listeners for all fields
+    const inputs = ['quiz1', 'quiz2', 'mid-term', 'attendance-percent', 'final-exam'];
     inputs.forEach(id => {
         const input = document.getElementById(id);
         if (input) {
-            // Real-time validation as user types
             input.addEventListener('input', function() {
                 enforceMaxValue(id);
                 calculateTotal();
             });
-            
-            // Additional validation on blur
             input.addEventListener('blur', function() {
                 validateInput(id);
             });
@@ -51,6 +50,9 @@ function initializeCalculator() {
     // Initial calculation
     calculateTotal();
 }
+
+// Remove dynamic quiz functions (renderQuizzes, addQuiz, removeQuiz)
+// ... keeping other utility functions ...
 
 function enforceMaxValue(inputId) {
     const input = document.getElementById(inputId);
@@ -103,9 +105,9 @@ function selectQuality(type, quality) {
     // Calculate marks based on quality
     let marks = 0;
     if (type === 'presentation') {
-        if (quality === 'poor') marks = 5;
-        else if (quality === 'good') marks = 6;
-        else if (quality === 'excellent') marks = Math.random() < 0.5 ? 7 : 8; // Random 7 or 8
+        if (quality === 'poor') marks = 3;
+        else if (quality === 'good') marks = 4;
+        else if (quality === 'excellent') marks = 5;
         
         document.getElementById('presentation-mark').value = marks;
         document.getElementById('presentation-display').textContent = `Score: ${marks}`;
@@ -122,14 +124,13 @@ function selectQuality(type, quality) {
 }
 
 function calculateTotal() {
-    // Get quiz marks and calculate average
+    // Get both quiz marks
     const quiz1 = parseFloat(document.getElementById('quiz1').value) || 0;
     const quiz2 = parseFloat(document.getElementById('quiz2').value) || 0;
-    const quiz3 = parseFloat(document.getElementById('quiz3').value) || 0;
-    const quizAverage = (quiz1 + quiz2 + quiz3) / 3;
+    const quizSum = quiz1 + quiz2;
     
-    // Update quiz average display
-    document.getElementById('quiz-avg-display').textContent = `Avg: ${quizAverage.toFixed(2)}`;
+    // Update quiz sum display
+    document.getElementById('quiz-avg-display').textContent = `Total: ${quizSum.toFixed(2)}`;
     
     // Get presentation and assignment marks
     const presentationMarks = parseFloat(document.getElementById('presentation-mark').value) || 0;
@@ -138,18 +139,22 @@ function calculateTotal() {
     // Get midterm marks
     const midtermMarks = parseFloat(document.getElementById('mid-term').value) || 0;
     
-    // Calculate attendance marks (out of 7)
+    // Calculate attendance marks (out of 5)
     const attendancePercent = parseFloat(document.getElementById('attendance-percent').value) || 0;
-    const attendanceMarks = (attendancePercent / 100) * 7;
+    const attendanceMarks = (attendancePercent / 100) * 5;
     
     // Update attendance display
     document.getElementById('attendance-display').textContent = `Points: ${attendanceMarks.toFixed(2)}`;
     
-    // Get final exam marks
-    const finalMarks = parseFloat(document.getElementById('final-exam').value) || 0;
+    // Calculate total marks
+    const currentTotal = quizSum + presentationMarks + assignmentMarks + midtermMarks + attendanceMarks;
     
-    // Calculate total (without final for current status)
-    const currentTotal = quizAverage + presentationMarks + assignmentMarks + midtermMarks + attendanceMarks;
+    // Check if final exam mark is actually entered (not just 0)
+    const finalExamInput = document.getElementById('final-exam');
+    const finalMarksString = finalExamInput.value;
+    const finalMarks = parseFloat(finalMarksString) || 0;
+    const isFinalEntered = finalMarksString.trim() !== "";
+    
     const totalWithFinal = currentTotal + finalMarks;
     
     // Update total marks display
@@ -163,35 +168,41 @@ function calculateTotal() {
     // Apply grade-specific color class
     gradeStatusElement.className = 'status-value ' + getGradeColorClass(currentGrade.grade);
     
-    // Calculate what's needed to pass (40 marks minimum) or next grade
-    const neededToPass = Math.max(0, 40 - currentTotal);
+    // Calculate what's needed for the NEXT milestone
     let passStatus = '';
+    const footerLabel = document.querySelector('.needed-score .status-label');
+    const neededPassElement = document.getElementById('needed-pass');
     
-    if (neededToPass > 40) {
-        passStatus = 'Impossible';
-    } else if (neededToPass > 0) {
-        passStatus = `${neededToPass.toFixed(1)} marks`;
+    // Reset color class by default
+    neededPassElement.className = 'status-value';
+    
+    if (isFinalEntered) {
+        passStatus = currentGrade.remark;
+        footerLabel.textContent = 'Result Obtained';
+        // Apply grade-specific color
+        neededPassElement.classList.add(getGradeColorClass(currentGrade.grade));
     } else {
-        // Already passing - only show closest grade if final exam is empty or 0
-        if (finalMarks === 0) {
-            // Find the closest higher grade based on current total (without final)
-            const closestGrade = findClosestHigherGrade(currentTotal);
-            
-            if (closestGrade) {
-                const marksNeeded = closestGrade.min - currentTotal;
-                passStatus = `${marksNeeded.toFixed(1)} to get ${closestGrade.grade}`;
-            } else {
-                passStatus = 'Already Passing!';
-            }
+        footerLabel.textContent = 'Next Milestone';
+        const nextGrade = findClosestHigherGrade(currentTotal);
+        
+        if (nextGrade) {
+            const marksNeeded = nextGrade.min - currentTotal;
+            // Use Math.ceil or keep precision based on preference, but following "4 to get C" style
+            const displayNeeded = marksNeeded % 1 === 0 ? marksNeeded : marksNeeded.toFixed(1);
+            passStatus = `${displayNeeded} to get ${nextGrade.grade}`;
         } else {
-            // Final exam has a value, just show "Already Passing!"
-            passStatus = 'Already Passing!';
+            // Check if already at A+
+            if (currentGrade.grade === 'A+') {
+                passStatus = 'Perfect Grade (A+)';
+            } else {
+                passStatus = 'A+ Target Achieved!';
+            }
         }
     }
-    document.getElementById('needed-pass').textContent = passStatus;
+    neededPassElement.textContent = passStatus;
     
     // Update grade targets table
-    updateGradeTargets(currentTotal);
+    updateGradeTargets(currentTotal, totalWithFinal);
 }
 
 function determineGrade(marks) {
@@ -204,16 +215,19 @@ function determineGrade(marks) {
 }
 
 function findClosestHigherGrade(currentMarks) {
-    // Find the closest higher grade that can be achieved
-    // Considering the maximum possible score with final exam (40 marks)
-    const maxPossibleMarks = currentMarks + 40; // Assuming final exam can add up to 40 more
+    // Current grade threshold (the one the user currently has)
+    let currentThreshold = determineGrade(currentMarks);
     
-    for (let threshold of gradeThresholds) {
-        if (threshold.min > currentMarks && threshold.min <= maxPossibleMarks) {
-            return threshold;
-        }
-    }
-    return null; // Already at the highest achievable grade
+    // Find all grades higher than the current one
+    // gradeThresholds is ordered from A+ (0) to F (last)
+    const possibleGrades = gradeThresholds.filter(t => t.min > currentThreshold.min);
+    
+    if (possibleGrades.length === 0) return null;
+    
+    // The immediate next grade is the one with the smallest min that's > currentMarks
+    // Since gradeThresholds is A+ to F, the one just before currentThreshold in the list
+    // is the immediate next. But filtering and picking the last one is safer.
+    return possibleGrades[possibleGrades.length - 1];
 }
 
 function getGradeColorClass(grade) {
@@ -232,7 +246,7 @@ function getGradeColorClass(grade) {
     return gradeMap[grade] || '';
 }
 
-function updateGradeTargets(currentTotal) {
+function updateGradeTargets(currentTotal, totalWithFinal) {
     const tbody = document.getElementById('grade-targets-body');
     tbody.innerHTML = '';
     
@@ -243,7 +257,8 @@ function updateGradeTargets(currentTotal) {
         let status = '';
         let statusClass = '';
         
-        if (neededMarks <= 0) {
+        // Check if grade is already achieved with current total (including final if entered)
+        if (totalWithFinal >= threshold.min) {
             status = '✓ Achieved';
             statusClass = 'status-achieved';
         } else if (neededMarks <= 40) {
