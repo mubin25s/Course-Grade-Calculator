@@ -30,14 +30,14 @@ const gradeThresholds = [
     { grade: 'F', min: 0, max: 54, gp: 0.00, remark: 'Failure' }
 ];
 
-let quizCount = 3; // Initial number of quizzes
+let quizCount = 4; // Initial number of quizzes
 
 function initializeCalculator() {
     // Render initial quizzes
     renderQuizzes();
     
     // Add input listeners for other static fields
-    const staticInputs = ['mid-term', 'attendance-percent', 'final-exam'];
+    const staticInputs = ['mid-term', 'assignment-mark', 'attendance-percent', 'final-exam'];
     staticInputs.forEach(id => {
         const input = document.getElementById(id);
         if (input) {
@@ -155,19 +155,12 @@ function selectQuality(type, quality) {
     // Calculate marks based on quality
     let marks = 0;
     if (type === 'presentation') {
-        if (quality === 'poor') marks = 5;
-        else if (quality === 'good') marks = 6;
-        else if (quality === 'excellent') marks = Math.random() < 0.5 ? 7 : 8; // Random 7 or 8
+        if (quality === 'poor') marks = Math.floor(Math.random() * (6 - 5 + 1)) + 5; // 5-6
+        else if (quality === 'good') marks = Math.floor(Math.random() * (8 - 7 + 1)) + 7; // 7-8
+        else if (quality === 'excellent') marks = Math.floor(Math.random() * (10 - 9 + 1)) + 9; // 9-10
         
         document.getElementById('presentation-mark').value = marks;
         document.getElementById('presentation-display').textContent = `Score: ${marks}`;
-    } else if (type === 'assignment') {
-        if (quality === 'poor') marks = 3;
-        else if (quality === 'good') marks = 4;
-        else if (quality === 'excellent') marks = 5;
-        
-        document.getElementById('assignment-mark').value = marks;
-        document.getElementById('assignment-display').textContent = `Score: ${marks}`;
     }
     
     calculateTotal();
@@ -180,29 +173,40 @@ function calculateTotal() {
         .map(input => parseFloat(input.value) || 0)
         .sort((a, b) => b - a); // Sort descending
     
-    // Calculate average of the best 3 (or fewer if total quizzes < 3)
-    const bestQuizzes = quizMarks.slice(0, 3);
-    const quizAverage = bestQuizzes.length > 0 
-        ? bestQuizzes.reduce((a, b) => a + b, 0) / Math.min(bestQuizzes.length, 3) 
-        : 0;
+    // Logic: Best 2 count, others are averaged. Total Quiz = (Best1 + Best2 + AvgOthers) / 3
+    let quizTotal = 0;
+    if (quizMarks.length >= 2) {
+        const best2 = quizMarks.slice(0, 2);
+        const others = quizMarks.slice(2);
+        const avgOthers = others.length > 0 ? (others.reduce((a, b) => a + b, 0) / others.length) : 0;
+        quizTotal = (best2[0] + best2[1] + avgOthers) / 3;
+    } else {
+        quizTotal = quizMarks.reduce((a, b) => a + b, 0) / Math.max(quizMarks.length, 1);
+    }
     
     // Update quiz average display
-    document.getElementById('quiz-avg-display').textContent = `Avg (Best ${bestQuizzes.length > 3 ? 3 : bestQuizzes.length}): ${quizAverage.toFixed(2)}`;
+    document.getElementById('quiz-avg-display').textContent = `Result: ${quizTotal.toFixed(2)} / 10`;
     
     // Get midterm marks
     const midtermMarks = parseFloat(document.getElementById('mid-term').value) || 0;
     
-    // Calculate attendance marks (out of 10)
+    // Get assignment marks
+    const assignmentMarks = parseFloat(document.getElementById('assignment-mark').value) || 0;
+
+    // Get presentation marks
+    const presentationMarks = parseFloat(document.getElementById('presentation-mark').value) || 0;
+
+    // Calculate attendance marks (out of 5)
     const attendancePercent = parseFloat(document.getElementById('attendance-percent').value) || 0;
-    const attendanceMarks = (attendancePercent / 100) * 10;
+    const attendanceMarks = (attendancePercent / 100) * 5;
     
     // Update attendance display
     document.getElementById('attendance-display').textContent = `Points: ${attendanceMarks.toFixed(2)}`;
     
-    // Calculate total marks
-    const currentTotal = quizAverage + midtermMarks + attendanceMarks;
+    // Calculate total marks (Total 100: Quiz 10, Mid 30, Final 40, Attendance 5, Assignment 5, Presentation 10)
+    const currentTotal = quizTotal + midtermMarks + attendanceMarks + assignmentMarks + presentationMarks;
     
-    // Check if final exam mark is actually entered (not just 0)
+    // Check if final exam mark is actually entered
     const finalExamInput = document.getElementById('final-exam');
     const finalMarksString = finalExamInput.value;
     const finalMarks = parseFloat(finalMarksString) || 0;
@@ -232,7 +236,6 @@ function calculateTotal() {
     if (isFinalEntered) {
         passStatus = currentGrade.remark;
         footerLabel.textContent = 'Result Obtained';
-        // Apply grade-specific color
         neededPassElement.classList.add(getGradeColorClass(currentGrade.grade));
     } else {
         footerLabel.textContent = 'Next Milestone';
@@ -240,16 +243,14 @@ function calculateTotal() {
         
         if (nextGrade) {
             const marksNeeded = nextGrade.min - currentTotal;
-            // Use Math.ceil or keep precision based on preference, but following "4 to get C" style
-            const displayNeeded = marksNeeded % 1 === 0 ? marksNeeded : marksNeeded.toFixed(1);
-            passStatus = `${displayNeeded} to get ${nextGrade.grade}`;
-        } else {
-            // Check if already at A+
-            if (currentGrade.grade === 'A+') {
-                passStatus = 'Perfect Grade (A+)';
+            if (marksNeeded <= 40) {
+                const displayNeeded = marksNeeded % 1 === 0 ? marksNeeded : marksNeeded.toFixed(1);
+                passStatus = `${displayNeeded} in Final for ${nextGrade.grade}`;
             } else {
-                passStatus = 'A+ Target Achieved!';
+                passStatus = `Target ${nextGrade.grade} (Unreachable)`;
             }
+        } else {
+            passStatus = 'A Grade Achieved!';
         }
     }
     neededPassElement.textContent = passStatus;

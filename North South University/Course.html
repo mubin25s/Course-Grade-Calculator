@@ -25,12 +25,52 @@
             <p id="universityName">University Name</p>
         </header>
 
+        <div class="setup-header">
+            <!-- Distribution Setup Section -->
+            <section class="card distribution-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-gears"></i> Marks Distribution</h2>
+                    <div class="weight-total-container">
+                        <span class="weight-label">Total Percentage</span>
+                        <span class="badge" id="total-weight-badge">100 / 100</span>
+                    </div>
+                </div>
+                <div class="distribution-grid">
+                    <div class="input-group">
+                        <label>Quiz</label>
+                        <input type="number" id="weight-quiz" value="15" min="0" max="100">
+                    </div>
+                    <div class="input-group">
+                        <label>Presentation</label>
+                        <input type="number" id="weight-presentation" value="10" min="0" max="100">
+                    </div>
+                    <div class="input-group">
+                        <label>Assignment</label>
+                        <input type="number" id="weight-assignment" value="5" min="0" max="100">
+                    </div>
+                    <div class="input-group">
+                        <label>Attendance</label>
+                        <input type="number" id="weight-attendance" value="10" min="0" max="100">
+                    </div>
+                    <div class="input-group">
+                        <label>Mid Term</label>
+                        <input type="number" id="weight-mid" value="20" min="0" max="100">
+                    </div>
+                    <div class="input-group">
+                        <label>Final Exam</label>
+                        <input type="number" id="weight-final" value="40" min="0" max="100">
+                    </div>
+                </div>
+            </section>
+        </div>
+
         <main class="calculator-grid">
+
             <!-- Quizzes Section -->
             <section class="card quiz-section">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-pen-to-square"></i> Quizzes</h2>
-                    <span class="badge">Best 3 of Max 10</span>
+                    <span class="badge" id="quiz-badge">Best 2 of Max 15</span>
                 </div>
                 <div id="quiz-inputs-container" class="inputs-row">
                     <!-- Populated by JS -->
@@ -39,16 +79,16 @@
                     <button class="remove-quiz-btn" onclick="removeQuiz()" title="Remove Quiz"><i class="fa-solid fa-minus"></i></button>
                     <button class="add-quiz-btn" onclick="addQuiz()" title="Add Quiz"><i class="fa-solid fa-plus"></i></button>
                 </div>
-                <div class="result-display" id="quiz-avg-display">Avg: 0.00</div>
+                <div class="result-display" id="quiz-avg-display">Avg Score: 0.00</div>
             </section>
 
             <!-- Presentation Section -->
             <section class="card presentation-section">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-person-chalkboard"></i> Presentation</h2>
-                    <span class="badge">8 Marks</span>
+                    <span class="badge" id="presentation-badge">? Marks</span>
                 </div>
-                <p class="instruction">How was your presentation?</p>
+                <p class="instruction" id="pres-instruction">Select quality (Max ?)</p>
                 <div class="selection-grid">
                     <button class="select-btn poor" onclick="selectQuality('presentation', 'poor')">
                         <span class="emoji">😕</span> Poor
@@ -68,9 +108,9 @@
             <section class="card assignment-section">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-file-lines"></i> Assignment</h2>
-                    <span class="badge">5 Marks</span>
+                    <span class="badge" id="assignment-badge">? Marks</span>
                 </div>
-                <p class="instruction">How was your assignment?</p>
+                <p class="instruction" id="assign-instruction">Select quality (Max ?)</p>
                 <div class="selection-grid">
                     <button class="select-btn poor" onclick="selectQuality('assignment', 'poor')">
                         <span class="emoji">😐</span> Poor
@@ -90,36 +130,40 @@
             <section class="card mid-section">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-star-half-stroke"></i> Mid Term</h2>
-                    <span class="badge">30 Marks</span>
+                    <span class="badge" id="mid-badge">Best 1 of 20</span>
                 </div>
-                <div class="input-group full-width">
-                    <label>Marks Obtained</label>
-                    <input type="number" id="mid-term" placeholder="Max 30" min="0" max="30">
+                <div id="mid-inputs-container" class="inputs-row">
+                    <!-- Populated by JS -->
                 </div>
+                <div class="quiz-controls">
+                    <button class="remove-quiz-btn" onclick="removeMid()" title="Remove Mid"><i class="fa-solid fa-minus"></i></button>
+                    <button class="add-quiz-btn" onclick="addMid()" title="Add Mid"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <div class="result-display" id="mid-best-display">Best: 0.00</div>
             </section>
 
             <!-- Attendance Section -->
             <section class="card attendance-section">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-hand-point-up"></i> Attendance</h2>
-                    <span class="badge">7 Marks</span>
+                    <span class="badge" id="attendance-badge">10 Marks</span>
                 </div>
                 <div class="input-group full-width">
                     <label>Attendance Percentage (%)</label>
-                    <input type="number" id="attendance-percent" placeholder="e.g. 71" min="0" max="100">
+                    <input type="number" id="attendance-percent" placeholder="e.g. 100" min="0" max="100">
                 </div>
                 <div class="result-display" id="attendance-display">Points: 0.00</div>
             </section>
 
-            <!-- Final Exam Section (Optional) -->
+            <!-- Final Exam Section -->
             <section class="card final-section">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-graduation-cap"></i> Final Exam</h2>
-                    <span class="badge">Optional / 40</span>
+                    <span class="badge" id="final-badge">40 Marks</span>
                 </div>
                 <div class="input-group full-width">
-                    <label>Projected Marks</label>
-                    <input type="number" id="final-exam" placeholder="Max 40" min="0" max="40">
+                    <label>Marks Obtained</label>
+                    <input type="number" id="final-exam" placeholder="Max 40" min="0" max="100">
                 </div>
             </section>
 

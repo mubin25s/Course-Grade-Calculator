@@ -1072,3 +1072,80 @@ input.error {
         font-size: 2rem;
     }
 }
+/* Distribution Entry Styles */
+.setup-header {
+    margin-bottom: 2rem;
+    animation: slideDown 0.6s ease;
+}
+
+.distribution-section {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2), 
+                inset 0 0 5px rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 30px;
+}
+
+.distribution-section h2 i {
+    color: #a78bfa;
+    animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.weight-total-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+}
+
+.weight-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.distribution-section .badge {
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+}
+
+.distribution-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .distribution-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+.distribution-section .input-group label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #a78bfa;
+    margin-bottom: 0.5rem;
+}
+
+.distribution-section input {
+    background: rgba(0, 0, 0, 0.3);
+    border-color: rgba(168, 85, 247, 0.4);
+    font-weight: 700;
+    text-align: center;
+}
+
+.distribution-section input:focus {
+    border-color: #a78bfa;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
+}

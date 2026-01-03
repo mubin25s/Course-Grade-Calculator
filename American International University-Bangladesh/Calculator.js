@@ -15,17 +15,17 @@ window.addEventListener('DOMContentLoaded', function() {
     initializeCalculator();
 });
 
-// Grade thresholds
+// Grade thresholds (AIUB Scale)
 const gradeThresholds = [
-    { grade: 'A+', min: 90, max: 100, gp: 4.00, remark: 'Excellent' },
-    { grade: 'A', min: 85, max: 89, gp: 3.75, remark: 'Very Good' },
-    { grade: 'B+', min: 80, max: 84, gp: 3.50, remark: 'Good' },
-    { grade: 'B', min: 75, max: 79, gp: 3.25, remark: 'Satisfactory' },
-    { grade: 'C+', min: 70, max: 74, gp: 3.00, remark: 'Fair' },
-    { grade: 'C', min: 65, max: 69, gp: 2.75, remark: 'Average' },
-    { grade: 'D+', min: 60, max: 64, gp: 2.50, remark: 'Below Average' },
-    { grade: 'D', min: 50, max: 59, gp: 2.25, remark: 'Weak' },
-    { grade: 'F', min: 0, max: 49, gp: 0.00, remark: 'Unsatisfactory' }
+    { grade: 'A+', min: 94, max: 100, gp: 4.00, remark: 'Excellent' },
+    { grade: 'A', min: 90, max: 93.99, gp: 3.75, remark: 'Very Good' },
+    { grade: 'B+', min: 86, max: 89.99, gp: 3.50, remark: 'Good' },
+    { grade: 'B', min: 82, max: 85.99, gp: 3.25, remark: 'Satisfactory' },
+    { grade: 'C+', min: 78, max: 81.99, gp: 3.00, remark: 'Fair' },
+    { grade: 'C', min: 74, max: 77.99, gp: 2.75, remark: 'Average' },
+    { grade: 'D+', min: 70, max: 73.99, gp: 2.50, remark: 'Below Average' },
+    { grade: 'D', min: 50, max: 69.99, gp: 2.25, remark: 'Weak' },
+    { grade: 'F', min: 0, max: 49.99, gp: 0.00, remark: 'Unsatisfactory' }
 ];
 
 let quizCount = 3; // Initial number of quizzes

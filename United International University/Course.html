@@ -30,7 +30,7 @@
             <section class="card quiz-section">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-pen-to-square"></i> Quizzes</h2>
-                    <span class="badge">Best 3 of Max 10</span>
+                    <span class="badge">Best 2 + Avg (Others) / 10</span>
                 </div>
                 <div id="quiz-inputs-container" class="inputs-row">
                     <!-- Populated by JS -->
@@ -40,6 +40,42 @@
                     <button class="add-quiz-btn" onclick="addQuiz()" title="Add Quiz"><i class="fa-solid fa-plus"></i></button>
                 </div>
                 <div class="result-display" id="quiz-avg-display">Avg: 0.00</div>
+            </section>
+
+            <!-- Presentation Section -->
+            <section class="card presentation-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-person-chalkboard"></i> Presentation</h2>
+                    <span class="badge">10 Marks</span>
+                </div>
+                <div class="selection-grid">
+                    <button class="select-btn poor" onclick="selectQuality('presentation', 'poor')">
+                        <span class="emoji">😕</span>
+                        <span>Poor</span>
+                    </button>
+                    <button class="select-btn good" onclick="selectQuality('presentation', 'good')">
+                        <span class="emoji">😊</span>
+                        <span>Good</span>
+                    </button>
+                    <button class="select-btn excellent" onclick="selectQuality('presentation', 'excellent')">
+                        <span class="emoji">⭐</span>
+                        <span>Excellent</span>
+                    </button>
+                </div>
+                <input type="hidden" id="presentation-mark" value="0">
+                <div class="result-display" id="presentation-display">Score: 0</div>
+            </section>
+
+            <!-- Assignment Section -->
+            <section class="card assignment-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-file-signature"></i> Assignment</h2>
+                    <span class="badge">5 Marks</span>
+                </div>
+                <div class="input-group full-width">
+                    <label>Marks Obtained</label>
+                    <input type="number" id="assignment-mark" placeholder="Max 5" min="0" max="5">
+                </div>
             </section>
 
             <!-- Mid Term Section -->
@@ -58,24 +94,24 @@
             <section class="card attendance-section">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-hand-point-up"></i> Attendance</h2>
-                    <span class="badge">10 Marks</span>
+                    <span class="badge">5 Marks</span>
                 </div>
                 <div class="input-group full-width">
                     <label>Attendance Percentage (%)</label>
-                    <input type="number" id="attendance-percent" placeholder="e.g. 71" min="0" max="100">
+                    <input type="number" id="attendance-percent" placeholder="e.g. 100" min="0" max="100">
                 </div>
                 <div class="result-display" id="attendance-display">Points: 0.00</div>
             </section>
 
-            <!-- Final Exam Section (Optional) -->
+            <!-- Final Exam Section -->
             <section class="card final-section">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-graduation-cap"></i> Final Exam</h2>
-                    <span class="badge">Optional / 50</span>
+                    <span class="badge">40 Marks</span>
                 </div>
                 <div class="input-group full-width">
                     <label>Projected Marks</label>
-                    <input type="number" id="final-exam" placeholder="Max 50" min="0" max="50">
+                    <input type="number" id="final-exam" placeholder="Max 40" min="0" max="40">
                 </div>
             </section>
 

@@ -31,36 +31,178 @@ const gradeThresholds = [
 ];
 
 let quizCount = 3; // Initial number of quizzes
+let midCount = 1; // Initial number of mid terms
 
 function initializeCalculator() {
-    // Render initial quizzes
+    // Initial renders
     renderQuizzes();
+    renderMids();
     
-    // Add input listeners for other static fields
-    const staticInputs = ['mid-term', 'attendance-percent', 'final-exam'];
-    staticInputs.forEach(id => {
+    // Distribution input listeners
+    const weightInputs = ['weight-quiz', 'weight-presentation', 'weight-assignment', 'weight-attendance', 'weight-mid', 'weight-final'];
+    weightInputs.forEach(id => {
         const input = document.getElementById(id);
         if (input) {
             input.addEventListener('input', function() {
-                enforceMaxValue(id);
+                enforceMaxWeight(id);
+                updateDynamicLabels();
                 calculateTotal();
-            });
-            input.addEventListener('blur', function() {
-                validateInput(id);
             });
         }
     });
+
+    // Mark input listeners
+    const staticInputs = ['attendance-percent', 'final-exam'];
+    staticInputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('input', () => {
+                enforceMarkLimits(id);
+                calculateTotal();
+            });
+            input.addEventListener('blur', () => validateInput(id));
+        }
+    });
     
-    // Initial calculation
+    updateDynamicLabels();
     calculateTotal();
+}
+
+function selectQuality(type, quality) {
+    const weights = getWeights();
+    const max = weights[type] || 0;
+    let marks = 0;
+
+    // Remove active class from buttons in this section
+    const sectionClass = type === 'presentation' ? '.presentation-section' : '.assignment-section';
+    document.querySelectorAll(`${sectionClass} .select-btn`).forEach(btn => btn.classList.remove('active'));
+    
+    // Add active to clicked button
+    const btn = event.currentTarget;
+    if (btn) btn.classList.add('active');
+
+    if (max === 5) {
+        if (quality === 'poor') marks = 3;
+        else if (quality === 'good') marks = 4;
+        else if (quality === 'excellent') marks = 5;
+    } else if (max === 10) {
+        if (quality === 'poor') marks = Math.floor(Math.random() * 2) + 5; // 5-6
+        else if (quality === 'good') marks = Math.floor(Math.random() * 2) + 7; // 7-8
+        else if (quality === 'excellent') marks = Math.floor(Math.random() * 2) + 9; // 9-10
+    } else if (max === 15) {
+        if (quality === 'poor') marks = Math.floor(Math.random() * 3) + 6; // 6,7,8
+        else if (quality === 'good') marks = Math.floor(Math.random() * 3) + 9; // 9,10,11
+        else if (quality === 'excellent') marks = Math.floor(Math.random() * 4) + 12; // 12,13,14,15
+    } else {
+        // Fallback for other values: Scaled marks
+        if (quality === 'poor') marks = Math.round(max * 0.6);
+        else if (quality === 'good') marks = Math.round(max * 0.8);
+        else if (quality === 'excellent') marks = max;
+    }
+
+    document.getElementById(`${type}-mark`).value = marks;
+    document.getElementById(`${type}-display`).textContent = `Score: ${marks}`;
+    calculateTotal();
+}
+
+function enforceMarkLimits(id) {
+    const input = document.getElementById(id);
+    let val = parseFloat(input.value) || 0;
+    const weights = getWeights();
+    let max = 100;
+
+    if (id.startsWith('quiz')) max = weights.quiz;
+    else if (id.startsWith('mid')) max = weights.mid;
+    else if (id === 'final-exam') max = weights.final;
+    else if (id === 'attendance-percent') max = 100;
+
+    if (val > max) {
+        input.value = max;
+        showToast(`Max allowed is ${max}`);
+    }
+    if (val < 0) input.value = 0;
+}
+
+function enforceMaxWeight(id) {
+    const input = document.getElementById(id);
+    let val = parseFloat(input.value) || 0;
+    
+    // Get weights of other fields
+    const weightInputs = ['weight-quiz', 'weight-presentation', 'weight-assignment', 'weight-attendance', 'weight-mid', 'weight-final'];
+    let otherSum = 0;
+    weightInputs.forEach(compId => {
+        if (compId !== id) {
+            otherSum += parseFloat(document.getElementById(compId).value) || 0;
+        }
+    });
+
+    if (val + otherSum > 100) {
+        val = 100 - otherSum;
+        input.value = val < 0 ? 0 : val;
+        showToast("Total distribution cannot exceed 100");
+    }
+
+    // Update dependencies
+    if (id === 'weight-quiz') {
+        document.querySelectorAll('#quiz-inputs-container input').forEach(inp => enforceMarkLimits(inp.id));
+    } else if (id === 'weight-mid') {
+        document.querySelectorAll('#mid-inputs-container input').forEach(inp => enforceMarkLimits(inp.id));
+    }
+    
+    updateDynamicLabels();
+    calculateTotal();
+}
+
+function updateQuizPlaceholders() {
+    const weights = getWeights();
+    document.querySelectorAll('#quiz-inputs-container input').forEach(inp => {
+        inp.placeholder = weights.quiz;
+    });
+}
+
+function updateDynamicLabels() {
+    const weights = getWeights();
+    const total = Object.values(weights).reduce((a, b) => a + b, 0);
+    
+    const totalBadge = document.getElementById('total-weight-badge');
+    if (totalBadge) {
+        totalBadge.textContent = `${total} / 100`;
+        totalBadge.style.background = total === 100 ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)';
+    }
+
+    // Update section badges
+    document.getElementById('quiz-badge').textContent = `Best 2 of Max ${weights.quiz}`;
+    document.getElementById('presentation-badge').textContent = `${weights.presentation} Marks`;
+    document.getElementById('assignment-badge').textContent = `${weights.assignment} Marks`;
+    document.getElementById('mid-badge').textContent = `Best 1 of ${weights.mid}`;
+    document.getElementById('attendance-badge').textContent = `${weights.attendance} Marks`;
+    document.getElementById('final-badge').textContent = `${weights.final} Marks`;
+
+    // Update instruction text for quality sections
+    document.getElementById('pres-instruction').textContent = `Select quality (Max ${weights.presentation})`;
+    document.getElementById('assign-instruction').textContent = `Select quality (Max ${weights.assignment})`;
+
+    // Update placeholders
+    document.getElementById('final-exam').placeholder = `Max ${weights.final}`;
+    updateQuizPlaceholders();
+}
+
+function getWeights() {
+    return {
+        quiz: parseFloat(document.getElementById('weight-quiz').value) || 0,
+        presentation: parseFloat(document.getElementById('weight-presentation').value) || 0,
+        assignment: parseFloat(document.getElementById('weight-assignment').value) || 0,
+        attendance: parseFloat(document.getElementById('weight-attendance').value) || 0,
+        mid: parseFloat(document.getElementById('weight-mid').value) || 0,
+        final: parseFloat(document.getElementById('weight-final').value) || 0
+    };
 }
 
 function renderQuizzes() {
     const container = document.getElementById('quiz-inputs-container');
     if (!container) return;
-    
-    // Preserve existing values
     const existingValues = Array.from(container.querySelectorAll('input')).map(input => input.value);
+    const weights = getWeights();
     
     container.innerHTML = '';
     for (let i = 1; i <= quizCount; i++) {
@@ -68,198 +210,134 @@ function renderQuizzes() {
         inputGroup.className = 'input-group';
         inputGroup.innerHTML = `
             <label>Quiz ${i}</label>
-            <input type="number" id="quiz${i}" placeholder="10" min="0" max="10" value="${existingValues[i-1] || ''}">
+            <input type="number" id="quiz${i}" placeholder="${weights.quiz}" min="0" max="${weights.quiz}" value="${existingValues[i-1] || ''}">
         `;
-        
         const input = inputGroup.querySelector('input');
-        input.addEventListener('input', function() {
-            enforceMaxValue(input.id);
+        input.addEventListener('input', () => {
+            enforceMarkLimits(input.id);
             calculateTotal();
         });
-        input.addEventListener('blur', function() {
-            validateInput(input.id);
-        });
-        
         container.appendChild(inputGroup);
     }
 }
 
 function addQuiz() {
-    if (quizCount < 10) {
-        quizCount++;
-        renderQuizzes();
-        calculateTotal();
-    } else {
-        showToast("Maximum 10 quizzes allowed");
-    }
+    if (quizCount < 10) { quizCount++; renderQuizzes(); calculateTotal(); }
+    else { showToast("Max 10 quizzes allowed"); }
 }
 
 function removeQuiz() {
-    if (quizCount > 1) {
-        quizCount--;
-        renderQuizzes();
-        calculateTotal();
-    } else {
-        showToast("At least 1 quiz is required");
+    if (quizCount > 1) { quizCount--; renderQuizzes(); calculateTotal(); }
+}
+
+function renderMids() {
+    const container = document.getElementById('mid-inputs-container');
+    if (!container) return;
+    const existingValues = Array.from(container.querySelectorAll('input')).map(input => input.value);
+    const weights = getWeights();
+    
+    container.innerHTML = '';
+    for (let i = 1; i <= midCount; i++) {
+        const inputGroup = document.createElement('div');
+        inputGroup.className = 'input-group';
+        inputGroup.innerHTML = `
+            <label>Mid ${i}</label>
+            <input type="number" id="mid${i}" placeholder="${weights.mid}" min="0" max="${weights.mid}" value="${existingValues[i-1] || ''}">
+        `;
+        const input = inputGroup.querySelector('input');
+        input.addEventListener('input', () => {
+            enforceMarkLimits(input.id);
+            calculateTotal();
+        });
+        container.appendChild(inputGroup);
     }
 }
 
-function enforceMaxValue(inputId) {
-    const input = document.getElementById(inputId);
-    const value = parseFloat(input.value);
-    const max = parseFloat(input.max);
-    
-    // If value exceeds max, instantly clamp it
-    if (value > max) {
-        input.value = max;
-        showToast(`Maximum value is ${max}`);
-        input.classList.add('error');
-        setTimeout(() => input.classList.remove('error'), 400);
-    }
-    
-    // Prevent negative values
-    if (value < 0) {
-        input.value = 0;
-    }
+function addMid() {
+    if (midCount < 5) { midCount++; renderMids(); calculateTotal(); }
+    else { showToast("Max 5 mid terms allowed"); }
 }
 
-function validateInput(inputId) {
-    const input = document.getElementById(inputId);
-    const value = parseFloat(input.value) || 0;
-    const max = parseFloat(input.max);
-    
-    if (value > max) {
-        showToast(`Maximum value for ${inputId.replace('-', ' ')} is ${max}`);
-        input.value = max;
-        input.classList.add('error');
-        setTimeout(() => input.classList.remove('error'), 400);
-        calculateTotal();
-    }
-    
-    if (value < 0) {
-        input.value = 0;
-        calculateTotal();
-    }
+function removeMid() {
+    if (midCount > 1) { midCount--; renderMids(); calculateTotal(); }
 }
 
-function selectQuality(type, quality) {
-    // Remove active class from all buttons in this section
-    const section = type === 'presentation' ? '.presentation-section' : '.assignment-section';
-    document.querySelectorAll(`${section} .select-btn`).forEach(btn => {
-        btn.classList.remove('active');
-    });
-    
-    // Add active class to selected button
-    event.target.closest('.select-btn').classList.add('active');
-    
-    // Calculate marks based on quality
-    let marks = 0;
-    if (type === 'presentation') {
-        if (quality === 'poor') marks = 5;
-        else if (quality === 'good') marks = 6;
-        else if (quality === 'excellent') marks = Math.random() < 0.5 ? 7 : 8; // Random 7 or 8
-        
-        document.getElementById('presentation-mark').value = marks;
-        document.getElementById('presentation-display').textContent = `Score: ${marks}`;
-    } else if (type === 'assignment') {
-        if (quality === 'poor') marks = 3;
-        else if (quality === 'good') marks = 4;
-        else if (quality === 'excellent') marks = 5;
-        
-        document.getElementById('assignment-mark').value = marks;
-        document.getElementById('assignment-display').textContent = `Score: ${marks}`;
-    }
-    
-    calculateTotal();
+function validateInput(id) {
+    const input = document.getElementById(id);
+    if (!input) return;
+    const val = parseFloat(input.value) || 0;
+    if (val < 0) input.value = 0;
 }
 
 function calculateTotal() {
-    // Get all quiz marks from the container
+    const weights = getWeights();
+    const totalWeight = Object.values(weights).reduce((a, b) => a + b, 0);
+
+    // Quiz Calculation: Best 2 average, directly used as score (since inputs are capped by weight)
     const quizInputs = document.querySelectorAll('#quiz-inputs-container input');
-    const quizMarks = Array.from(quizInputs)
-        .map(input => parseFloat(input.value) || 0)
-        .sort((a, b) => b - a); // Sort descending
+    const quizMarks = Array.from(quizInputs).map(i => parseFloat(i.value) || 0).sort((a, b) => b - a);
+    const bestQuizzes = quizMarks.slice(0, 2);
+    const quizScore = bestQuizzes.length > 0 ? (bestQuizzes.reduce((a, b) => a + b, 0) / bestQuizzes.length) : 0;
+    document.getElementById('quiz-avg-display').textContent = `Score: ${quizScore.toFixed(2)} / ${weights.quiz}`;
+
+    // Mid Calculation: Best 1 scaled to weight
+    const midInputs = document.querySelectorAll('#mid-inputs-container input');
+    const midMarks = Array.from(midInputs).map(i => parseFloat(i.value) || 0);
+    const bestMidRaw = midMarks.length > 0 ? Math.max(...midMarks) : 0;
+    // Assume each mid is out of its full weight for simplicity? 
+    // User said "The number I give earlier will be calculated until it is 100 marks."
+    // Let's assume input marks are raw percentages or out of the distribution weight.
+    const midScore = (bestMidRaw / weights.mid) * weights.mid; // It's already out of weight
+    document.getElementById('mid-best-display').textContent = `Best: ${bestMidRaw.toFixed(2)} / ${weights.mid}`;
+
+    const presScore = parseFloat(document.getElementById('presentation-mark').value) || 0;
+    const assignScore = parseFloat(document.getElementById('assignment-mark').value) || 0;
     
-    // Calculate average of the best 3 (or fewer if total quizzes < 3)
-    const bestQuizzes = quizMarks.slice(0, 3);
-    const quizAverage = bestQuizzes.length > 0 
-        ? bestQuizzes.reduce((a, b) => a + b, 0) / Math.min(bestQuizzes.length, 3) 
-        : 0;
-    
-    // Update quiz average display
-    document.getElementById('quiz-avg-display').textContent = `Avg (Best ${bestQuizzes.length > 3 ? 3 : bestQuizzes.length}): ${quizAverage.toFixed(2)}`;
-    
-    // Get presentation and assignment marks
-    const presentationMarks = parseFloat(document.getElementById('presentation-mark').value) || 0;
-    const assignmentMarks = parseFloat(document.getElementById('assignment-mark').value) || 0;
-    
-    // Get midterm marks
-    const midtermMarks = parseFloat(document.getElementById('mid-term').value) || 0;
-    
-    // Calculate attendance marks (out of 7)
-    const attendancePercent = parseFloat(document.getElementById('attendance-percent').value) || 0;
-    const attendanceMarks = (attendancePercent / 100) * 7;
-    
-    // Update attendance display
-    document.getElementById('attendance-display').textContent = `Points: ${attendanceMarks.toFixed(2)}`;
-    
-    // Calculate total marks
-    const currentTotal = quizAverage + presentationMarks + assignmentMarks + midtermMarks + attendanceMarks;
-    
-    // Check if final exam mark is actually entered (not just 0)
-    const finalExamInput = document.getElementById('final-exam');
-    const finalMarksString = finalExamInput.value;
-    const finalMarks = parseFloat(finalMarksString) || 0;
-    const isFinalEntered = finalMarksString.trim() !== "";
-    
-    const totalWithFinal = currentTotal + finalMarks;
-    
-    // Update total marks display
-    document.getElementById('total-marks').textContent = totalWithFinal.toFixed(2);
-    
-    // Determine current grade
-    const currentGrade = determineGrade(totalWithFinal);
-    const gradeStatusElement = document.getElementById('grade-status');
-    gradeStatusElement.textContent = `${currentGrade.grade} (${currentGrade.gp})`;
-    
-    // Apply grade-specific color class
-    gradeStatusElement.className = 'status-value ' + getGradeColorClass(currentGrade.grade);
-    
-    // Calculate what's needed for the NEXT milestone
-    let passStatus = '';
+    const attendPercent = parseFloat(document.getElementById('attendance-percent').value) || 0;
+    const attendScore = (attendPercent / 100) * weights.attendance;
+    document.getElementById('attendance-display').textContent = `Points: ${attendScore.toFixed(2)}`;
+
+    const finalScore = parseFloat(document.getElementById('final-exam').value) || 0;
+
+    const currentTotal = quizScore + presScore + assignScore + midScore + attendScore + finalScore;
+    document.getElementById('total-marks').textContent = currentTotal.toFixed(2);
+
+    // Update Grade Status
+    const grade = determineGrade(currentTotal);
+    const statusEl = document.getElementById('grade-status');
+    statusEl.textContent = `${grade.grade} (${grade.gp})`;
+    statusEl.className = 'status-value ' + getGradeColorClass(grade.grade);
+
+    // Milestone calculation
     const footerLabel = document.querySelector('.needed-score .status-label');
-    const neededPassElement = document.getElementById('needed-pass');
+    const neededPassEl = document.getElementById('needed-pass');
     
     // Reset color class by default
-    neededPassElement.className = 'status-value';
+    neededPassEl.className = 'status-value';
     
-    if (isFinalEntered) {
-        passStatus = currentGrade.remark;
+    if (document.getElementById('final-exam').value.trim() !== "") {
         footerLabel.textContent = 'Result Obtained';
+        neededPassEl.textContent = grade.remark;
         // Apply grade-specific color
-        neededPassElement.classList.add(getGradeColorClass(currentGrade.grade));
+        neededPassEl.classList.add(getGradeColorClass(grade.grade));
     } else {
         footerLabel.textContent = 'Next Milestone';
-        const nextGrade = findClosestHigherGrade(currentTotal);
-        
-        if (nextGrade) {
-            const marksNeeded = nextGrade.min - currentTotal;
-            // Use Math.ceil or keep precision based on preference, but following "4 to get C" style
-            const displayNeeded = marksNeeded % 1 === 0 ? marksNeeded : marksNeeded.toFixed(1);
-            passStatus = `${displayNeeded} to get ${nextGrade.grade}`;
+        const next = findClosestHigherGrade(currentTotal);
+        if (next) {
+            const needed = next.min - currentTotal;
+            neededPassEl.textContent = needed > weights.final ? `Target ${next.grade} (Unreachable)` : `${needed.toFixed(1)} more for ${next.grade}`;
         } else {
-            // Check if already at A+
-            if (currentGrade.grade === 'A+') {
-                passStatus = 'Perfect Grade (A+)';
-            } else {
-                passStatus = 'A+ Target Achieved!';
-            }
+            neededPassEl.textContent = 'A Grade Achieved!';
         }
     }
-    neededPassElement.textContent = passStatus;
-    
-    // Update grade targets table
-    updateGradeTargets(currentTotal, totalWithFinal);
+
+    if (totalWeight !== 100) {
+        document.getElementById('total-marks').style.color = 'var(--danger)';
+    } else {
+        document.getElementById('total-marks').style.color = 'var(--primary)';
+    }
+
+    updateGradeTargets(currentTotal, currentTotal + (parseFloat(document.getElementById('final-exam').value) || 0));
 }
 
 function determineGrade(marks) {
