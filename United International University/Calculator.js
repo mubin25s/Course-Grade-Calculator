@@ -37,7 +37,7 @@ function initializeCalculator() {
     renderQuizzes();
     
     // Add input listeners for other static fields
-    const staticInputs = ['mid-term', 'assignment-mark', 'attendance-percent', 'final-exam'];
+    const staticInputs = ['mid-term', 'attendance-percent', 'final-exam'];
     staticInputs.forEach(id => {
         const input = document.getElementById(id);
         if (input) {
@@ -161,6 +161,13 @@ function selectQuality(type, quality) {
         
         document.getElementById('presentation-mark').value = marks;
         document.getElementById('presentation-display').textContent = `Score: ${marks}`;
+    } else if (type === 'assignment') {
+        if (quality === 'poor') marks = 3;
+        else if (quality === 'good') marks = 4;
+        else if (quality === 'excellent') marks = 5;
+        
+        document.getElementById('assignment-mark').value = marks;
+        document.getElementById('assignment-display').textContent = `Score: ${marks}`;
     }
     
     calculateTotal();

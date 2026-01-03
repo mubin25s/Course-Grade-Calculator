@@ -72,10 +72,22 @@
                     <h2><i class="fa-solid fa-file-signature"></i> Assignment</h2>
                     <span class="badge">5 Marks</span>
                 </div>
-                <div class="input-group full-width">
-                    <label>Marks Obtained</label>
-                    <input type="number" id="assignment-mark" placeholder="Max 5" min="0" max="5">
+                <div class="selection-grid">
+                    <button class="select-btn poor" onclick="selectQuality('assignment', 'poor')">
+                        <span class="emoji">😕</span>
+                        <span>Poor</span>
+                    </button>
+                    <button class="select-btn good" onclick="selectQuality('assignment', 'good')">
+                        <span class="emoji">😊</span>
+                        <span>Good</span>
+                    </button>
+                    <button class="select-btn excellent" onclick="selectQuality('assignment', 'excellent')">
+                        <span class="emoji">⭐</span>
+                        <span>Excellent</span>
+                    </button>
                 </div>
+                <input type="hidden" id="assignment-mark" value="0">
+                <div class="result-display" id="assignment-display">Score: 0</div>
             </section>
 
             <!-- Mid Term Section -->
