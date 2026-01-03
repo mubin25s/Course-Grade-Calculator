@@ -162,9 +162,6 @@ function validateInput(inputId) {
 }
 
 function selectQuality(type, quality) {
-    const isPres = type.startsWith('pres');
-    const selector = isPres ? `.${type}-section` : '.assignment-section'; // Wait, I used sub-section in HTML
-    
     // Find the closest container to the buttons
     const container = event.target.closest('.selection-grid');
     if (!container) return;
@@ -177,14 +174,14 @@ function selectQuality(type, quality) {
     if (clickedBtn) clickedBtn.classList.add('active');
     
     let marks = 0;
-    if (isPres) {
-        // Scaling for 5-mark part
-        if (quality === 'poor') marks = Math.random() < 0.5 ? 2.5 : 3.0;
-        else if (quality === 'good') marks = Math.random() < 0.5 ? 3.5 : 4.0;
-        else if (quality === 'excellent') marks = Math.random() < 0.5 ? 4.5 : 5.0;
+    if (type === 'presentation') {
+        // 10-mark presentation logic
+        if (quality === 'poor') marks = Math.floor(Math.random() * 2) + 5; // 5-6
+        else if (quality === 'good') marks = Math.floor(Math.random() * 2) + 7; // 7-8
+        else if (quality === 'excellent') marks = Math.floor(Math.random() * 2) + 9; // 9-10
         
-        document.getElementById(`${type}-mark`).value = marks;
-        document.getElementById(`${type}-display`).textContent = `Score: ${marks}`;
+        document.getElementById('presentation-mark').value = marks;
+        document.getElementById('presentation-display').textContent = `Score: ${marks}`;
     } else if (type === 'assignment') {
         if (quality === 'poor') marks = 3;
         else if (quality === 'good') marks = 4;
@@ -230,12 +227,7 @@ function calculateTotal() {
     
     const midtermMarks = parseFloat(document.getElementById('mid-term').value) || 0;
     const assignmentMarks = parseFloat(document.getElementById('assignment-mark').value) || 0;
-    
-    // Sum two presentation parts for the 10-mark total
-    const pres1 = parseFloat(document.getElementById('pres1-mark').value) || 0;
-    const pres2 = parseFloat(document.getElementById('pres2-mark').value) || 0;
-    const presentationMarks = pres1 + pres2;
-    document.getElementById('presentation-display').textContent = `Total Score: ${presentationMarks.toFixed(2)}`;
+    const presentationMarks = parseFloat(document.getElementById('presentation-mark').value) || 0;
 
     // Calculate attendance marks (Base 5, deduct 0.25 per missed class)
     const missedClasses = parseFloat(document.getElementById('missed-classes').value) || 0;
