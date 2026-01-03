@@ -1188,3 +1188,60 @@ input.error {
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
 }
 
+/* Compact UI Utilities */
+.config-pills {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.pill-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text-muted);
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.pill-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.pill-btn.active {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    box-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
+}
+
+.selection-grid.mini {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.4rem;
+}
+
+.select-btn.mini {
+    padding: 0.4rem 0.2rem;
+    font-size: 0.75rem;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.result-display.mini {
+    font-size: 0.9rem;
+    padding-top: 0.25rem;
+}
+
+.sub-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.texto-small {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}

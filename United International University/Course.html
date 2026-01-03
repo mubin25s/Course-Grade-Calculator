@@ -29,8 +29,15 @@
             <!-- Quizzes Section -->
             <section class="card quiz-section">
                 <div class="card-header">
-                    <h2><i class="fa-solid fa-pen-to-square"></i> Quizzes</h2>
-                    <span class="badge">Best 2 + Avg (Others) / 10</span>
+                    <div>
+                        <h2><i class="fa-solid fa-pen-to-square"></i> Quizzes</h2>
+                        <span class="badge" id="quiz-badge">Best 2 of 4</span>
+                    </div>
+                    <div class="config-pills">
+                        <button class="pill-btn active" onclick="selectQuizBest(2)">B2</button>
+                        <button class="pill-btn" onclick="selectQuizBest(3)">B3</button>
+                        <button class="pill-btn" onclick="selectQuizBest(4)">All</button>
+                    </div>
                 </div>
                 <div id="quiz-inputs-container" class="inputs-row">
                     <!-- Populated by JS -->
@@ -46,24 +53,32 @@
             <section class="card presentation-section">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-person-chalkboard"></i> Presentation</h2>
-                    <span class="badge">10 Marks</span>
+                    <span class="badge">10 Marks Total</span>
                 </div>
-                <div class="selection-grid">
-                    <button class="select-btn poor" onclick="selectQuality('presentation', 'poor')">
-                        <span class="emoji">😕</span>
-                        <span>Poor</span>
-                    </button>
-                    <button class="select-btn good" onclick="selectQuality('presentation', 'good')">
-                        <span class="emoji">😊</span>
-                        <span>Good</span>
-                    </button>
-                    <button class="select-btn excellent" onclick="selectQuality('presentation', 'excellent')">
-                        <span class="emoji">⭐</span>
-                        <span>Excellent</span>
-                    </button>
+                
+                <div class="sub-section">
+                    <p class="instruction texto-small">Part 1 (5 Marks)</p>
+                    <div class="selection-grid mini">
+                        <button class="select-btn mini poor" onclick="selectQuality('pres1', 'poor')">Poor</button>
+                        <button class="select-btn mini good" onclick="selectQuality('pres1', 'good')">Good</button>
+                        <button class="select-btn mini excellent" onclick="selectQuality('pres1', 'excellent')">Excellent</button>
+                    </div>
+                    <input type="hidden" id="pres1-mark" value="0">
+                    <div class="result-display mini" id="pres1-display">Score: 0</div>
                 </div>
-                <input type="hidden" id="presentation-mark" value="0">
-                <div class="result-display" id="presentation-display">Score: 0</div>
+
+                <div class="sub-section" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.05);">
+                    <p class="instruction texto-small">Part 2 (5 Marks)</p>
+                    <div class="selection-grid mini">
+                        <button class="select-btn mini poor" onclick="selectQuality('pres2', 'poor')">Poor</button>
+                        <button class="select-btn mini good" onclick="selectQuality('pres2', 'good')">Good</button>
+                        <button class="select-btn mini excellent" onclick="selectQuality('pres2', 'excellent')">Excellent</button>
+                    </div>
+                    <input type="hidden" id="pres2-mark" value="0">
+                    <div class="result-display mini" id="pres2-display">Score: 0</div>
+                </div>
+
+                <div class="result-display" id="presentation-display" style="margin-top: 12px; background: rgba(255,255,255,0.03);">Total: 0.00</div>
             </section>
 
             <!-- Assignment Section -->
@@ -109,8 +124,8 @@
                     <span class="badge">5 Marks</span>
                 </div>
                 <div class="input-group full-width">
-                    <label>Attendance Percentage (%)</label>
-                    <input type="number" id="attendance-percent" placeholder="e.g. 100" min="0" max="100">
+                    <label>Missed Classes (Total 12)</label>
+                    <input type="number" id="missed-classes" placeholder="e.g. 0" min="0" max="12">
                 </div>
                 <div class="result-display" id="attendance-display">Points: 0.00</div>
             </section>
