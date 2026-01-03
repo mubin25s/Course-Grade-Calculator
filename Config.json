@@ -161,9 +161,25 @@
             }
         },
         {
-            "id": "World University of Bangladesh",
-            "name": "World University of Bangladesh",
-            "folder": "World University of Bangladesh",
+            "id": "Manarat International University",
+            "name": "Manarat International University",
+            "folder": "Manarat International University",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "City University",
+            "name": "City University",
+            "folder": "City University",
+            "gradingSystem": {
+                "description": "Standard grading system"
+            }
+        },
+        {
+            "id": "Gono Bishwabidyalay",
+            "name": "Gono Bishwabidyalay",
+            "folder": "Gono Bishwabidyalay",
             "gradingSystem": {
                 "description": "Standard grading system"
             }

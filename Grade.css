@@ -1149,3 +1149,42 @@ input.error {
     border-color: #a78bfa;
     box-shadow: 0 0 15px rgba(168, 85, 247, 0.3);
 }
+
+/* Dashboard Disclaimer Styles */
+.dashboard-disclaimer {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-align: center;
+    max-width: 450px;
+    margin: 1.5rem auto 0;
+    line-height: 1.6;
+    font-weight: 300;
+    padding: 1rem 0 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    letter-spacing: 0.2px;
+}
+
+.footer-info {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin-bottom: 1rem !important;
+}
+
+.developer-credit {
+    margin-top: 0.5rem;
+}
+
+
+/* Neon White Border Effect */
+.neon-border-active.active {
+    border: 1px solid rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5), inset 0 0 4px rgba(255, 255, 255, 0.3) !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+}
+
+.neon-card {
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+}
+

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Grade Calculator</title>
+    <link rel="stylesheet" href="../Grade.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+        <div class="globe globe-3"></div>
+    </div>
+
+    <div class="container">
+        <a href="../index.html" class="back-link">← Back to Dashboard</a>
+        
+        <header>
+            <h1>Course Grade Calculator</h1>
+            <p id="universityName">University Name</p>
+        </header>
+
+        <main class="calculator-grid">
+            <!-- Quizzes Section -->
+            <section class="card quiz-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-pen-to-square"></i> Quizzes</h2>
+                    <span class="badge">Best 3 of Max 10 (15 Marks)</span>
+                </div>
+                <div id="quiz-inputs-container" class="inputs-row">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="quiz-controls">
+                    <button class="remove-quiz-btn" onclick="removeQuiz()" title="Remove Quiz"><i class="fa-solid fa-minus"></i></button>
+                    <button class="add-quiz-btn" onclick="addQuiz()" title="Add Quiz"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <div class="result-display" id="quiz-avg-display">Avg: 0.00</div>
+            </section>
+
+            <!-- Presentation Section -->
+            <section class="card presentation-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-person-chalkboard"></i> Presentation</h2>
+                    <span class="badge">8 Marks</span>
+                </div>
+                <p class="instruction">How was your presentation?</p>
+                <div class="selection-grid">
+                    <button class="select-btn poor" onclick="selectQuality('presentation', 'poor')">
+                        <span class="emoji">😕</span> Poor
+                    </button>
+                    <button class="select-btn good" onclick="selectQuality('presentation', 'good')">
+                        <span class="emoji">🙂</span> Good
+                    </button>
+                    <button class="select-btn excellent" onclick="selectQuality('presentation', 'excellent')">
+                        <span class="emoji">🤩</span> Excellent
+                    </button>
+                </div>
+                <input type="hidden" id="presentation-mark" value="0">
+                <div class="result-display" id="presentation-display">Score: ?</div>
+            </section>
+
+            <!-- Assignment Section -->
+            <section class="card assignment-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-file-lines"></i> Assignment</h2>
+                    <span class="badge">5 Marks</span>
+                </div>
+                <p class="instruction">How was your assignment?</p>
+                <div class="selection-grid">
+                    <button class="select-btn poor" onclick="selectQuality('assignment', 'poor')">
+                        <span class="emoji">😐</span> Poor
+                    </button>
+                    <button class="select-btn good" onclick="selectQuality('assignment', 'good')">
+                        <span class="emoji">😊</span> Good
+                    </button>
+                    <button class="select-btn excellent" onclick="selectQuality('assignment', 'excellent')">
+                        <span class="emoji">😎</span> Excellent
+                    </button>
+                </div>
+                <input type="hidden" id="assignment-mark" value="0">
+                <div class="result-display" id="assignment-display">Score: ?</div>
+            </section>
+
+            <!-- Mid Term Section -->
+            <section class="card mid-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-star-half-stroke"></i> Mid Term</h2>
+                    <span class="badge">25 Marks</span>
+                </div>
+                <div class="input-group full-width">
+                    <label>Marks Obtained</label>
+                    <input type="number" id="mid-term" placeholder="Max 25" min="0" max="25">
+                </div>
+            </section>
+
+            <!-- Attendance Section -->
+            <section class="card attendance-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-hand-point-up"></i> Attendance</h2>
+                    <span class="badge">7 Marks</span>
+                </div>
+                <div class="input-group full-width">
+                    <label>Attendance Percentage (%)</label>
+                    <input type="number" id="attendance-percent" placeholder="e.g. 71" min="0" max="100">
+                </div>
+                <div class="result-display" id="attendance-display">Points: 0.00</div>
+            </section>
+
+            <!-- Final Exam Section (Optional) -->
+            <section class="card final-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-graduation-cap"></i> Final Exam</h2>
+                    <span class="badge">Optional / 40</span>
+                </div>
+                <div class="input-group full-width">
+                    <label>Projected Marks</label>
+                    <input type="number" id="final-exam" placeholder="Max 40" min="0" max="40">
+                </div>
+            </section>
+
+            <!-- Grade Analysis Section -->
+            <section class="card analysis-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-chart-line"></i> Grade Targets</h2>
+                    <span class="badge">Final Exam Requirements</span>
+                </div>
+                <div class="grade-table-container">
+                    <table class="grade-table">
+                        <thead>
+                            <tr>
+                                <th>Grade</th>
+                                <th>Target</th>
+                                <th>Need in Final</th>
+                            </tr>
+                        </thead>
+                        <tbody id="grade-targets-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Total Result Footer -->
+        <footer class="results-footer">
+            <div class="total-score">
+                <div class="score-label">Total Marks</div>
+                <div class="score-value" id="total-marks">0.00</div>
+            </div>
+            <div class="grade-status">
+                <div class="status-label">Grade Status</div>
+                <div class="status-value" id="grade-status">-</div>
+            </div>
+            <div class="needed-score">
+                <div class="status-label">Next Milestone</div>
+                <div class="status-value" id="needed-pass">-</div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="Calculator.js"></script>
+</body>
+</html>

@@ -67,7 +67,7 @@ function renderQuizzes() {
         inputGroup.className = 'input-group';
         inputGroup.innerHTML = `
             <label>Quiz ${i}</label>
-            <input type="number" id="quiz${i}" placeholder="10" min="0" max="10" value="${existingValues[i-1] || ''}">
+            <input type="number" id="quiz${i}" placeholder="15" min="0" max="15" value="${existingValues[i-1] || ''}">
         `;
         
         const input = inputGroup.querySelector('input');
