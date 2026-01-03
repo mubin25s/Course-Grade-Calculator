@@ -284,10 +284,8 @@ function calculateTotal() {
     const midInputs = document.querySelectorAll('#mid-inputs-container input');
     const midMarks = Array.from(midInputs).map(i => parseFloat(i.value) || 0);
     const bestMidRaw = midMarks.length > 0 ? Math.max(...midMarks) : 0;
-    // Assume each mid is out of its full weight for simplicity? 
-    // User said "The number I give earlier will be calculated until it is 100 marks."
-    // Let's assume input marks are raw percentages or out of the distribution weight.
-    const midScore = (bestMidRaw / weights.mid) * weights.mid; // It's already out of weight
+    // Note: bestMidRaw is already capped by weights.mid in enforceMarkLimits
+    const midScore = bestMidRaw; 
     document.getElementById('mid-best-display').textContent = `Best: ${bestMidRaw.toFixed(2)} / ${weights.mid}`;
 
     const presScore = parseFloat(document.getElementById('presentation-mark').value) || 0;
@@ -303,7 +301,8 @@ function calculateTotal() {
     document.getElementById('total-marks').textContent = currentTotal.toFixed(2);
 
     // Update Grade Status
-    const grade = determineGrade(currentTotal);
+    const totalAchieved = currentTotal;
+    const grade = determineGrade(totalAchieved);
     const statusEl = document.getElementById('grade-status');
     statusEl.textContent = `${grade.grade} (${grade.gp})`;
     statusEl.className = 'status-value ' + getGradeColorClass(grade.grade);
@@ -325,7 +324,11 @@ function calculateTotal() {
         const next = findClosestHigherGrade(currentTotal);
         if (next) {
             const needed = next.min - currentTotal;
-            neededPassEl.textContent = needed > weights.final ? `Target ${next.grade} (Unreachable)` : `${needed.toFixed(1)} more for ${next.grade}`;
+            if (needed > weights.final) {
+                neededPassEl.textContent = `Target ${next.grade} (Unreachable)`;
+            } else {
+                neededPassEl.textContent = `${needed.toFixed(1)} more for ${next.grade}`;
+            }
         } else {
             neededPassEl.textContent = 'A Grade Achieved!';
         }
@@ -337,16 +340,22 @@ function calculateTotal() {
         document.getElementById('total-marks').style.color = 'var(--primary)';
     }
 
-    updateGradeTargets(currentTotal, currentTotal + (parseFloat(document.getElementById('final-exam').value) || 0));
+    const marksWithoutFinal = currentTotal - finalScore;
+    updateGradeTargets(marksWithoutFinal, currentTotal);
 }
 
 function determineGrade(marks) {
-    for (let threshold of gradeThresholds) {
-        if (marks >= threshold.min && marks <= threshold.max) {
-            return threshold;
-        }
-    }
-    return gradeThresholds[gradeThresholds.length - 1]; // Return F if nothing matches
+    if (marks >= 93) return gradeThresholds[0];  // A
+    if (marks >= 90) return gradeThresholds[1];  // A-
+    if (marks >= 87) return gradeThresholds[2];  // B+
+    if (marks >= 83) return gradeThresholds[3];  // B
+    if (marks >= 80) return gradeThresholds[4];  // B-
+    if (marks >= 77) return gradeThresholds[5];  // C+
+    if (marks >= 73) return gradeThresholds[6];  // C
+    if (marks >= 70) return gradeThresholds[7];  // C-
+    if (marks >= 67) return gradeThresholds[8];  // D+
+    if (marks >= 60) return gradeThresholds[9];  // D
+    return gradeThresholds[10]; // F
 }
 
 function findClosestHigherGrade(currentMarks) {
@@ -385,6 +394,7 @@ function getGradeColorClass(grade) {
 function updateGradeTargets(currentTotal, totalWithFinal) {
     const tbody = document.getElementById('grade-targets-body');
     tbody.innerHTML = '';
+    const weights = getWeights(); // Get current weights
     
     gradeThresholds.forEach(threshold => {
         const row = document.createElement('tr');
@@ -397,7 +407,7 @@ function updateGradeTargets(currentTotal, totalWithFinal) {
         if (totalWithFinal >= threshold.min) {
             status = '✓ Achieved';
             statusClass = 'status-achieved';
-        } else if (neededMarks <= 40) {
+        } else if (neededMarks <= weights.final) {
             status = `${neededMarks.toFixed(1)} marks`;
             statusClass = 'status-possible';
         } else {
