@@ -175,14 +175,14 @@
         }
 
         .btn-calc {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, #D500F9, #AA00FF); /* Bright Purple */
             color: white;
-            box-shadow: 0 8px 25px rgba(167, 139, 250, 0.4);
+            box-shadow: 0 8px 25px rgba(213, 0, 249, 0.4);
         }
 
         .btn-calc:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(167, 139, 250, 0.6);
+            box-shadow: 0 15px 35px rgba(213, 0, 249, 0.6);
         }
 
         .btn-reset {
@@ -298,6 +298,26 @@
             }
         }
 
+        /* Modal Overlay for Dropdown */
+        .dropdown-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(2px);
+            z-index: 999;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .dropdown-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
         /* Custom Dropdown Styles */
         .custom-select-wrapper {
             position: relative;
@@ -354,20 +374,21 @@
             top: 100%;
             left: 0;
             right: 0;
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(167, 139, 250, 0.4);
             border-top: 0;
             border-radius: 0 0 12px 12px;
-            background: rgba(30, 27, 75, 0.95); /* darker background for readability */
-            backdrop-filter: blur(15px);
+            background: rgba(75, 65, 130, 0.95); /* Lighter purple background */
+            backdrop-filter: blur(30px) saturate(180%); /* Stronger blur */
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
             transition: all 0.2s ease-in-out;
             opacity: 0;
             visibility: hidden;
             pointer-events: none;
-            z-index: 50;
+            z-index: 1000; /* Higher z-index to appear above everything */
             max-height: 200px;
             overflow-y: auto;
             transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
         }
 
         .custom-select.open .custom-options {
@@ -382,10 +403,12 @@
             display: block;
             padding: 0.75rem 1rem;
             font-size: 0.95rem;
-            color: var(--text-muted);
+            font-weight: 600; /* Bolder text */
+            color: rgba(255, 255, 255, 0.95); /* Brighter white text */
             cursor: pointer;
             transition: all 0.2s;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(100, 80, 160, 0.3); /* Lighter purple tint */
         }
 
         .custom-option:last-child {
@@ -394,14 +417,15 @@
 
         .custom-option:hover {
             color: white;
-            background: rgba(167, 139, 250, 0.2); /* Primary color low opacity */
+            background: rgba(167, 139, 250, 0.6); /* Lighter, more vibrant hover */
             padding-left: 1.25rem;
+            font-weight: 700; /* Even bolder on hover */
         }
 
         .custom-option.selected {
             color: white;
             background: var(--primary); /* Full primary for selected */
-            font-weight: 600;
+            font-weight: 700; /* Bolder for selected */
         }
 
         /* Scrollbar for options */
@@ -522,9 +546,20 @@
         const INITIAL_ROWS = 3;
         const listContainer = document.getElementById('courseList');
         const template = document.getElementById('rowTemplate');
+        let dropdownOverlay = null;
 
         // Initialize with default rows
         window.onload = function() {
+            // Create overlay element
+            dropdownOverlay = document.createElement('div');
+            dropdownOverlay.className = 'dropdown-overlay';
+            document.body.appendChild(dropdownOverlay);
+            
+            // Overlay click closes all dropdowns
+            dropdownOverlay.addEventListener('click', function() {
+                closeAllDropdowns();
+            });
+            
             for(let i=0; i<INITIAL_ROWS; i++) {
                 addCourse();
             }
@@ -532,10 +567,17 @@
             // Close dropdowns when clicking outside
             document.addEventListener('click', function(e) {
                 if (!e.target.closest('.custom-select')) {
-                    document.querySelectorAll('.custom-select').forEach(el => el.classList.remove('open'));
+                    closeAllDropdowns();
                 }
             });
         };
+        
+        function closeAllDropdowns() {
+            document.querySelectorAll('.custom-select').forEach(el => el.classList.remove('open'));
+            if (dropdownOverlay) {
+                dropdownOverlay.classList.remove('active');
+            }
+        }
 
         function addCourse() {
             const clone = template.content.cloneNode(true);
@@ -568,15 +610,30 @@
             const label = trigger.querySelector('span');
 
             trigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                
                 // Close other opened dropdowns
                 document.querySelectorAll('.custom-select').forEach(el => {
                     if(el !== dropdown) el.classList.remove('open');
                 });
+                
+                // Toggle current dropdown
+                const isOpening = !dropdown.classList.contains('open');
                 dropdown.classList.toggle('open');
+                
+                // Show/hide overlay
+                if (dropdownOverlay) {
+                    if (isOpening) {
+                        dropdownOverlay.classList.add('active');
+                    } else {
+                        dropdownOverlay.classList.remove('active');
+                    }
+                }
             });
 
             options.forEach(option => {
-                option.addEventListener('click', function() {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     const value = this.getAttribute('data-value');
                     const text = this.textContent;
 
@@ -591,8 +648,11 @@
                     options.forEach(opt => opt.classList.remove('selected'));
                     this.classList.add('selected');
 
-                    // Close Dropdown
+                    // Close Dropdown and hide overlay
                     dropdown.classList.remove('open');
+                    if (dropdownOverlay) {
+                        dropdownOverlay.classList.remove('active');
+                    }
                     
                     // Reset Error State if any
                     trigger.style.borderColor = 'var(--glass-border)';

@@ -263,8 +263,8 @@
                 const university = { folder: selectedUniversity }; 
 
                 if (university) {
-                    // Update: path needs to go up one level since index.html is now in X_Calculator/Grade_Calculator
-                    window.location.href = '../' + university.folder + '/Course.html';
+                    // Update: path needs to go up two levels since index.html is now in X_Calculator/Grade_Calculator
+                    window.location.href = '../../' + university.folder + '/Course.html';
                 } else {
                     // This else block was incomplete in the provided snippet.
                     // For syntactic correctness, it's either removed or completed.

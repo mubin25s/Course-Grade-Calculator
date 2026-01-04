@@ -911,13 +911,13 @@ input.error {
 }
 
 .dashboard-btn.btn-cgpa {
-    background: linear-gradient(135deg, #f59e0b, #d97706);
-    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+    background: linear-gradient(135deg, #7C3AED, #5B21B6);
+    box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
     margin-top: 1rem;
 }
 
 .dashboard-btn.btn-cgpa:hover {
-    box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
+    box-shadow: 0 15px 40px rgba(124, 58, 237, 0.6);
 }
 
 .dashboard-btn.loading {
