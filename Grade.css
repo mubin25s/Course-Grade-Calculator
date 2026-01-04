@@ -1258,3 +1258,429 @@ input.error {
     font-weight: 600;
     color: var(--text-muted);
 }
+
+/* Under Construction Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(61, 74, 122, 0.95) 0%, rgba(90, 74, 122, 0.95) 50%, rgba(122, 90, 138, 0.95) 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+}
+
+.modal-construction {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 2px solid rgba(251, 146, 60, 0.6);
+    border-radius: 30px;
+    padding: 3rem 2.5rem;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(251, 146, 60, 0.4),
+                inset 0 0 30px rgba(251, 146, 60, 0.1);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: neonPulseOrange 3s ease-in-out infinite;
+}
+
+@keyframes neonPulseOrange {
+    0%, 100% {
+        border-color: rgba(251, 146, 60, 0.6);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+                    0 0 40px rgba(251, 146, 60, 0.4),
+                    inset 0 0 30px rgba(251, 146, 60, 0.1);
+    }
+    50% {
+        border-color: rgba(249, 115, 22, 0.8);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+                    0 0 60px rgba(251, 146, 60, 0.6),
+                    0 0 80px rgba(249, 115, 22, 0.3),
+                    inset 0 0 40px rgba(251, 146, 60, 0.2);
+    }
+}
+
+.modal-overlay.show .modal-construction {
+    transform: scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.modal-close:hover {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(245, 158, 11, 0.3));
+    border-color: rgba(239, 68, 68, 0.5);
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+}
+
+.construction-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(245, 158, 11, 0.15));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.construction-icon::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
+.construction-icon i {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #ef4444, #f59e0b);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: iconBounce 2s ease-in-out infinite;
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes iconBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 15px rgba(239, 68, 68, 0);
+    }
+}
+
+.modal-construction h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #f59e0b, #ef4444, #f59e0b);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    animation: gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift {
+    0%, 100% {
+        background-position: 0% center;
+    }
+    50% {
+        background-position: 100% center;
+    }
+}
+
+.modal-message {
+    font-size: 1.1rem;
+    color: var(--text-main);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+}
+
+.modal-submessage {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.modal-btn {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border: none;
+    color: white;
+    padding: 0.5rem 1.2rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
+    position: relative;
+    overflow: hidden;
+    flex: 1;
+    min-width: 130px;
+    justify-content: center;
+}
+
+.modal-btn.secondary {
+    background: linear-gradient(135deg, #a78bfa, #c084fc);
+    box-shadow: 0 6px 15px rgba(167, 139, 250, 0.3);
+}
+
+.modal-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.modal-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.modal-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
+}
+
+.modal-btn.secondary:hover {
+    box-shadow: 0 15px 40px rgba(167, 139, 250, 0.5);
+}
+
+.modal-btn:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+.modal-btn i {
+    transition: transform 0.3s ease;
+}
+
+.modal-btn:hover i {
+    transform: scale(1.2) rotate(10deg);
+}
+
+/* Available Universities Modal */
+.modal-available {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 2px solid rgba(167, 139, 250, 0.6);
+    border-radius: 30px;
+    padding: 3rem 2.5rem;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(167, 139, 250, 0.4),
+                inset 0 0 30px rgba(167, 139, 250, 0.1);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: neonPulse 3s ease-in-out infinite;
+}
+
+@keyframes neonPulseGreen {
+    0%, 100% {
+        border-color: rgba(167, 139, 250, 0.6);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+                    0 0 40px rgba(167, 139, 250, 0.4),
+                    inset 0 0 30px rgba(167, 139, 250, 0.1);
+    }
+    50% {
+        border-color: rgba(192, 132, 252, 0.8);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+                    0 0 60px rgba(167, 139, 250, 0.6),
+                    0 0 80px rgba(192, 132, 252, 0.3),
+                    inset 0 0 40px rgba(167, 139, 250, 0.2);
+    }
+}
+
+.modal-overlay.show .modal-available {
+    transform: scale(1);
+}
+
+.available-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.15), rgba(192, 132, 252, 0.15));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.available-icon::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: shimmer 3s infinite;
+}
+
+.available-icon i {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #a78bfa, #c084fc);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: iconBounce 2s ease-in-out infinite;
+    position: relative;
+    z-index: 1;
+}
+
+.completed-universities {
+    background: rgba(167, 139, 250, 0.08);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    animation: fadeInUp 0.5s ease 0.3s backwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.uni-carousel {
+    position: relative;
+    min-height: 120px;
+    overflow: hidden;
+}
+
+.carousel-slide {
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    animation: slideIn 0.5s ease;
+}
+
+.carousel-slide.active {
+    display: flex;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.uni-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: var(--text-main);
+    border-left: 3px solid #a78bfa;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.uni-item:hover {
+    background: rgba(167, 139, 250, 0.15);
+    transform: translateX(5px);
+    border-left-width: 4px;
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(167, 139, 250, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carousel-dot:hover {
+    background: rgba(167, 139, 250, 0.6);
+    transform: scale(1.2);
+}
+
+.carousel-dot.active {
+    background: #a78bfa;
+    width: 24px;
+    border-radius: 4px;
+}

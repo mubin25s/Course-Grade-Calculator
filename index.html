@@ -117,6 +117,60 @@
         </div>
     </div>
 
+    <!-- Under Construction Modal -->
+    <div class="modal-overlay" id="constructionModal" onclick="closeConstructionModal()">
+        <div class="modal-construction" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeConstructionModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="construction-icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h2>Under Construction</h2>
+            <p class="modal-message">This university's grading system is currently being configured.</p>
+            <p class="modal-submessage">The grade distribution has not been properly set up yet. Please check back later or select one of our completed universities.</p>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" onclick="showAvailableUniversities()">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>View Available Universities</span>
+                </button>
+                <button class="modal-btn" onclick="closeConstructionModal()">
+                    <span>Got it</span>
+                    <i class="fa-solid fa-check"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Available Universities Modal -->
+    <div class="modal-overlay" id="availableModal" onclick="closeAvailableModal()">
+        <div class="modal-available" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeAvailableModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="available-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h2>Available Universities</h2>
+            <p class="modal-message">These universities are fully configured and ready to use!</p>
+            
+            <div class="completed-universities">
+                <div class="uni-carousel" id="uniCarousel">
+                    <!-- Universities will be dynamically populated -->
+                </div>
+                <div class="carousel-dots" id="carouselDots">
+                    <!-- Dots will be dynamically populated -->
+                </div>
+            </div>
+            
+            <button class="modal-btn" onclick="closeAvailableModal()">
+                <span>Back to Dashboard</span>
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+        </div>
+    </div>
+
     <script>
         function toggleDropdown() {
             const options = document.getElementById('dropdownOptions');
@@ -175,6 +229,23 @@
                 return;
             }
             
+            // List of completed universities
+            const completedUniversities = [
+                'North South University',
+                'Daffodil International University',
+                'Gono Bishwabidyalay',
+                'United International University',
+                'Bangladesh University of Business & Technology',
+                'Manarat International University',
+                'American International University-Bangladesh'
+            ];
+            
+            // Check if university is completed
+            if (!completedUniversities.includes(selectedUniversity)) {
+                showConstructionModal();
+                return;
+            }
+            
             // Add loading animation
             const btn = document.querySelector('.dashboard-btn');
             btn.classList.add('loading');
@@ -183,6 +254,134 @@
             setTimeout(() => {
                 window.location.href = `${selectedUniversity}/Course.html`;
             }, 300);
+        }
+
+        function showConstructionModal() {
+            const modal = document.getElementById('constructionModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
+
+        function closeConstructionModal() {
+            const modal = document.getElementById('constructionModal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function showAvailableUniversities() {
+            // Close construction modal first
+            closeConstructionModal();
+            // Show available universities modal after a brief delay
+            setTimeout(() => {
+                const modal = document.getElementById('availableModal');
+                modal.style.display = 'flex';
+                setTimeout(() => {
+                    modal.classList.add('show');
+                    initializeCarousel();
+                }, 10);
+            }, 350);
+        }
+
+        function closeAvailableModal() {
+            const modal = document.getElementById('availableModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                stopCarousel();
+            }, 300);
+        }
+
+        let carouselInterval;
+        let currentSlide = 0;
+        const universities = [
+            'North South University',
+            'Daffodil International University',
+            'Gono Bishwabidyalay',
+            'United International University',
+            'Bangladesh University of Business & Technology',
+            'Manarat International University',
+            'American International University-Bangladesh'
+        ];
+
+        function initializeCarousel() {
+            const carousel = document.getElementById('uniCarousel');
+            const dotsContainer = document.getElementById('carouselDots');
+            
+            // Clear existing content
+            carousel.innerHTML = '';
+            dotsContainer.innerHTML = '';
+            
+            // Calculate number of slides (2 universities per slide)
+            const totalSlides = Math.ceil(universities.length / 2);
+            
+            // Create slides
+            for (let i = 0; i < totalSlides; i++) {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                
+                const uni1 = universities[i * 2];
+                const uni2 = universities[i * 2 + 1];
+                
+                if (uni1) {
+                    const item1 = document.createElement('div');
+                    item1.className = 'uni-item';
+                    item1.textContent = uni1;
+                    slide.appendChild(item1);
+                }
+                
+                if (uni2) {
+                    const item2 = document.createElement('div');
+                    item2.className = 'uni-item';
+                    item2.textContent = uni2;
+                    slide.appendChild(item2);
+                }
+                
+                carousel.appendChild(slide);
+                
+                // Create dot
+                const dot = document.createElement('span');
+                dot.className = 'carousel-dot';
+                dot.onclick = () => goToSlide(i);
+                dotsContainer.appendChild(dot);
+            }
+            
+            currentSlide = 0;
+            updateCarousel();
+            startCarousel();
+        }
+
+        function updateCarousel() {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.carousel-dot');
+            
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlide);
+            });
+            
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            const totalSlides = Math.ceil(universities.length / 2);
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+
+        function startCarousel() {
+            carouselInterval = setInterval(nextSlide, 3000); // Rotate every 3 seconds
+        }
+
+        function stopCarousel() {
+            if (carouselInterval) {
+                clearInterval(carouselInterval);
+            }
         }
 
         function showToast(message) {
