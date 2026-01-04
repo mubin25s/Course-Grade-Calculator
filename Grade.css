@@ -1534,10 +1534,10 @@ input.error {
                 inset 0 0 30px rgba(167, 139, 250, 0.1);
     transform: scale(0.9);
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    animation: neonPulse 3s ease-in-out infinite;
+    animation: neonPulsePurple 3s ease-in-out infinite;
 }
 
-@keyframes neonPulseGreen {
+@keyframes neonPulsePurple {
     0%, 100% {
         border-color: rgba(167, 139, 250, 0.6);
         box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
