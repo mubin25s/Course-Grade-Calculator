@@ -9,9 +9,9 @@
             }
         },
         {
-            "id": "American International University-Bangladesh",
-            "name": "American International University-Bangladesh",
-            "folder": "American International University-Bangladesh",
+            "id": "American International University Bangladesh",
+            "name": "American International University Bangladesh",
+            "folder": "American International University Bangladesh",
             "gradingSystem": {
                 "description": "Standard grading system"
             }

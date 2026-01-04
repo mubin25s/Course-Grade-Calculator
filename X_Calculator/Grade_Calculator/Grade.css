@@ -910,6 +910,16 @@ input.error {
     transform: translateX(5px);
 }
 
+.dashboard-btn.btn-cgpa {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    box-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+    margin-top: 1rem;
+}
+
+.dashboard-btn.btn-cgpa:hover {
+    box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
+}
+
 .dashboard-btn.loading {
     pointer-events: none;
     opacity: 0.7;

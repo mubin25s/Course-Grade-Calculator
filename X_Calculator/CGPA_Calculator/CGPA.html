@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CGPA Calculator | Grade Master</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../Grade_Calculator/Grade.css">
+    <style>
+        /* Specific Styles for CGPA Calculator */
+        .cgpa-container {
+            max-width: 900px; /* Slightly wider for the table */
+            margin: 0 auto;
+        }
+
+        .calculator-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-list {
+            display: block;
+            margin-bottom: 2rem;
+            height: auto;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .course-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 1rem;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            animation: slideIn 0.3s ease backwards;
+            margin-bottom: 1rem;
+        }
+
+        .course-row:last-child {
+            margin-bottom: 0;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .course-row:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .course-input-group {
+            position: relative;
+        }
+
+        .course-input-group label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+            margin-left: 0.25rem;
+        }
+
+        .course-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .course-input:focus {
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.2);
+        }
+
+        /* Mobile Responsive Grid */
+        @media (max-width: 768px) {
+            .course-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.75rem;
+            }
+            .course-input-group:first-child { /* Course Name */
+                grid-column: 1 / -1;
+            }
+        }
+
+        .btn-delete {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.25rem;
+        }
+
+        .btn-delete:hover {
+            background: var(--danger);
+            color: white;
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        @media (max-width: 768px) {
+            .btn-delete {
+                margin-top: 0;
+                grid-column: 2;
+                justify-self: end;
+            }
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        /* Update Back Nav to be absolute (not sticky/fixed) */
+        .back-nav {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            z-index: 100;
+        }
+
+        .btn-action {
+            padding: 0.9rem 2rem;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .btn-add {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-add:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-calc {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 8px 25px rgba(167, 139, 250, 0.4);
+        }
+
+        .btn-calc:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(167, 139, 250, 0.6);
+        }
+
+        .btn-reset {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            flex: 0 0 auto;
+        }
+
+        .btn-reset:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Results Section */
+        .results-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            display: none; /* Hide element completely to remove space */
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .results-panel.visible {
+            display: grid; /* Show when active */
+            opacity: 1;
+            transform: translateY(0);
+            animation: fadeInGrid 0.5s ease forwards;
+        }
+
+        @keyframes fadeInGrid {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .result-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #00C9FF, #92FE9D);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .result-cgpa .result-value {
+            font-size: 3.5rem;
+            background: linear-gradient(to right, #f59e0b, #eab308); /* Gold */
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+        }
+
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .back-link i {
+            font-size: 1.1rem;
+        }
+
+        /* Responsive adjustment */
+        @media (max-width: 768px) {
+            .back-nav {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 2rem;
+                text-align: left;
+            }
+            .cgpa-container {
+                margin-top: 0;
+            }
+        }
+
+        /* Custom Dropdown Styles */
+        .custom-select-wrapper {
+            position: relative;
+            user-select: none;
+            width: 100%;
+        }
+
+        .custom-select-trigger {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            color: var(--text-muted);
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .custom-select-trigger:hover {
+            background: rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .custom-select.open .custom-select-trigger {
+            border-color: var(--primary);
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .custom-select-trigger span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .custom-select-trigger i {
+            transition: transform 0.3s ease;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .custom-select.open .custom-select-trigger i {
+            transform: rotate(180deg);
+            color: var(--primary);
+        }
+
+        .custom-options {
+            position: absolute;
+            display: block;
+            top: 100%;
+            left: 0;
+            right: 0;
+            border: 1px solid var(--glass-border);
+            border-top: 0;
+            border-radius: 0 0 12px 12px;
+            background: rgba(30, 27, 75, 0.95); /* darker background for readability */
+            backdrop-filter: blur(15px);
+            transition: all 0.2s ease-in-out;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            z-index: 50;
+            max-height: 200px;
+            overflow-y: auto;
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .custom-select.open .custom-options {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+
+        .custom-option {
+            position: relative;
+            display: block;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .custom-option:last-child {
+            border-bottom: none;
+        }
+
+        .custom-option:hover {
+            color: white;
+            background: rgba(167, 139, 250, 0.2); /* Primary color low opacity */
+            padding-left: 1.25rem;
+        }
+
+        .custom-option.selected {
+            color: white;
+            background: var(--primary); /* Full primary for selected */
+            font-weight: 600;
+        }
+
+        /* Scrollbar for options */
+        .custom-options::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-options::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.2); 
+        }
+        .custom-options::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2); 
+            border-radius: 4px;
+        }
+        .custom-options::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.4); 
+        }
+
+        /* Default row to clone hidden */
+        .template-row { display: none; }
+    </style>
+</head>
+<body class="dashboard-page">
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+        <div class="globe globe-3"></div>
+    </div>
+
+    <!-- Back Navigation -->
+    <div class="back-nav">
+        <a href="../Grade_Calculator/index.html" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <div class="container cgpa-container">
+        <header>
+            <h1>CGPA Calculator</h1>
+            <p>Calculate your cumulative grade point average with ease</p>
+        </header>
+
+        <div class="calculator-card">
+            <div class="course-list" id="courseList">
+                <!-- Javascript will populate this -->
+            </div>
+
+            <div class="controls">
+                <button class="btn-action btn-add" onclick="addCourse()">
+                    <i class="fa-solid fa-plus"></i> Add Subject
+                </button>
+                <button class="btn-action btn-calc" onclick="calculateCGPA()">
+                    <i class="fa-solid fa-calculator"></i> Calculate CGPA
+                </button>
+                <button class="btn-action btn-reset" onclick="resetCalculator()">
+                    <i class="fa-solid fa-rotate-left"></i>
+                </button>
+            </div>
+
+            <div class="results-panel" id="resultPanel">
+                <div class="result-item result-cgpa">
+                    <span class="result-label">Your CGPA</span>
+                    <span class="result-value" id="cgpaValue">0.00</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Credits</span>
+                    <span class="result-value" id="totalCredits">0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">Total Points</span>
+                    <span class="result-value" id="totalPoints">0</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Hidden Template -->
+    <template id="rowTemplate">
+        <div class="course-row">
+            <div class="course-input-group">
+                <label>Course Name</label>
+                <input type="text" class="course-input input-name" placeholder="SWE 101">
+            </div>
+            <div class="course-input-group">
+                <label>Credits</label>
+                <input type="number" class="course-input input-credit" placeholder="3.0" min="0.5" step="0.5" oninput="validateInput(this)">
+            </div>
+            <div class="course-input-group">
+                <label>Grade</label>
+                <div class="custom-select-wrapper custom-select">
+                    <input type="hidden" class="input-grade" value="">
+                    <div class="custom-select-trigger">
+                        <span>Select</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="custom-options">
+                        <span class="custom-option" data-value="4.00">A+ (4.00)</span>
+                        <span class="custom-option" data-value="3.75">A (3.75)</span>
+                        <span class="custom-option" data-value="3.50">A- (3.50)</span>
+                        <span class="custom-option" data-value="3.25">B+ (3.25)</span>
+                        <span class="custom-option" data-value="3.00">B (3.00)</span>
+                        <span class="custom-option" data-value="2.75">B- (2.75)</span>
+                        <span class="custom-option" data-value="2.50">C+ (2.50)</span>
+                        <span class="custom-option" data-value="2.25">C (2.25)</span>
+                        <span class="custom-option" data-value="2.00">D (2.00)</span>
+                        <span class="custom-option" data-value="0.00">F (0.00)</span>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-delete" onclick="removeCourse(this)">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        </div>
+    </template>
+
+    <script>
+        // Constants
+        const INITIAL_ROWS = 3;
+        const listContainer = document.getElementById('courseList');
+        const template = document.getElementById('rowTemplate');
+
+        // Initialize with default rows
+        window.onload = function() {
+            for(let i=0; i<INITIAL_ROWS; i++) {
+                addCourse();
+            }
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.custom-select')) {
+                    document.querySelectorAll('.custom-select').forEach(el => el.classList.remove('open'));
+                }
+            });
+        };
+
+        function addCourse() {
+            const clone = template.content.cloneNode(true);
+            const row = clone.querySelector('.course-row');
+            
+            // Initialize Dropdown Logic for this specific row
+            initializeDropdown(row);
+
+            // Add animation delay for initial load
+            const currentRows = listContainer.children.length;
+            row.style.animationDelay = `${currentRows * 0.1}s`;
+            
+            // Append ONLY the row element (ignores whitespace text nodes from template)
+            listContainer.appendChild(row);
+            
+            // Auto scroll to bottom
+            setTimeout(() => {
+                listContainer.scrollTo({
+                    top: listContainer.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }, 10);
+        }
+        
+        function initializeDropdown(row) {
+            const dropdown = row.querySelector('.custom-select');
+            const trigger = dropdown.querySelector('.custom-select-trigger');
+            const hiddenInput = dropdown.querySelector('.input-grade');
+            const options = dropdown.querySelectorAll('.custom-option');
+            const label = trigger.querySelector('span');
+
+            trigger.addEventListener('click', function(e) {
+                // Close other opened dropdowns
+                document.querySelectorAll('.custom-select').forEach(el => {
+                    if(el !== dropdown) el.classList.remove('open');
+                });
+                dropdown.classList.toggle('open');
+            });
+
+            options.forEach(option => {
+                option.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    const text = this.textContent;
+
+                    // Update UI
+                    label.textContent = text;
+                    label.style.color = 'var(--text-main)';
+                    
+                    // Update Hidden Input
+                    hiddenInput.value = value;
+                    
+                    // Visual Selection State
+                    options.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+
+                    // Close Dropdown
+                    dropdown.classList.remove('open');
+                    
+                    // Reset Error State if any
+                    trigger.style.borderColor = 'var(--glass-border)';
+                });
+            });
+        }
+
+        function removeCourse(btn) {
+            const rows = listContainer.getElementsByClassName('course-row');
+            if(rows.length > 1) {
+                const row = btn.closest('.course-row');
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(10px)';
+                setTimeout(() => row.remove(), 300);
+            } else {
+                showToast("You must have at least one subject!", "error");
+            }
+        }
+
+        function validateInput(input) {
+            if (input.value < 0) input.value = 0;
+            // Limit to reasonable credits (e.g. max 10 for a single course)
+            if (input.value > 20) input.value = 20;
+        }
+
+        function calculateCGPA() {
+            const rows = document.querySelectorAll('.course-row');
+            let totalCredits = 0;
+            let totalPoints = 0;
+            let isValid = true;
+            let hasData = false;
+
+            rows.forEach(row => {
+                const creditInput = row.querySelector('.input-credit');
+                const gradeInput = row.querySelector('.input-grade'); // This is now a hidden input
+                const dropdownTrigger = row.querySelector('.custom-select-trigger');
+                
+                const credit = parseFloat(creditInput.value);
+                const gradePoint = parseFloat(gradeInput.value);
+
+                // Skip partial rows (if user entered nothing in a row, ignore it)
+                if (!creditInput.value && !gradeInput.value) {
+                    return; // Empty row
+                }
+
+                // If partial data (credit but no grade, or vice versa)
+                if (!creditInput.value || isNaN(credit) || !gradeInput.value) {
+                    // Highlight the invalid field
+                    if(!creditInput.value) creditInput.style.borderColor = 'var(--danger)';
+                    if(!gradeInput.value) dropdownTrigger.style.borderColor = 'var(--danger)'; // Highlight custom trigger
+                    isValid = false;
+                    
+                    // Reset border after 2s
+                    setTimeout(() => {
+                        creditInput.style.borderColor = 'var(--glass-border)';
+                        dropdownTrigger.style.borderColor = 'var(--glass-border)';
+                    }, 2000);
+                } else {
+                    hasData = true;
+                    totalCredits += credit;
+                    totalPoints += (credit * gradePoint);
+                }
+            });
+
+            if (!isValid) {
+                showToast("Please fill in both credits and grade for filled rows.", "warning");
+                return;
+            }
+
+            if (!hasData) {
+                showToast("Please add at least one course!", "warning");
+                return;
+            }
+
+            const cgpa = totalPoints / totalCredits;
+            
+            // Display Results with animation
+            displayResult(cgpa, totalCredits, totalPoints);
+        }
+
+        function displayResult(cgpa, credits, points) {
+            const panel = document.getElementById('resultPanel');
+            const cgpaEl = document.getElementById('cgpaValue');
+            const credEl = document.getElementById('totalCredits');
+            const pointEl = document.getElementById('totalPoints');
+
+            // Counter animation
+            animateValue(credEl, parseFloat(credEl.innerText), credits, 1000, 1);
+            animateValue(pointEl, parseFloat(pointEl.innerText), points, 1000, 1);
+            animateValue(cgpaEl, parseFloat(cgpaEl.innerText), cgpa, 1500, 2);
+
+            panel.classList.add('visible');
+        }
+
+        function animateValue(obj, start, end, duration, decimals = 2) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = progress * (end - start) + start;
+                obj.innerHTML = value.toFixed(decimals);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        function resetCalculator() {
+            const rows = document.querySelectorAll('.course-row');
+            rows.forEach(row => {
+                row.querySelector('.input-name').value = '';
+                row.querySelector('.input-credit').value = '';
+                
+                // Reset Custom Dropdown
+                row.querySelector('.input-grade').value = '';
+                const triggerLabel = row.querySelector('.custom-select-trigger span');
+                triggerLabel.textContent = 'Select';
+                triggerLabel.style.color = 'var(--text-muted)';
+                row.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
+                
+                row.style.background = '';
+            });
+            
+            document.getElementById('resultPanel').classList.remove('visible');
+            setTimeout(() => {
+                document.getElementById('cgpaValue').innerText = '0.00';
+                document.getElementById('totalCredits').innerText = '0';
+                document.getElementById('totalPoints').innerText = '0';
+            }, 300);
+        }
+
+        function showToast(message, type = 'info') {
+            // Check if existing toast
+            let toast = document.querySelector('.warning-toast');
+            if(!toast) {
+                toast = document.createElement('div');
+                toast.className = 'warning-toast';
+                document.body.appendChild(toast);
+            }
+            
+            let icon = type === 'error' || type === 'warning' ? 'fa-triangle-exclamation' : 'fa-circle-info';
+            let color = type === 'error' || type === 'warning' ? '#ef4444' : '#10b981';
+            
+            toast.style.background = type === 'error' ? 'rgba(239, 68, 68, 0.9)' : 'rgba(16, 185, 129, 0.9)';
+            
+            toast.innerHTML = `
+                <i class="fa-solid ${icon}"></i>
+                <span>${message}</span>
+            `;
+            
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>

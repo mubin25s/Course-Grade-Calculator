@@ -52,7 +52,7 @@
                         </div>
                         <ul class="dropdown-options-list">
                             <li data-value="Ahsanullah International University Bangladesh" onclick="selectUniversity('Ahsanullah International University Bangladesh', 'Ahsanullah International University Bangladesh')">Ahsanullah International University Bangladesh</li>
-                            <li data-value="American International University-Bangladesh" onclick="selectUniversity('American International University-Bangladesh', 'American International University-Bangladesh')">American International University-Bangladesh</li>
+                            <li data-value="American International University Bangladesh" onclick="selectUniversity('American International University Bangladesh', 'American International University Bangladesh')">American International University Bangladesh</li>
                             <li data-value="Bangladesh Rural Advancement Committee University" onclick="selectUniversity('Bangladesh Rural Advancement Committee University', 'Bangladesh Rural Advancement Committee University')">Bangladesh Rural Advancement Committee University</li>
                             <li data-value="Bangladesh University of Business & Technology" onclick="selectUniversity('Bangladesh University of Business & Technology', 'Bangladesh University of Business & Technology')">Bangladesh University of Business & Technology</li>
                             <li data-value="BGMEA University of Fashion and Technology" onclick="selectUniversity('BGMEA University of Fashion and Technology', 'BGMEA University of Fashion and Technology')">BGMEA University of Fashion and Technology</li>
@@ -83,6 +83,11 @@
             <button class="dashboard-btn" onclick="goToCalculator()">
                 <span>Go to Calculator</span>
                 <i class="fa-solid fa-arrow-right"></i>
+            </button>
+
+            <button class="dashboard-btn btn-cgpa" onclick="window.location.href='../CGPA_Calculator/CGPA.html'">
+                <span>CGPA Calculator</span>
+                <i class="fa-solid fa-calculator"></i>
             </button>
 
             <div class="dashboard-features">
@@ -237,7 +242,7 @@
                 'United International University',
                 'Bangladesh University of Business & Technology',
                 'Manarat International University',
-                'American International University-Bangladesh'
+                'American International University Bangladesh'
             ];
             
             // Check if university is completed
@@ -252,7 +257,20 @@
             
             // Navigate to the selected university's calculator page
             setTimeout(() => {
-                window.location.href = `${selectedUniversity}/Course.html`;
+                // To make the provided snippet syntactically correct and functional,
+                // we need to define 'university' based on 'selectedUniversity'.
+                // Assuming 'selectedUniversity' directly corresponds to the folder name.
+                const university = { folder: selectedUniversity }; 
+
+                if (university) {
+                    // Update: path needs to go up one level since index.html is now in X_Calculator/Grade_Calculator
+                    window.location.href = '../' + university.folder + '/Course.html';
+                } else {
+                    // This else block was incomplete in the provided snippet.
+                    // For syntactic correctness, it's either removed or completed.
+                    // Given the context, it's unlikely to be reached if university is derived from selectedUniversity.
+                    // Keeping it empty to match the spirit of the provided snippet's structure.
+                }
             }, 300);
         }
 
@@ -300,7 +318,7 @@
             'United International University',
             'Bangladesh University of Business & Technology',
             'Manarat International University',
-            'American International University-Bangladesh'
+            'American International University Bangladesh'
         ];
 
         function initializeCarousel() {
