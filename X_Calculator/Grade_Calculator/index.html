@@ -85,7 +85,7 @@
                 <i class="fa-solid fa-arrow-right"></i>
             </button>
 
-            <button class="dashboard-btn btn-cgpa" onclick="window.location.href='../CGPA_Calculator/CGPA.html'">
+            <button class="dashboard-btn btn-cgpa" onclick="showUpcomingModal()">
                 <span>CGPA Calculator</span>
                 <i class="fa-solid fa-calculator"></i>
             </button>
@@ -173,6 +173,32 @@
                 <span>Back to Dashboard</span>
                 <i class="fa-solid fa-arrow-left"></i>
             </button>
+        </div>
+    </div>
+
+    <!-- Upcoming Feature Modal -->
+    <div class="modal-overlay" id="upcomingModal" onclick="closeUpcomingModal()">
+        <div class="modal-construction" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeUpcomingModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="construction-icon" style="background: rgba(124, 58, 237, 0.2); color: #7C3AED;">
+                <i class="fa-solid fa-rocket"></i>
+            </div>
+            <h2>New feature is upcoming!</h2>
+            <p class="modal-message">Under construction.</p>
+            <p class="modal-submessage">Please wait until the new feature is added. We are working hard to bring you the best CGPA calculation tools.</p>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn" style="background: linear-gradient(135deg, #7C3AED, #5B21B6);" onclick="proceedToCGPA()">
+                    <span>Proceed Anyway</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button class="modal-btn secondary" onclick="closeUpcomingModal()">
+                    <span>Got it</span>
+                    <i class="fa-solid fa-check"></i>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -306,6 +332,25 @@
             setTimeout(() => {
                 modal.style.display = 'none';
                 stopCarousel();
+            }, 300);
+        }
+
+        function showUpcomingModal() {
+            const modal = document.getElementById('upcomingModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('show'), 10);
+        }
+
+        function closeUpcomingModal() {
+            const modal = document.getElementById('upcomingModal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function proceedToCGPA() {
+            closeUpcomingModal();
+            setTimeout(() => {
+                window.location.href = '../CGPA_Calculator/CGPA.html';
             }, 300);
         }
 
