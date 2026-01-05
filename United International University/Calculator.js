@@ -52,6 +52,24 @@ function initializeCalculator() {
     calculateTotal();
 }
 
+function updateQuizBadge() {
+    const badge = document.getElementById('quiz-badge') || document.querySelector('.card-header .badge');
+    if (!badge) return;
+    
+    // UIU specific logic: bestQuizzesToCount can be 4 (All)
+    const count = bestQuizzesToCount;
+    const weightInput = document.getElementById('weight-quiz');
+    let weight = weightInput ? weightInput.value : '10';
+
+    if (count === 4 && quizCount === 4) {
+        badge.textContent = `Average of All (${quizCount}) (Max ${weight})`;
+    } else if (count === 4) {
+        badge.textContent = `Average of All (${quizCount}) (Max ${weight})`;
+    } else {
+        badge.textContent = `Best ${count} of ${quizCount} (Max ${weight})`;
+    }
+}
+
 function selectQuizBest(count) {
     bestQuizzesToCount = count;
     
@@ -63,18 +81,7 @@ function selectQuizBest(count) {
         }
     });
 
-    // Update displays
-    const quizBadge = document.getElementById('quiz-badge');
-    if (quizBadge) {
-        if (count === 4 && quizCount === 4) {
-            quizBadge.textContent = `All 4 of 4`;
-        } else if (count === 4) {
-            quizBadge.textContent = `All ${quizCount} of ${quizCount}`;
-        } else {
-            quizBadge.textContent = `Best ${count} of ${quizCount}`;
-        }
-    }
-    
+    updateQuizBadge();
     calculateTotal();
 }
 

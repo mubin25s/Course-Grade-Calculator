@@ -87,6 +87,7 @@ function addQuiz() {
     if (quizCount < 10) {
         quizCount++;
         renderQuizzes();
+        updateQuizBadge();
         calculateTotal();
     } else {
         showToast("Maximum 10 quizzes allowed");
@@ -97,6 +98,7 @@ function removeQuiz() {
     if (quizCount > 1) {
         quizCount--;
         renderQuizzes();
+        updateQuizBadge();
         calculateTotal();
     } else {
         showToast("At least 1 quiz is required");
@@ -105,6 +107,7 @@ function removeQuiz() {
 
 function enforceMaxValue(inputId) {
     const input = document.getElementById(inputId);
+    if (!input) return;
     const value = parseFloat(input.value);
     const max = parseFloat(input.max);
     

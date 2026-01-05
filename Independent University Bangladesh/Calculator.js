@@ -88,6 +88,7 @@ function addQuiz() {
     if (quizCount < 10) {
         quizCount++;
         renderQuizzes();
+        updateQuizBadge();
         calculateTotal();
     } else {
         showToast("Maximum 10 quizzes allowed");
@@ -98,6 +99,7 @@ function removeQuiz() {
     if (quizCount > 1) {
         quizCount--;
         renderQuizzes();
+        updateQuizBadge();
         calculateTotal();
     } else {
         showToast("At least 1 quiz is required");
@@ -106,6 +108,7 @@ function removeQuiz() {
 
 function enforceMaxValue(inputId) {
     const input = document.getElementById(inputId);
+    if (!input) return;
     const value = parseFloat(input.value);
     const max = parseFloat(input.max);
     
@@ -394,6 +397,19 @@ function showToast(message) {
 // Quiz Mode Logic
 window.quizMode = 'best3'; // Default
 
+function updateQuizBadge() {
+    const badge = document.getElementById('quiz-badge') || document.querySelector('.card-header .badge');
+    if (!badge) return;
+    
+    const mode = window.quizMode || 'all';
+    const weightInput = document.getElementById('weight-quiz');
+    let weight = weightInput ? weightInput.value : '10';
+
+    if (mode === 'all') badge.textContent = `Average of All (${quizCount}) (Max ${weight})`;
+    else if (mode === 'best2') badge.textContent = `Best 2 of ${quizCount} (Max ${weight})`;
+    else if (mode === 'best3') badge.textContent = `Best 3 of ${quizCount} (Max ${weight})`;
+}
+
 function setQuizMode(mode) {
     window.quizMode = mode;
     
@@ -403,30 +419,6 @@ function setQuizMode(mode) {
         if(btn.id === 'btn-' + mode) btn.classList.add('active');
     });
     
-    // Attempt to update badge if it exists
-    const badge = document.getElementById('quiz-badge');
-    const badgeSpan = document.querySelector('.card-header .badge');
-    const targetBadge = badge || badgeSpan;
-    
-    const weightInput = document.getElementById('weight-quiz');
-    let weight = '10'; // Default fallback
-
-    if (weightInput) {
-        weight = weightInput.value;
-    } else if (targetBadge) {
-        // Try to parse from existing text to preserve the specific max marks of the university
-        // Example: "Best 3 of Max 10" -> "10"
-        const match = targetBadge.textContent.match(/Max (d+)/);
-        if (match) {
-            weight = match[1];
-        }
-    }
-
-    if(targetBadge) {
-         if (mode === 'all') targetBadge.textContent = `All (Max ${weight})`;
-         else if (mode === 'best2') targetBadge.textContent = `Best 2 of Max ${weight}`;
-         else targetBadge.textContent = `Best 3 of Max ${weight}`;
-    }
-
+    updateQuizBadge();
     calculateTotal();
 }

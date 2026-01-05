@@ -15,7 +15,7 @@ window.addEventListener('DOMContentLoaded', function() {
     initializeCalculator();
 });
 
-// Grade thresholds
+// Grade thresholds for East West University
 const gradeThresholds = [
     { grade: 'A+', min: 80, max: 100, gp: 4.00, remark: 'Outstanding' },
     { grade: 'A', min: 75, max: 79, gp: 3.75, remark: 'Excellent' },
@@ -29,14 +29,14 @@ const gradeThresholds = [
     { grade: 'F', min: 0, max: 39, gp: 0.00, remark: 'Unsatisfactory' }
 ];
 
-let quizCount = 3; // Initial number of quizzes
+let quizCount = 3; // Initial number of quizzes (EWU uses average of 3)
 
 function initializeCalculator() {
     // Render initial quizzes
     renderQuizzes();
     
     // Add input listeners for other static fields
-    const staticInputs = ['mid-term', 'attendance-percent', 'final-exam'];
+    const staticInputs = ['mid-term', 'attendance-marks', 'class-activities', 'final-exam'];
     staticInputs.forEach(id => {
         const input = document.getElementById(id);
         if (input) {
@@ -87,6 +87,7 @@ function addQuiz() {
     if (quizCount < 10) {
         quizCount++;
         renderQuizzes();
+        updateQuizBadge();
         calculateTotal();
     } else {
         showToast("Maximum 10 quizzes allowed");
@@ -97,6 +98,7 @@ function removeQuiz() {
     if (quizCount > 1) {
         quizCount--;
         renderQuizzes();
+        updateQuizBadge();
         calculateTotal();
     } else {
         showToast("At least 1 quiz is required");
@@ -148,23 +150,24 @@ function selectQuality(type, quality) {
         btn.classList.remove('active');
     });
     
-    // Add active class to selected button
-    event.target.closest('.select-btn').classList.add('active');
+    // Add active class to selected button (using currentTarget to ensure we get the button)
+    event.currentTarget.classList.add('active');
     
-    // Calculate marks based on quality
+    // Calculate marks based on quality (Max 10 for EWU)
+    // Poor: 5-6, Good: 7-8, Excellent: 9-10
     let marks = 0;
+    if (quality === 'poor') {
+        marks = Math.floor(Math.random() * 2) + 5; // 5 or 6
+    } else if (quality === 'good') {
+        marks = Math.floor(Math.random() * 2) + 7; // 7 or 8
+    } else if (quality === 'excellent') {
+        marks = Math.floor(Math.random() * 2) + 9; // 9 or 10
+    }
+    
     if (type === 'presentation') {
-        if (quality === 'poor') marks = 5;
-        else if (quality === 'good') marks = 6;
-        else if (quality === 'excellent') marks = Math.random() < 0.5 ? 7 : 8; // Random 7 or 8
-        
         document.getElementById('presentation-mark').value = marks;
         document.getElementById('presentation-display').textContent = `Score: ${marks}`;
     } else if (type === 'assignment') {
-        if (quality === 'poor') marks = 3;
-        else if (quality === 'good') marks = 4;
-        else if (quality === 'excellent') marks = 5;
-        
         document.getElementById('assignment-mark').value = marks;
         document.getElementById('assignment-display').textContent = `Score: ${marks}`;
     }
@@ -176,48 +179,14 @@ function calculateTotal() {
     // Get all quiz marks from the container
     const quizInputs = document.querySelectorAll('#quiz-inputs-container input');
     const quizMarks = Array.from(quizInputs)
-        .map(input => parseFloat(input.value) || 0)
-        .sort((a, b) => b - a); // Sort descending
+        .map(input => parseFloat(input.value) || 0);
     
-    // Calculate average of the best 3 (or fewer if total quizzes < 3)
-    let limit = quizMarks.length;
-    if (window.quizMode === 'best2') limit = 2;
-    // For 'all', limit is length (do nothing special, slice(0, length))
-    else if (window.quizMode === 'best3') limit = 3;
-    
-    // Ensure we don't slice more than available if 'all' or default
-    if (window.quizMode === 'all') limit = quizMarks.length;
-
-    const bestQuizzes = quizMarks.slice(0, limit);
-    
-    // Adjust divider for average calculation
-    let divider = bestQuizzes.length;
-    if (window.quizMode === 'best2') divider = Math.min(bestQuizzes.length, 2);
-    else if (window.quizMode === 'best3') divider = Math.min(bestQuizzes.length, 3);
-    else if (window.quizMode === 'all') divider = bestQuizzes.length;
-    
-    if (divider === 0) divider = 1; // Prevent div by zero
-    
-    
-    const quizAverage = bestQuizzes.length > 0 
-        ? bestQuizzes.reduce((a, b) => a + b, 0) / divider 
-        : 0;
+    // EWU usually takes average of all quizzes (default 3)
+    const quizSum = quizMarks.reduce((a, b) => a + b, 0);
+    const quizAverage = quizMarks.length > 0 ? quizSum / quizMarks.length : 0;
     
     // Update quiz average display
-    // Dynamic Max Mark for display
-        let maxMark = '10';
-        const wInput = document.getElementById('weight-quiz');
-        if(wInput) maxMark = wInput.value;
-        else {
-             // Try badge
-             const b = document.getElementById('quiz-badge') || document.querySelector('.card-header .badge');
-             if(b) {
-                const m = b.textContent.match(/Max (d+)/);
-                if(m) maxMark = m[1];
-             }
-        }
-        
-        document.getElementById('quiz-avg-display').textContent = `Result (Avg): ${quizAverage.toFixed(2)} / ${maxMark}`;
+    document.getElementById('quiz-avg-display').textContent = `Avg: ${quizAverage.toFixed(2)}`;
     
     // Get presentation and assignment marks
     const presentationMarks = parseFloat(document.getElementById('presentation-mark').value) || 0;
@@ -226,15 +195,14 @@ function calculateTotal() {
     // Get midterm marks
     const midtermMarks = parseFloat(document.getElementById('mid-term').value) || 0;
     
-    // Calculate attendance marks (out of 7)
-    const attendancePercent = parseFloat(document.getElementById('attendance-percent').value) || 0;
-    const attendanceMarks = (attendancePercent / 100) * 7;
+    // Get attendance marks
+    const attendanceMarks = parseFloat(document.getElementById('attendance-marks').value) || 0;
     
-    // Update attendance display
-    document.getElementById('attendance-display').textContent = `Points: ${attendanceMarks.toFixed(2)}`;
+    // Get class activities marks
+    const activitiesMarks = parseFloat(document.getElementById('class-activities').value) || 0;
     
-    // Calculate total marks
-    const currentTotal = quizAverage + presentationMarks + assignmentMarks + midtermMarks + attendanceMarks;
+    // Calculate total marks excluding final
+    const currentTotal = quizAverage + presentationMarks + assignmentMarks + midtermMarks + attendanceMarks + activitiesMarks;
     
     // Check if final exam mark is actually entered (not just 0)
     const finalExamInput = document.getElementById('final-exam');
@@ -274,16 +242,12 @@ function calculateTotal() {
         
         if (nextGrade) {
             const marksNeeded = nextGrade.min - currentTotal;
-            // Use Math.ceil or keep precision based on preference, but following "4 to get C" style
             const displayNeeded = marksNeeded % 1 === 0 ? marksNeeded : marksNeeded.toFixed(1);
             passStatus = `${displayNeeded} to get ${nextGrade.grade}`;
+        } else if (currentGrade.grade === 'A+') {
+            passStatus = 'Perfect Grade (A+)';
         } else {
-            // Check if already at A+
-            if (currentGrade.grade === 'A+') {
-                passStatus = 'Perfect Grade (A+)';
-            } else {
-                passStatus = 'A+ Target Achieved!';
-            }
+            passStatus = 'A+ Target Achieved!';
         }
     }
     neededPassElement.textContent = passStatus;
@@ -302,18 +266,9 @@ function determineGrade(marks) {
 }
 
 function findClosestHigherGrade(currentMarks) {
-    // Current grade threshold (the one the user currently has)
     let currentThreshold = determineGrade(currentMarks);
-    
-    // Find all grades higher than the current one
-    // gradeThresholds is ordered from A+ (0) to F (last)
     const possibleGrades = gradeThresholds.filter(t => t.min > currentThreshold.min);
-    
     if (possibleGrades.length === 0) return null;
-    
-    // The immediate next grade is the one with the smallest min that's > currentMarks
-    // Since gradeThresholds is A+ to F, the one just before currentThreshold in the list
-    // is the immediate next. But filtering and picking the last one is safer.
     return possibleGrades[possibleGrades.length - 1];
 }
 
@@ -344,11 +299,10 @@ function updateGradeTargets(currentTotal, totalWithFinal) {
         let status = '';
         let statusClass = '';
         
-        // Check if grade is already achieved with current total (including final if entered)
         if (totalWithFinal >= threshold.min) {
             status = '✓ Achieved';
             statusClass = 'status-achieved';
-        } else if (neededMarks <= 40) {
+        } else if (neededMarks <= 35) {
             status = `${neededMarks.toFixed(1)} marks`;
             statusClass = 'status-possible';
         } else {
@@ -367,64 +321,41 @@ function updateGradeTargets(currentTotal, totalWithFinal) {
 }
 
 function showToast(message) {
-    // Remove existing toast if any
     const existingToast = document.querySelector('.warning-toast');
-    if (existingToast) {
-        existingToast.remove();
-    }
+    if (existingToast) existingToast.remove();
     
-    // Create new toast
     const toast = document.createElement('div');
     toast.className = 'warning-toast';
     toast.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${message}`;
     document.body.appendChild(toast);
     
-    // Show toast
     setTimeout(() => toast.classList.add('show'), 10);
-    
-    // Hide and remove toast after 3 seconds
     setTimeout(() => {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 400);
     }, 3000);
 }
 
-// Quiz Mode Logic
-window.quizMode = 'best3'; // Default
+// Initial mode setup
+window.quizMode = 'all';
+
+function updateQuizBadge() {
+    const badge = document.querySelector('.quiz-section .badge');
+    if (!badge) return;
+    
+    const mode = window.quizMode || 'all';
+    if (mode === 'all') badge.textContent = `Average of All (${quizCount})`;
+    else if (mode === 'best2') badge.textContent = `Best 2 of ${quizCount}`;
+    else if (mode === 'best3') badge.textContent = `Best 3 of ${quizCount}`;
+}
 
 function setQuizMode(mode) {
     window.quizMode = mode;
-    
-    // Update active button state
     document.querySelectorAll('.pill-btn').forEach(btn => {
         btn.classList.remove('active');
         if(btn.id === 'btn-' + mode) btn.classList.add('active');
     });
     
-    // Attempt to update badge if it exists
-    const badge = document.getElementById('quiz-badge');
-    const badgeSpan = document.querySelector('.card-header .badge');
-    const targetBadge = badge || badgeSpan;
-    
-    const weightInput = document.getElementById('weight-quiz');
-    let weight = '10'; // Default fallback
-
-    if (weightInput) {
-        weight = weightInput.value;
-    } else if (targetBadge) {
-        // Try to parse from existing text to preserve the specific max marks of the university
-        // Example: "Best 3 of Max 10" -> "10"
-        const match = targetBadge.textContent.match(/Max (d+)/);
-        if (match) {
-            weight = match[1];
-        }
-    }
-
-    if(targetBadge) {
-         if (mode === 'all') targetBadge.textContent = `All (Max ${weight})`;
-         else if (mode === 'best2') targetBadge.textContent = `Best 2 of Max ${weight}`;
-         else targetBadge.textContent = `Best 3 of Max ${weight}`;
-    }
-
+    updateQuizBadge();
     calculateTotal();
 }
