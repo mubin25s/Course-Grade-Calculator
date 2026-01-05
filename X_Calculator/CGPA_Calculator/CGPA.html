@@ -9,20 +9,57 @@
     <link rel="stylesheet" href="../Grade_Calculator/Grade.css">
     <style>
         /* Specific Styles for CGPA Calculator */
+        :root {
+            --primary: #8b5cf6;
+            --primary-glow: rgba(139, 92, 246, 0.4);
+            --secondary: #06b6d4;
+            --secondary-glow: rgba(6, 182, 212, 0.4);
+            --glass-bg: rgba(15, 12, 41, 0.6);
+            --glass-bg-accent: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0; /* Vertical padding */
+        }
+
         .cgpa-container {
-            max-width: 900px; /* Slightly wider for the table */
+            max-width: 1000px;
             margin: 0 auto;
+            position: relative;
         }
 
         .calculator-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 2rem;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            border-radius: 32px;
+            padding: 3rem 2.5rem;
+            box-shadow: var(--card-shadow);
             position: relative;
-            overflow: hidden;
+            overflow: visible; /* To allow floating button shadows */
+        }
+
+        .calculator-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.1), transparent 40%),
+                        radial-gradient(circle at bottom left, rgba(6, 182, 212, 0.1), transparent 40%);
+            border-radius: 32px;
+            pointer-events: none;
         }
 
         .course-list {
@@ -36,31 +73,29 @@
 
         .course-row {
             display: grid;
-            grid-template-columns: 2fr 1fr 1fr auto;
-            gap: 1rem;
+            grid-template-columns: 2.5fr 1fr 1.5fr auto;
+            gap: 1.5rem;
             align-items: center;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 1rem;
-            border-radius: 16px;
-            transition: all 0.3s ease;
-            animation: slideIn 0.3s ease backwards;
-            margin-bottom: 1rem;
+            background: var(--glass-bg-accent);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: cardEntrance 0.5s ease-out backwards;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .course-row:last-child {
-            margin-bottom: 0;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(20px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .course-row:hover {
             background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2), 0 0 15px var(--primary-glow);
         }
 
         .course-input-group {
@@ -77,20 +112,21 @@
 
         .course-input {
             width: 100%;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--glass-border);
             color: var(--text-main);
-            padding: 0.75rem 1rem;
-            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            border-radius: 14px;
             font-size: 1rem;
             outline: none;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
         }
 
         .course-input:focus {
-            border-color: var(--primary);
-            background: rgba(0, 0, 0, 0.4);
-            box-shadow: 0 0 0 4px rgba(167, 139, 250, 0.2);
+            border-color: var(--secondary);
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 0 4px var(--secondary-glow);
         }
 
         /* Mobile Responsive Grid */
@@ -105,24 +141,25 @@
         }
 
         .btn-delete {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
             background: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
+            color: #ef4444;
             border: 1px solid rgba(239, 68, 68, 0.2);
-            border-radius: 12px;
+            border-radius: 14px;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 1.25rem;
         }
 
         .btn-delete:hover {
-            background: var(--danger);
+            background: #ef4444;
             color: white;
-            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+            transform: scale(1.05);
         }
 
         @media (max-width: 768px) {
@@ -149,40 +186,44 @@
         }
 
         .btn-action {
-            padding: 0.9rem 2rem;
-            border-radius: 16px;
-            font-weight: 600;
+            padding: 1.1rem 2.5rem;
+            border-radius: 18px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             border: none;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            font-size: 1rem;
+            gap: 0.8rem;
+            font-size: 1.05rem;
             flex: 1;
             justify-content: center;
+            letter-spacing: 0.5px;
         }
 
         .btn-add {
-            background: rgba(255, 255, 255, 0.1);
+            background: var(--glass-bg-accent);
             color: var(--text-main);
             border: 1px solid var(--glass-border);
         }
 
         .btn-add:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 10px var(--secondary-glow);
         }
 
         .btn-calc {
-            background: linear-gradient(135deg, #D500F9, #AA00FF); /* Bright Purple */
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6); /* Premium Violet to Blue */
             color: white;
-            box-shadow: 0 8px 25px rgba(213, 0, 249, 0.4);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+            text-transform: uppercase;
         }
 
         .btn-calc:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(213, 0, 249, 0.6);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5), 0 0 20px var(--primary-glow);
         }
 
         .btn-reset {
@@ -197,49 +238,67 @@
             color: white;
         }
 
-        /* Results Section */
+        /* Results Section - Performance Board */
         .results-panel {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 20px;
-            padding: 2rem;
-            display: none; /* Hide element completely to remove space */
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 24px;
+            padding: 2.5rem;
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2.5rem;
             text-align: center;
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            margin-top: 2rem;
+            position: relative;
         }
 
         .results-panel.visible {
-            display: grid; /* Show when active */
+            display: grid;
             opacity: 1;
             transform: translateY(0);
-            animation: fadeInGrid 0.5s ease forwards;
-        }
-
-        @keyframes fadeInGrid {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .result-item {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.75rem;
+            position: relative;
+        }
+
+        .result-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: -1.25rem;
+            top: 10%;
+            height: 80%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent);
+        }
+
+        @media (max-width: 768px) {
+            .result-item:not(:last-child)::after { display: none; }
         }
 
         .result-label {
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
+            font-weight: 700;
         }
 
         .result-value {
-            font-size: 2.5rem;
-            font-weight: 700;
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+
+        .result-points .result-value {
             background: linear-gradient(to right, #00C9FF, #92FE9D);
             background-clip: text;
             -webkit-background-clip: text;
@@ -247,12 +306,12 @@
         }
 
         .result-cgpa .result-value {
-            font-size: 3.5rem;
-            background: linear-gradient(to right, #f59e0b, #eab308); /* Gold */
+            font-size: 4.5rem;
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 10px 30px rgba(245, 158, 11, 0.3);
+            text-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
         }
 
 
@@ -318,129 +377,37 @@
             opacity: 1;
         }
 
-        /* Custom Dropdown Styles */
-        .custom-select-wrapper {
-            position: relative;
-            user-select: none;
-            width: 100%;
-        }
-
-        .custom-select-trigger {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.75rem 1rem;
-            font-size: 1rem;
-            color: var(--text-muted);
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
+        /* Native Select Styling */
+        select.course-input {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ffffff' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1.25rem center;
+            background-size: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            text-align: center;
+            text-align-last: center;
+            background: linear-gradient(180deg, rgba(76, 29, 149, 0.3), rgba(6, 182, 212, 0.2)); /* Less bright theme */
+            border-color: rgba(255, 255, 255, 0.15);
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .custom-select-trigger:hover {
-            background: rgba(0, 0, 0, 0.3);
+        select.course-input:hover {
+            background: linear-gradient(180deg, rgba(76, 29, 149, 0.4), rgba(6, 182, 212, 0.3));
             border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
         }
 
-        .custom-select.open .custom-select-trigger {
-            border-color: var(--primary);
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 12px 12px 0 0;
-        }
-        
-        .custom-select-trigger span {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .custom-select-trigger i {
-            transition: transform 0.3s ease;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        .custom-select.open .custom-select-trigger i {
-            transform: rotate(180deg);
-            color: var(--primary);
-        }
-
-        .custom-options {
-            position: absolute;
-            display: block;
-            top: 100%;
-            left: 0;
-            right: 0;
-            border: 1px solid rgba(167, 139, 250, 0.4);
-            border-top: 0;
-            border-radius: 0 0 12px 12px;
-            background: rgba(75, 65, 130, 0.95); /* Lighter purple background */
-            backdrop-filter: blur(30px) saturate(180%); /* Stronger blur */
-            -webkit-backdrop-filter: blur(30px) saturate(180%);
-            transition: all 0.2s ease-in-out;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            z-index: 1000; /* Higher z-index to appear above everything */
-            max-height: 200px;
-            overflow-y: auto;
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-        }
-
-        .custom-select.open .custom-options {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: all;
-            transform: translateY(0);
-        }
-
-        .custom-option {
-            position: relative;
-            display: block;
-            padding: 0.75rem 1rem;
-            font-size: 0.95rem;
-            font-weight: 600; /* Bolder text */
-            color: rgba(255, 255, 255, 0.95); /* Brighter white text */
-            cursor: pointer;
-            transition: all 0.2s;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(100, 80, 160, 0.3); /* Lighter purple tint */
-        }
-
-        .custom-option:last-child {
-            border-bottom: none;
-        }
-
-        .custom-option:hover {
+        select.course-input option {
+            background-color: #1e1b4b; /* Dark fallback for options (gradients don't work on options) */
             color: white;
-            background: rgba(167, 139, 250, 0.6); /* Lighter, more vibrant hover */
-            padding-left: 1.25rem;
-            font-weight: 700; /* Even bolder on hover */
-        }
-
-        .custom-option.selected {
-            color: white;
-            background: var(--primary); /* Full primary for selected */
-            font-weight: 700; /* Bolder for selected */
-        }
-
-        /* Scrollbar for options */
-        .custom-options::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-options::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.2); 
-        }
-        .custom-options::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.2); 
-            border-radius: 4px;
-        }
-        .custom-options::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,255,255,0.4); 
+            padding: 10px;
+            font-weight: 500;
         }
 
         /* Default row to clone hidden */
@@ -448,6 +415,9 @@
 
         /* Construction Banner */
         .construction-banner {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
             background: rgba(124, 58, 237, 0.1);
             border: 1px solid rgba(124, 58, 237, 0.2);
             color: #a78bfa;
@@ -458,10 +428,11 @@
             gap: 0.75rem;
             font-size: 0.9rem;
             font-weight: 500;
-            margin: 2rem auto 1rem;
+            margin: 0;
             backdrop-filter: blur(10px);
             animation: pulseBanner 2s infinite ease-in-out;
             max-width: fit-content;
+            z-index: 100;
         }
 
         @keyframes pulseBanner {
@@ -501,9 +472,12 @@
     </div>
 
     <div class="container cgpa-container">
-        <header>
-            <h1>CGPA Calculator</h1>
-            <p>Calculate your cumulative grade point average with ease</p>
+        <header style="text-align: center; margin-bottom: 3.5rem !important;">
+            <div class="header-icon" style="font-size: 3.5rem; margin-bottom: 1rem; color: var(--primary); text-shadow: 0 0 20px var(--primary-glow);">
+                <i class="fa-solid fa-chart-pie"></i>
+            </div>
+            <h1 style="font-size: 3.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.5rem; background: linear-gradient(to right, #fff, #94a3b8); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">CGPA Calculator</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto;">Calculate your cumulative grade point average with modern precision and style.</p>
         </header>
 
         <div class="calculator-card">
@@ -525,15 +499,15 @@
 
             <div class="results-panel" id="resultPanel">
                 <div class="result-item result-cgpa">
-                    <span class="result-label">Your CGPA</span>
+                    <span class="result-label"><i class="fa-solid fa-trophy"></i> Your CGPA</span>
                     <span class="result-value" id="cgpaValue">0.00</span>
                 </div>
-                <div class="result-item">
-                    <span class="result-label">Total Credits</span>
+                <div class="result-item result-credits">
+                    <span class="result-label"><i class="fa-solid fa-graduation-cap"></i> Total Credits</span>
                     <span class="result-value" id="totalCredits">0</span>
                 </div>
-                <div class="result-item">
-                    <span class="result-label">Total Points</span>
+                <div class="result-item result-points">
+                    <span class="result-label"><i class="fa-solid fa-coins"></i> Total Points</span>
                     <span class="result-value" id="totalPoints">0</span>
                 </div>
             </div>
@@ -545,34 +519,28 @@
     <template id="rowTemplate">
         <div class="course-row">
             <div class="course-input-group">
-                <label>Course Name</label>
-                <input type="text" class="course-input input-name" placeholder="SWE 101">
+                <label><i class="fa-solid fa-book-open"></i> Course Name</label>
+                <input type="text" class="course-input input-name" placeholder="Software Engineering">
             </div>
             <div class="course-input-group">
-                <label>Credits</label>
+                <label><i class="fa-solid fa-hashtag"></i> Credits</label>
                 <input type="number" class="course-input input-credit" placeholder="3.0" min="0.5" step="0.5" oninput="validateInput(this)">
             </div>
             <div class="course-input-group">
-                <label>Grade</label>
-                <div class="custom-select-wrapper custom-select">
-                    <input type="hidden" class="input-grade" value="">
-                    <div class="custom-select-trigger">
-                        <span>Select</span>
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </div>
-                    <div class="custom-options">
-                        <span class="custom-option" data-value="4.00">A+ (4.00)</span>
-                        <span class="custom-option" data-value="3.75">A (3.75)</span>
-                        <span class="custom-option" data-value="3.50">A- (3.50)</span>
-                        <span class="custom-option" data-value="3.25">B+ (3.25)</span>
-                        <span class="custom-option" data-value="3.00">B (3.00)</span>
-                        <span class="custom-option" data-value="2.75">B- (2.75)</span>
-                        <span class="custom-option" data-value="2.50">C+ (2.50)</span>
-                        <span class="custom-option" data-value="2.25">C (2.25)</span>
-                        <span class="custom-option" data-value="2.00">D (2.00)</span>
-                        <span class="custom-option" data-value="0.00">F (0.00)</span>
-                    </div>
-                </div>
+                <label><i class="fa-solid fa-medal"></i> Grade</label>
+                <select class="course-input input-grade">
+                    <option value="" disabled selected>Select</option>
+                    <option value="4.00">A+ (4.00)</option>
+                    <option value="3.75">A (3.75)</option>
+                    <option value="3.50">A- (3.50)</option>
+                    <option value="3.25">B+ (3.25)</option>
+                    <option value="3.00">B (3.00)</option>
+                    <option value="2.75">B- (2.75)</option>
+                    <option value="2.50">C+ (2.50)</option>
+                    <option value="2.25">C (2.25)</option>
+                    <option value="2.00">D (2.00)</option>
+                    <option value="0.00">F (0.00)</option>
+                </select>
             </div>
             <button class="btn-delete" onclick="removeCourse(this)">
                 <i class="fa-solid fa-trash"></i>
@@ -585,46 +553,19 @@
         const INITIAL_ROWS = 3;
         const listContainer = document.getElementById('courseList');
         const template = document.getElementById('rowTemplate');
-        let dropdownOverlay = null;
+        // Initialize with default rows
 
         // Initialize with default rows
         window.onload = function() {
-            // Create overlay element
-            dropdownOverlay = document.createElement('div');
-            dropdownOverlay.className = 'dropdown-overlay';
-            document.body.appendChild(dropdownOverlay);
-            
-            // Overlay click closes all dropdowns
-            dropdownOverlay.addEventListener('click', function() {
-                closeAllDropdowns();
-            });
-            
             for(let i=0; i<INITIAL_ROWS; i++) {
                 addCourse();
             }
-            
-            // Close dropdowns when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.custom-select')) {
-                    closeAllDropdowns();
-                }
-            });
         };
         
-        function closeAllDropdowns() {
-            document.querySelectorAll('.custom-select').forEach(el => el.classList.remove('open'));
-            if (dropdownOverlay) {
-                dropdownOverlay.classList.remove('active');
-            }
-        }
-
         function addCourse() {
             const clone = template.content.cloneNode(true);
             const row = clone.querySelector('.course-row');
             
-            // Initialize Dropdown Logic for this specific row
-            initializeDropdown(row);
-
             // Add animation delay for initial load
             const currentRows = listContainer.children.length;
             row.style.animationDelay = `${currentRows * 0.1}s`;
@@ -641,64 +582,6 @@
             }, 10);
         }
         
-        function initializeDropdown(row) {
-            const dropdown = row.querySelector('.custom-select');
-            const trigger = dropdown.querySelector('.custom-select-trigger');
-            const hiddenInput = dropdown.querySelector('.input-grade');
-            const options = dropdown.querySelectorAll('.custom-option');
-            const label = trigger.querySelector('span');
-
-            trigger.addEventListener('click', function(e) {
-                e.stopPropagation();
-                
-                // Close other opened dropdowns
-                document.querySelectorAll('.custom-select').forEach(el => {
-                    if(el !== dropdown) el.classList.remove('open');
-                });
-                
-                // Toggle current dropdown
-                const isOpening = !dropdown.classList.contains('open');
-                dropdown.classList.toggle('open');
-                
-                // Show/hide overlay
-                if (dropdownOverlay) {
-                    if (isOpening) {
-                        dropdownOverlay.classList.add('active');
-                    } else {
-                        dropdownOverlay.classList.remove('active');
-                    }
-                }
-            });
-
-            options.forEach(option => {
-                option.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const value = this.getAttribute('data-value');
-                    const text = this.textContent;
-
-                    // Update UI
-                    label.textContent = text;
-                    label.style.color = 'var(--text-main)';
-                    
-                    // Update Hidden Input
-                    hiddenInput.value = value;
-                    
-                    // Visual Selection State
-                    options.forEach(opt => opt.classList.remove('selected'));
-                    this.classList.add('selected');
-
-                    // Close Dropdown and hide overlay
-                    dropdown.classList.remove('open');
-                    if (dropdownOverlay) {
-                        dropdownOverlay.classList.remove('active');
-                    }
-                    
-                    // Reset Error State if any
-                    trigger.style.borderColor = 'var(--glass-border)';
-                });
-            });
-        }
-
         function removeCourse(btn) {
             const rows = listContainer.getElementsByClassName('course-row');
             if(rows.length > 1) {
@@ -726,8 +609,7 @@
 
             rows.forEach(row => {
                 const creditInput = row.querySelector('.input-credit');
-                const gradeInput = row.querySelector('.input-grade'); // This is now a hidden input
-                const dropdownTrigger = row.querySelector('.custom-select-trigger');
+                const gradeInput = row.querySelector('.input-grade');
                 
                 const credit = parseFloat(creditInput.value);
                 const gradePoint = parseFloat(gradeInput.value);
@@ -741,13 +623,13 @@
                 if (!creditInput.value || isNaN(credit) || !gradeInput.value) {
                     // Highlight the invalid field
                     if(!creditInput.value) creditInput.style.borderColor = 'var(--danger)';
-                    if(!gradeInput.value) dropdownTrigger.style.borderColor = 'var(--danger)'; // Highlight custom trigger
+                    if(!gradeInput.value) gradeInput.style.borderColor = 'var(--danger)';
                     isValid = false;
                     
                     // Reset border after 2s
                     setTimeout(() => {
                         creditInput.style.borderColor = 'var(--glass-border)';
-                        dropdownTrigger.style.borderColor = 'var(--glass-border)';
+                        gradeInput.style.borderColor = 'var(--glass-border)';
                     }, 2000);
                 } else {
                     hasData = true;
@@ -805,14 +687,7 @@
             rows.forEach(row => {
                 row.querySelector('.input-name').value = '';
                 row.querySelector('.input-credit').value = '';
-                
-                // Reset Custom Dropdown
-                row.querySelector('.input-grade').value = '';
-                const triggerLabel = row.querySelector('.custom-select-trigger span');
-                triggerLabel.textContent = 'Select';
-                triggerLabel.style.color = 'var(--text-muted)';
-                row.querySelectorAll('.custom-option').forEach(opt => opt.classList.remove('selected'));
-                
+                row.querySelector('.input-grade').value = ''; 
                 row.style.background = '';
             });
             
