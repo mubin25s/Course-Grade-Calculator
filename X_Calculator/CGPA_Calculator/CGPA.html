@@ -128,18 +128,6 @@
             background: rgba(0, 0, 0, 0.5);
             box-shadow: 0 0 0 4px var(--secondary-glow);
         }
-
-        /* Mobile Responsive Grid */
-        @media (max-width: 768px) {
-            .course-row {
-                grid-template-columns: 1fr 1fr;
-                gap: 0.75rem;
-            }
-            .course-input-group:first-child { /* Course Name */
-                grid-column: 1 / -1;
-            }
-        }
-
         .btn-delete {
             width: 45px;
             height: 45px;
@@ -162,11 +150,65 @@
             transform: scale(1.05);
         }
 
+        /* Tablet & Mobile Layout */
+        @media (max-width: 900px) {
+            .back-nav {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 1rem;
+                width: 100%;
+                max-width: 600px;
+            }
+            
+            .construction-banner {
+                position: relative;
+                top: auto;
+                right: auto;
+                margin: 0 auto 2rem;
+            }
+
+            .cgpa-container {
+                width: 95%;
+            }
+        }
+
         @media (max-width: 768px) {
+            .course-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+            .course-input-group:first-child { /* Course Name spans full */
+                grid-column: 1 / -1;
+            }
             .btn-delete {
                 margin-top: 0;
-                grid-column: 2;
-                justify-self: end;
+                grid-column: 2; /* Align with last input in 2 col grid */
+                width: 100%; /* Full width button on mobile */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .course-row {
+                grid-template-columns: 1fr; /* Single column stack */
+                gap: 1rem;
+                padding: 1.25rem;
+            }
+            .course-input-group, .course-input-group:first-child, .btn-delete {
+                grid-column: auto;
+            }
+            .calculator-card {
+                padding: 2rem 1.5rem;
+                border-radius: 24px;
+            }
+            header h1 {
+                font-size: 2.5rem !important;
+            }
+            .result-value {
+                font-size: 2rem; 
+            }
+            .result-cgpa .result-value {
+                font-size: 3.5rem;
             }
         }
 
