@@ -223,7 +223,7 @@ function calculateTotal() {
     
     const quizTotal = countToAverage > 0 ? (quizSum / countToAverage) : 0;
     
-    document.getElementById('quiz-avg-display').textContent = `Result: ${quizTotal.toFixed(2)} / 10`;
+    document.getElementById('quiz-avg-display').textContent = `Result (Avg): ${quizTotal.toFixed(2)} / 10`;
     
     const midtermMarks = parseFloat(document.getElementById('mid-term').value) || 0;
     const assignmentMarks = parseFloat(document.getElementById('assignment-mark').value) || 0;
@@ -345,4 +345,44 @@ function showToast(message) {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 400);
     }, 3000);
+}
+
+// Quiz Mode Logic
+window.quizMode = 'best3'; // Default
+
+function setQuizMode(mode) {
+    window.quizMode = mode;
+    
+    // Update active button state
+    document.querySelectorAll('.pill-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.id === 'btn-' + mode) btn.classList.add('active');
+    });
+    
+    // Attempt to update badge if it exists
+    const badge = document.getElementById('quiz-badge');
+    const badgeSpan = document.querySelector('.card-header .badge');
+    const targetBadge = badge || badgeSpan;
+    
+    const weightInput = document.getElementById('weight-quiz');
+    let weight = '10'; // Default fallback
+
+    if (weightInput) {
+        weight = weightInput.value;
+    } else if (targetBadge) {
+        // Try to parse from existing text to preserve the specific max marks of the university
+        // Example: "Best 3 of Max 10" -> "10"
+        const match = targetBadge.textContent.match(/Max (d+)/);
+        if (match) {
+            weight = match[1];
+        }
+    }
+
+    if(targetBadge) {
+         if (mode === 'all') targetBadge.textContent = `All (Max ${weight})`;
+         else if (mode === 'best2') targetBadge.textContent = `Best 2 of Max ${weight}`;
+         else targetBadge.textContent = `Best 3 of Max ${weight}`;
+    }
+
+    calculateTotal();
 }

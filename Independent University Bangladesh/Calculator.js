@@ -181,13 +181,44 @@ function calculateTotal() {
         .sort((a, b) => b - a); // Sort descending
     
     // Calculate average of the best 3 (or fewer if total quizzes < 3)
-    const bestQuizzes = quizMarks.slice(0, 3);
+    let limit = quizMarks.length;
+    if (window.quizMode === 'best2') limit = 2;
+    // For 'all', limit is length (do nothing special, slice(0, length))
+    else if (window.quizMode === 'best3') limit = 3;
+    
+    // Ensure we don't slice more than available if 'all' or default
+    if (window.quizMode === 'all') limit = quizMarks.length;
+
+    const bestQuizzes = quizMarks.slice(0, limit);
+    
+    // Adjust divider for average calculation
+    let divider = bestQuizzes.length;
+    if (window.quizMode === 'best2') divider = Math.min(bestQuizzes.length, 2);
+    else if (window.quizMode === 'best3') divider = Math.min(bestQuizzes.length, 3);
+    else if (window.quizMode === 'all') divider = bestQuizzes.length;
+    
+    if (divider === 0) divider = 1; // Prevent div by zero
+    
+    
     const quizAverage = bestQuizzes.length > 0 
-        ? bestQuizzes.reduce((a, b) => a + b, 0) / Math.min(bestQuizzes.length, 3) 
+        ? bestQuizzes.reduce((a, b) => a + b, 0) / divider 
         : 0;
     
     // Update quiz average display
-    document.getElementById('quiz-avg-display').textContent = `Avg (Best ${bestQuizzes.length > 3 ? 3 : bestQuizzes.length}): ${quizAverage.toFixed(2)}`;
+    // Dynamic Max Mark for display
+        let maxMark = '10';
+        const wInput = document.getElementById('weight-quiz');
+        if(wInput) maxMark = wInput.value;
+        else {
+             // Try badge
+             const b = document.getElementById('quiz-badge') || document.querySelector('.card-header .badge');
+             if(b) {
+                const m = b.textContent.match(/Max (d+)/);
+                if(m) maxMark = m[1];
+             }
+        }
+        
+        document.getElementById('quiz-avg-display').textContent = `Result (Avg): ${quizAverage.toFixed(2)} / ${maxMark}`;
     
     // Get presentation and assignment marks
     const presentationMarks = parseFloat(document.getElementById('presentation-mark').value) || 0;
@@ -358,4 +389,44 @@ function showToast(message) {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 400);
     }, 3000);
+}
+
+// Quiz Mode Logic
+window.quizMode = 'best3'; // Default
+
+function setQuizMode(mode) {
+    window.quizMode = mode;
+    
+    // Update active button state
+    document.querySelectorAll('.pill-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.id === 'btn-' + mode) btn.classList.add('active');
+    });
+    
+    // Attempt to update badge if it exists
+    const badge = document.getElementById('quiz-badge');
+    const badgeSpan = document.querySelector('.card-header .badge');
+    const targetBadge = badge || badgeSpan;
+    
+    const weightInput = document.getElementById('weight-quiz');
+    let weight = '10'; // Default fallback
+
+    if (weightInput) {
+        weight = weightInput.value;
+    } else if (targetBadge) {
+        // Try to parse from existing text to preserve the specific max marks of the university
+        // Example: "Best 3 of Max 10" -> "10"
+        const match = targetBadge.textContent.match(/Max (d+)/);
+        if (match) {
+            weight = match[1];
+        }
+    }
+
+    if(targetBadge) {
+         if (mode === 'all') targetBadge.textContent = `All (Max ${weight})`;
+         else if (mode === 'best2') targetBadge.textContent = `Best 2 of Max ${weight}`;
+         else targetBadge.textContent = `Best 3 of Max ${weight}`;
+    }
+
+    calculateTotal();
 }

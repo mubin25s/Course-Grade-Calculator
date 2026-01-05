@@ -69,9 +69,16 @@
             <!-- Quizzes Section -->
             <section class="card quiz-section">
                 <div class="card-header">
+                    <div>
                     <h2><i class="fa-solid fa-pen-to-square"></i> Quizzes</h2>
                     <span class="badge" id="quiz-badge">Best 2 of Max 15</span>
                 </div>
+                    
+                    <div class="config-pills">
+                        <button onclick="setQuizMode('best2')" class="pill-btn" id="btn-best2">B2</button>
+                        <button onclick="setQuizMode('best3')" class="pill-btn active" id="btn-best3">B3</button>
+                        <button onclick="setQuizMode('all')" class="pill-btn" id="btn-all">All</button>
+                    </div></div>
                 <div id="quiz-inputs-container" class="inputs-row">
                     <!-- Populated by JS -->
                 </div>
@@ -79,6 +86,8 @@
                     <button class="remove-quiz-btn" onclick="removeQuiz()" title="Remove Quiz"><i class="fa-solid fa-minus"></i></button>
                     <button class="add-quiz-btn" onclick="addQuiz()" title="Add Quiz"><i class="fa-solid fa-plus"></i></button>
                 </div>
+                
+                
                 <div class="result-display" id="quiz-avg-display">Avg Score: 0.00</div>
             </section>
 

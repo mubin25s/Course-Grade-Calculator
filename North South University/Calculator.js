@@ -276,9 +276,27 @@ function calculateTotal() {
     // Quiz Calculation: Best 2 average, directly used as score (since inputs are capped by weight)
     const quizInputs = document.querySelectorAll('#quiz-inputs-container input');
     const quizMarks = Array.from(quizInputs).map(i => parseFloat(i.value) || 0).sort((a, b) => b - a);
-    const bestQuizzes = quizMarks.slice(0, 2);
+    let limit = quizMarks.length;
+    if (window.quizMode === 'best2') limit = 2;
+    // For 'all', limit is length (do nothing special, slice(0, length))
+    else if (window.quizMode === 'best3') limit = 3;
+    
+    // Ensure we don't slice more than available if 'all' or default
+    if (window.quizMode === 'all') limit = quizMarks.length;
+
+    const bestQuizzes = quizMarks.slice(0, limit);
+    
+    // Adjust divider for average calculation
+    let divider = bestQuizzes.length;
+    if (window.quizMode === 'best2') divider = Math.min(bestQuizzes.length, 2);
+    else if (window.quizMode === 'best3') divider = Math.min(bestQuizzes.length, 3);
+    else if (window.quizMode === 'all') divider = bestQuizzes.length;
+    
+    if (divider === 0) divider = 1; // Prevent div by zero
+    
+    
     const quizScore = bestQuizzes.length > 0 ? (bestQuizzes.reduce((a, b) => a + b, 0) / bestQuizzes.length) : 0;
-    document.getElementById('quiz-avg-display').textContent = `Score: ${quizScore.toFixed(2)} / ${weights.quiz}`;
+    document.getElementById('quiz-avg-display').textContent = `Result (Avg): ${quizScore.toFixed(2)} / ${weights.quiz}`;
 
     // Mid Calculation: Best 1 scaled to weight
     const midInputs = document.querySelectorAll('#mid-inputs-container input');
@@ -446,4 +464,44 @@ function showToast(message) {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 400);
     }, 3000);
+}
+
+// Quiz Mode Logic
+window.quizMode = 'best3'; // Default
+
+function setQuizMode(mode) {
+    window.quizMode = mode;
+    
+    // Update active button state
+    document.querySelectorAll('.pill-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.id === 'btn-' + mode) btn.classList.add('active');
+    });
+    
+    // Attempt to update badge if it exists
+    const badge = document.getElementById('quiz-badge');
+    const badgeSpan = document.querySelector('.card-header .badge');
+    const targetBadge = badge || badgeSpan;
+    
+    const weightInput = document.getElementById('weight-quiz');
+    let weight = '10'; // Default fallback
+
+    if (weightInput) {
+        weight = weightInput.value;
+    } else if (targetBadge) {
+        // Try to parse from existing text to preserve the specific max marks of the university
+        // Example: "Best 3 of Max 10" -> "10"
+        const match = targetBadge.textContent.match(/Max (d+)/);
+        if (match) {
+            weight = match[1];
+        }
+    }
+
+    if(targetBadge) {
+         if (mode === 'all') targetBadge.textContent = `All (Max ${weight})`;
+         else if (mode === 'best2') targetBadge.textContent = `Best 2 of Max ${weight}`;
+         else targetBadge.textContent = `Best 3 of Max ${weight}`;
+    }
+
+    calculateTotal();
 }
