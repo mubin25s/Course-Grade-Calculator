@@ -208,27 +208,17 @@ function calculateTotal() {
         .sort((a, b) => b - a); 
     
     // Logic: Average of best N quizzes
-    let quizSum = 0;
-    // If bestQuizzesToCount is 4, but we have 5 quizzes, 
-    // it was intended as "All", so we should handle that.
-    // The "All" button sets count to 4 in my current HTML.
-    // Let's make it smarter: if 4 is selected but quizCount > 4, 
-    // and the button says "All", we should count all.
-    
     let effectiveN = bestQuizzesToCount;
-    if (bestQuizzesToCount === 4) {
-        const allBtn = Array.from(document.querySelectorAll('.pill-btn')).find(b => b.innerText.includes('All'));
-        if (allBtn && allBtn.classList.contains('active')) {
-            effectiveN = quizCount;
-        }
+    const allBtn = Array.from(document.querySelectorAll('.pill-btn')).find(b => b.innerText.includes('All'));
+    const isAllMode = allBtn && allBtn.classList.contains('active');
+    
+    if (isAllMode) {
+        effectiveN = quizCount;
     }
 
-    const countToAverage = Math.min(effectiveN, quizMarks.length);
-    for(let i=0; i<countToAverage; i++) {
-        quizSum += quizMarks[i];
-    }
-    
-    const quizTotal = countToAverage > 0 ? (quizSum / countToAverage) : 0;
+    const quizSum = quizMarks.slice(0, effectiveN).reduce((sum, mark) => sum + mark, 0);
+    const divider = effectiveN;
+    const quizTotal = divider > 0 ? (quizSum / divider) : 0;
     
     document.getElementById('quiz-avg-display').textContent = `Result (Avg): ${quizTotal.toFixed(2)} / 10`;
     

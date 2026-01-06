@@ -50,7 +50,8 @@ function initializeCalculator() {
         }
     });
     
-    // Initial calculation
+    // Initial calculation and mode setup
+    setQuizMode('best2');
     calculateTotal();
 }
 
@@ -181,9 +182,16 @@ function calculateTotal() {
     const quizMarks = Array.from(quizInputs)
         .map(input => parseFloat(input.value) || 0);
     
-    // EWU usually takes average of all quizzes (default 3)
-    const quizSum = quizMarks.reduce((a, b) => a + b, 0);
-    const quizAverage = quizMarks.length > 0 ? quizSum / quizMarks.length : 0;
+    // EWU usually takes average of all entered or best 2/3 based on mode
+    let divider = quizCount;
+    if (window.quizMode === 'best2') divider = 2;
+    else if (window.quizMode === 'best3') divider = 3;
+    else if (window.quizMode === 'all') divider = quizCount;
+
+    if (divider === 0) divider = 1;
+
+    const quizSum = quizMarks.sort((a, b) => b - a).slice(0, window.quizMode === 'all' ? quizCount : (window.quizMode === 'best2' ? 2 : 3)).reduce((a, b) => a + b, 0);
+    const quizAverage = quizSum / divider;
     
     // Update quiz average display
     document.getElementById('quiz-avg-display').textContent = `Avg: ${quizAverage.toFixed(2)}`;

@@ -65,6 +65,7 @@ function initializeCalculator() {
     });
     
     updateDynamicLabels();
+    setQuizMode('best2'); // Initial setup for quiz mode
     calculateTotal();
 }
 
@@ -297,15 +298,14 @@ function calculateTotal() {
     const bestQuizzes = quizMarks.slice(0, limit);
     
     // Adjust divider for average calculation
-    let divider = bestQuizzes.length;
-    if (window.quizMode === 'best2') divider = Math.min(bestQuizzes.length, 2);
-    else if (window.quizMode === 'best3') divider = Math.min(bestQuizzes.length, 3);
-    else if (window.quizMode === 'all') divider = bestQuizzes.length;
+    let divider = quizCount;
+    if (window.quizMode === 'best2') divider = 2;
+    else if (window.quizMode === 'best3') divider = 3;
+    else if (window.quizMode === 'all') divider = quizCount;
     
     if (divider === 0) divider = 1; // Prevent div by zero
     
-    
-    const quizScore = bestQuizzes.length > 0 ? (bestQuizzes.reduce((a, b) => a + b, 0) / bestQuizzes.length) : 0;
+    const quizScore = bestQuizzes.length > 0 ? (bestQuizzes.reduce((a, b) => a + b, 0) / divider) : 0;
     document.getElementById('quiz-avg-display').textContent = `Result (Avg): ${quizScore.toFixed(2)} / ${weights.quiz}`;
 
     // Mid Calculation: Best 1 scaled to weight

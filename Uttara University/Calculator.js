@@ -77,6 +77,16 @@ function renderQuizzes() {
         });
         input.addEventListener('blur', function() {
             validateInput(input.id);
+        });
+        
+        container.appendChild(inputGroup);
+    }
+}
+
+function enforceMaxValue(inputId) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    const value = parseFloat(input.value);
     const max = parseFloat(input.max);
     
     // If value exceeds max, instantly clamp it
@@ -162,10 +172,10 @@ function calculateTotal() {
     const bestQuizzes = quizMarks.slice(0, limit);
     
     // Adjust divider for average calculation
-    let divider = bestQuizzes.length;
-    if (window.quizMode === 'best2') divider = Math.min(bestQuizzes.length, 2);
-    else if (window.quizMode === 'best3') divider = Math.min(bestQuizzes.length, 3);
-    else if (window.quizMode === 'all') divider = bestQuizzes.length;
+    let divider = quizCount;
+    if (window.quizMode === 'best2') divider = 2;
+    else if (window.quizMode === 'best3') divider = 3;
+    else if (window.quizMode === 'all') divider = quizCount;
     
     if (divider === 0) divider = 1; // Prevent div by zero
     
