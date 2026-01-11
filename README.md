@@ -1,19 +1,27 @@
 # 🎓 Course Grade Calculator
 
-A simple web tool to **calculate university course grades** based on input scores.
+A web-based application that allows students to **calculate course grades and CGPA** based on their selected university’s grading system.
 
-## 📌 Features
-- Enter assignment/test scores
-- Get final grade instantly
-- Works in the browser
+## ✨ Key Features
+- University selection before calculation
+- University-specific grade calculation rules
+- Course-wise grade calculator
+- CGPA calculator included
+- Instant results with a simple interface
 
-## 🛠️ Built With
-JavaScript • HTML • CSS
+## 🔄 How It Works
+1. Select your **University**
+2. Choose the **calculation type** (Course Grade / CGPA)
+3. Enter required marks or credits
+4. View results instantly
 
-## 🧪 How to Use
-1. Open `index.html`
-2. Enter your scores
-3. See the calculated result
+## 🔗 Live Demo
+👉 https://mubin25s.github.io/Course-Grade-Calculator/X_Calculator/Grade_Calculator/index.html
 
-## 🙌 Why This?
-A useful project for students to quickly compute final grades.
+## 🛠️ Technologies
+HTML • CSS • JavaScript
+
+## 📌 Disclaimer
+This is an independent, unofficial student project.  
+It is not affiliated with or endorsed by any university.  
+Grading rules are based on publicly available information and may change.
