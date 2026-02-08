@@ -10,16 +10,17 @@
     <style>
         /* Specific Styles for CGPA Calculator */
         :root {
-            --primary: #8b5cf6;
-            --primary-glow: rgba(139, 92, 246, 0.4);
-            --secondary: #06b6d4;
-            --secondary-glow: rgba(6, 182, 212, 0.4);
-            --glass-bg: rgba(15, 12, 41, 0.6);
-            --glass-bg-accent: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --primary: #6D001A;    /* Dark Red */
+            --primary-glow: rgba(109, 0, 26, 0.4);
+            --secondary: #8B112B;  /* Slightly Lighter Red */
+            --secondary-glow: rgba(139, 17, 43, 0.4);
+            --glass-bg: rgba(26, 26, 26, 0.6);
+            --glass-bg-accent: rgba(109, 0, 26, 0.08);
+            --glass-border: rgba(109, 0, 26, 0.15);
+            --text-main: #F5F1EC;  /* Irony White */
+            --text-muted: rgba(245, 241, 236, 0.7);
             --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            --danger: #EF4444;
         }
 
         body {
@@ -56,8 +57,8 @@
             left: 0;
             right: 0;
             height: 100%;
-            background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.1), transparent 40%),
-                        radial-gradient(circle at bottom left, rgba(6, 182, 212, 0.1), transparent 40%);
+            background: radial-gradient(circle at top right, rgba(109, 0, 26, 0.1), transparent 40%),
+                        radial-gradient(circle at bottom left, rgba(139, 17, 43, 0.1), transparent 40%);
             border-radius: 32px;
             pointer-events: none;
         }
@@ -257,9 +258,9 @@
         }
 
         .btn-calc {
-            background: linear-gradient(135deg, #8b5cf6, #3b82f6); /* Premium Violet to Blue */
-            color: white;
-            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+            background: linear-gradient(135deg, #6D001A, #A51D3A); /* Red Wine to Accent */
+            color: #F5F1EC;
+            box-shadow: 0 10px 30px rgba(109, 0, 26, 0.3);
             text-transform: uppercase;
         }
 
@@ -341,7 +342,7 @@
         }
 
         .result-points .result-value {
-            background: linear-gradient(to right, #00C9FF, #92FE9D);
+            background: linear-gradient(to right, #6D001A, #A51D3A);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -349,11 +350,11 @@
 
         .result-cgpa .result-value {
             font-size: 4.5rem;
-            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+            background: linear-gradient(135deg, #F5F1EC, #6D001A);
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
+            text-shadow: 0 0 30px rgba(109, 0, 26, 0.4);
         }
 
 
@@ -431,7 +432,7 @@
             cursor: pointer;
             text-align: center;
             text-align-last: center;
-            background: linear-gradient(180deg, rgba(76, 29, 149, 0.3), rgba(6, 182, 212, 0.2)); /* Less bright theme */
+            background: linear-gradient(180deg, rgba(109, 0, 26, 0.3), rgba(139, 17, 43, 0.2)); /* Red theme */
             border-color: rgba(255, 255, 255, 0.15);
             font-weight: 500;
             backdrop-filter: blur(10px);
@@ -440,13 +441,13 @@
         }
 
         select.course-input:hover {
-            background: linear-gradient(180deg, rgba(76, 29, 149, 0.4), rgba(6, 182, 212, 0.3));
+            background: linear-gradient(180deg, rgba(109, 0, 26, 0.4), rgba(139, 17, 43, 0.3));
             border-color: rgba(255, 255, 255, 0.3);
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
         }
 
         select.course-input option {
-            background-color: #1e1b4b; /* Dark fallback for options (gradients don't work on options) */
+            background-color: #1A1A1A; /* Dark fallback for options */
             color: white;
             padding: 10px;
             font-weight: 500;
@@ -460,9 +461,9 @@
             position: absolute;
             top: 1.5rem;
             right: 1.5rem;
-            background: rgba(124, 58, 237, 0.1);
-            border: 1px solid rgba(124, 58, 237, 0.2);
-            color: #a78bfa;
+            background: rgba(109, 0, 26, 0.1);
+            border: 1px solid rgba(139, 17, 43, 0.2);
+            color: #F5F1EC;
             padding: 0.75rem 1.5rem;
             border-radius: 50px;
             display: inline-flex;
@@ -518,7 +519,7 @@
             <div class="header-icon" style="font-size: 3.5rem; margin-bottom: 1rem; color: var(--primary); text-shadow: 0 0 20px var(--primary-glow);">
                 <i class="fa-solid fa-chart-pie"></i>
             </div>
-            <h1 style="font-size: 3.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.5rem; background: linear-gradient(to right, #fff, #94a3b8); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">CGPA Calculator</h1>
+            <h1 style="font-size: 3.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.5rem; background: linear-gradient(to right, #F5F1EC, #6D001A); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">CGPA Calculator</h1>
             <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto;">Calculate your cumulative grade point average with modern precision and style.</p>
         </header>
 
