@@ -18,7 +18,10 @@ A web-based application that allows students to **calculate course grades and CG
 ## 🔗 Live Demo
 👉 https://mubin25s.github.io/Course-Grade-Calculator/X_Calculator/Grade_Calculator/index.html
 
-## 🛠️ Technologies
+## � Documentation
+For a full breakdown of the project's architecture, tools, and technical implementation, see the [Detailed Project Documentation](./PROJECT_DOCUMENTATION.md).
+
+## �🛠️ Technologies
 HTML • CSS • JavaScript
 
 ## 📌 Disclaimer
