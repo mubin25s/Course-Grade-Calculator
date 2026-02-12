@@ -1,19 +1,5 @@
 # 🎓 Project Documentation: Course Grade Calculator
 
-## 📋 Table of Contents
-1. [Project Overview](#-project-overview)
-2. [Problem Statement & Motivation](#-problem-statement--motivation)
-3. [Key Features](#-key-features)
-4. [Technology Stack](#-technology-stack)
-5. [Project Architecture](#-project-architecture)
-6. [Core Functionalities](#-core-functionalities)
-7. [Design & User Experience](#-design--user-experience)
-8. [Technical Implementation Details](#-technical-implementation-details)
-9. [Future Roadmap](#-future-roadmap)
-10. [Legal Disclaimer](#-legal-disclaimer)
-
----
-
 ## 🌟 Project Overview
 The **Course Grade Calculator** is a comprehensive, web-based tool designed specifically for university students in Bangladesh. It simplifies the often complex process of tracking academic performance by providing university-specific grading calculations for both individual courses and overall CGPA.
 
