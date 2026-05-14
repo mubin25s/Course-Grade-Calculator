@@ -16,7 +16,7 @@ A web-based application that allows students to **calculate course grades and CG
 4. View results instantly
 
 ## 🔗 Live Demo
-👉 course-grade-calculator-ten.vercel.app
+👉 [course-grade-calculator-ten.vercel.app](https://course-grade-calculator-ten.vercel.app)
 
 ## � Documentation
 For a full breakdown of the project's architecture, tools, and technical implementation, see the [Detailed Project Documentation](./PROJECT_DOCUMENTATION.md).
