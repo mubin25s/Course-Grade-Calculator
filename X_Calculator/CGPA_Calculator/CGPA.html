@@ -10,26 +10,32 @@
     <style>
         /* Specific Styles for CGPA Calculator */
         :root {
-            --primary: #6D001A;    /* Dark Red */
-            --primary-glow: rgba(109, 0, 26, 0.4);
-            --secondary: #8B112B;  /* Slightly Lighter Red */
-            --secondary-glow: rgba(139, 17, 43, 0.4);
-            --glass-bg: rgba(26, 26, 26, 0.6);
-            --glass-bg-accent: rgba(109, 0, 26, 0.08);
-            --glass-border: rgba(109, 0, 26, 0.15);
-            --text-main: #F5F1EC;  /* Irony White */
-            --text-muted: rgba(245, 241, 236, 0.7);
-            --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            --primary: #6D001A;    /* Red Wine */
+            --primary-glow: rgba(109, 0, 26, 0.15);
+            --secondary: #8B112B;  /* Slightly Lighter Wine */
+            --secondary-glow: rgba(139, 17, 43, 0.1);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-bg-accent: rgba(109, 0, 26, 0.03);
+            --glass-border: rgba(109, 0, 26, 0.1);
+            --text-main: #6D001A;  /* Red Wine Text */
+            --text-muted: #9B4D5E;  /* Muted Wine Text */
+            --card-shadow: 0 20px 40px rgba(109, 0, 26, 0.1);
             --danger: #EF4444;
+            --bg-page: #FDFBFA;    /* Creamy White */
         }
 
         body {
+            background-color: var(--bg-page);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(109, 0, 26, 0.03) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(109, 0, 26, 0.03) 0px, transparent 50%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem 0; /* Vertical padding */
+            padding: 2rem 0;
+            color: var(--text-main);
         }
 
         .cgpa-container {
@@ -113,7 +119,7 @@
 
         .course-input {
             width: 100%;
-            background: rgba(0, 0, 0, 0.3);
+            background: #FFFFFF;
             border: 1px solid var(--glass-border);
             color: var(--text-main);
             padding: 1rem 1.25rem;
@@ -122,12 +128,13 @@
             outline: none;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
+            box-shadow: inset 0 2px 4px rgba(109, 0, 26, 0.02);
         }
 
         .course-input:focus {
-            border-color: var(--secondary);
-            background: rgba(0, 0, 0, 0.5);
-            box-shadow: 0 0 0 4px var(--secondary-glow);
+            border-color: var(--primary);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 4px var(--primary-glow);
         }
         .btn-delete {
             width: 45px;
@@ -283,18 +290,18 @@
 
         /* Results Section - Performance Board */
         .results-panel {
-            background: rgba(0, 0, 0, 0.4);
+            background: #FFFFFF;
             border-radius: 24px;
             padding: 2.5rem;
             display: none;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 2.5rem;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
             opacity: 0;
             transform: translateY(30px);
             transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            box-shadow: var(--card-shadow);
             margin-top: 2rem;
             position: relative;
         }
@@ -350,11 +357,8 @@
 
         .result-cgpa .result-value {
             font-size: 4.5rem;
-            background: linear-gradient(135deg, #F5F1EC, #6D001A);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(109, 0, 26, 0.4);
+            color: var(--primary);
+            text-shadow: 0 10px 20px var(--primary-glow);
         }
 
 
@@ -362,24 +366,24 @@
             display: inline-flex;
             align-items: center;
             gap: 0.6rem;
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
             text-decoration: none;
             padding: 0.8rem 1.5rem;
             border-radius: 50px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: #FFFFFF;
+            border: 1px solid var(--glass-border);
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
-            font-weight: 500;
+            font-weight: 600;
             letter-spacing: 0.5px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(109, 0, 26, 0.05);
         }
 
         .back-link:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--primary);
+            color: #FFFFFF;
             transform: translateX(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 25px var(--primary-glow);
         }
         
         .back-link i {
@@ -407,7 +411,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(109, 0, 26, 0.05);
             backdrop-filter: blur(2px);
             z-index: 999;
             display: none;
@@ -425,30 +429,31 @@
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23ffffff' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236D001A' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 1.25rem center;
             background-size: 12px;
             cursor: pointer;
             text-align: center;
             text-align-last: center;
-            background: linear-gradient(180deg, rgba(109, 0, 26, 0.3), rgba(139, 17, 43, 0.2)); /* Red theme */
-            border-color: rgba(255, 255, 255, 0.15);
+            background: #0A0A0A;
+            border-color: var(--glass-border);
+            color: #FFFFFF;
             font-weight: 500;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(109, 0, 26, 0.4);
         }
 
         select.course-input:hover {
-            background: linear-gradient(180deg, rgba(109, 0, 26, 0.4), rgba(139, 17, 43, 0.3));
-            border-color: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+            background: #000000;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
         }
 
         select.course-input option {
-            background-color: #1A1A1A; /* Dark fallback for options */
-            color: white;
+            background-color: #FFFFFF;
+            color: var(--primary);
             padding: 10px;
             font-weight: 500;
         }
@@ -519,7 +524,7 @@
             <div class="header-icon" style="font-size: 3.5rem; margin-bottom: 1rem; color: var(--primary); text-shadow: 0 0 20px var(--primary-glow);">
                 <i class="fa-solid fa-chart-pie"></i>
             </div>
-            <h1 style="font-size: 3.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.5rem; background: linear-gradient(to right, #F5F1EC, #6D001A); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">CGPA Calculator</h1>
+            <h1 style="font-size: 3.5rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 0.5rem; color: var(--primary);">CGPA Calculator</h1>
             <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto;">Calculate your cumulative grade point average with modern precision and style.</p>
         </header>
 
@@ -529,11 +534,11 @@
             </div>
 
             <div class="controls">
-                <button class="btn-action btn-add" onclick="addCourse()">
-                    <i class="fa-solid fa-plus"></i> Add Subject
+                <button class="btn-action btn-add" onclick="addCourseToFinal()">
+                    <i class="fa-solid fa-plus"></i> Calculate & Add Subject
                 </button>
-                <button class="btn-action btn-calc" onclick="calculateCGPA()">
-                    <i class="fa-solid fa-calculator"></i> Calculate CGPA
+                <button class="btn-action btn-calc" onclick="calculateOverallCGPA()">
+                    <i class="fa-solid fa-chart-line"></i> Final CGPA
                 </button>
                 <button class="btn-action btn-reset" onclick="resetCalculator()">
                     <i class="fa-solid fa-rotate-left"></i>
@@ -592,13 +597,12 @@
     </template>
 
     <script>
-        // Constants
-        const INITIAL_ROWS = 3;
+        // Incremental Logic
+        let addedCourses = [];
+        const INITIAL_ROWS = 1;
         const listContainer = document.getElementById('courseList');
         const template = document.getElementById('rowTemplate');
-        // Initialize with default rows
 
-        // Initialize with default rows
         window.onload = function() {
             for(let i=0; i<INITIAL_ROWS; i++) {
                 addCourse();
@@ -608,15 +612,8 @@
         function addCourse() {
             const clone = template.content.cloneNode(true);
             const row = clone.querySelector('.course-row');
-            
-            // Add animation delay for initial load
-            const currentRows = listContainer.children.length;
-            row.style.animationDelay = `${currentRows * 0.1}s`;
-            
-            // Append ONLY the row element (ignores whitespace text nodes from template)
             listContainer.appendChild(row);
             
-            // Auto scroll to bottom
             setTimeout(() => {
                 listContainer.scrollTo({
                     top: listContainer.scrollHeight,
@@ -624,91 +621,99 @@
                 });
             }, 10);
         }
-        
-        function removeCourse(btn) {
-            const rows = listContainer.getElementsByClassName('course-row');
-            if(rows.length > 1) {
-                const row = btn.closest('.course-row');
-                row.style.opacity = '0';
-                row.style.transform = 'translateY(10px)';
-                setTimeout(() => row.remove(), 300);
-            } else {
-                showToast("You must have at least one subject!", "error");
-            }
-        }
 
-        function validateInput(input) {
-            if (input.value < 0) input.value = 0;
-            // Limit to reasonable credits (e.g. max 10 for a single course)
-            if (input.value > 20) input.value = 20;
-        }
-
-        function calculateCGPA() {
+        function addCourseToFinal() {
             const rows = document.querySelectorAll('.course-row');
-            let totalCredits = 0;
-            let totalPoints = 0;
-            let isValid = true;
-            let hasData = false;
+            let newlyAdded = false;
 
             rows.forEach(row => {
+                const nameInput = row.querySelector('.input-name');
                 const creditInput = row.querySelector('.input-credit');
                 const gradeInput = row.querySelector('.input-grade');
                 
+                const name = nameInput.value || "Untitled Course";
                 const credit = parseFloat(creditInput.value);
                 const gradePoint = parseFloat(gradeInput.value);
 
-                // Skip partial rows (if user entered nothing in a row, ignore it)
-                if (!creditInput.value && !gradeInput.value) {
-                    return; // Empty row
+                if (isNaN(credit) || isNaN(gradePoint)) {
+                    if(isNaN(credit)) creditInput.style.borderColor = 'var(--danger)';
+                    if(isNaN(gradePoint)) gradeInput.style.borderColor = 'var(--danger)';
+                    return;
                 }
 
-                // If partial data (credit but no grade, or vice versa)
-                if (!creditInput.value || isNaN(credit) || !gradeInput.value) {
-                    // Highlight the invalid field
-                    if(!creditInput.value) creditInput.style.borderColor = 'var(--danger)';
-                    if(!gradeInput.value) gradeInput.style.borderColor = 'var(--danger)';
-                    isValid = false;
-                    
-                    // Reset border after 2s
-                    setTimeout(() => {
-                        creditInput.style.borderColor = 'var(--glass-border)';
-                        gradeInput.style.borderColor = 'var(--glass-border)';
-                    }, 2000);
-                } else {
-                    hasData = true;
-                    totalCredits += credit;
-                    totalPoints += (credit * gradePoint);
-                }
+                // Add to array
+                addedCourses.push({ name, credit, gradePoint });
+                newlyAdded = true;
+
+                // Visual feedback: disable the row or mark it as added
+                row.style.opacity = '0.5';
+                row.style.pointerEvents = 'none';
+                row.classList.add('added-to-final');
+                row.style.background = 'rgba(16, 185, 129, 0.05)';
             });
 
-            if (!isValid) {
-                showToast("Please fill in both credits and grade for filled rows.", "warning");
-                return;
+            if (newlyAdded) {
+                showToast("Course added to final calculation!", "success");
+                addCourse(); // Add a new empty row for next input
+                calculateOverallCGPA(false); // Update results panel quietly
+            } else {
+                showToast("Please fill in credits and grade.", "warning");
             }
-
-            if (!hasData) {
-                showToast("Please add at least one course!", "warning");
-                return;
-            }
-
-            const cgpa = totalPoints / totalCredits;
-            
-            // Display Results with animation
-            displayResult(cgpa, totalCredits, totalPoints);
         }
 
-        function displayResult(cgpa, credits, points) {
+        function calculateOverallCGPA(showPanel = true) {
+            if (addedCourses.length === 0) {
+                if(showPanel) showToast("No courses added yet!", "warning");
+                return;
+            }
+
+            let totalCredits = 0;
+            let totalPoints = 0;
+
+            addedCourses.forEach(course => {
+                totalCredits += course.credit;
+                totalPoints += (course.credit * course.gradePoint);
+            });
+
+            const cgpa = totalPoints / totalCredits;
+            displayResult(cgpa, totalCredits, totalPoints, showPanel);
+        }
+
+        function displayResult(cgpa, credits, points, showPanel = true) {
             const panel = document.getElementById('resultPanel');
             const cgpaEl = document.getElementById('cgpaValue');
             const credEl = document.getElementById('totalCredits');
             const pointEl = document.getElementById('totalPoints');
 
-            // Counter animation
-            animateValue(credEl, parseFloat(credEl.innerText), credits, 1000, 1);
-            animateValue(pointEl, parseFloat(pointEl.innerText), points, 1000, 1);
-            animateValue(cgpaEl, parseFloat(cgpaEl.innerText), cgpa, 1500, 2);
+            if (showPanel) {
+                animateValue(credEl, parseFloat(credEl.innerText), credits, 1000, 1);
+                animateValue(pointEl, parseFloat(pointEl.innerText), points, 1000, 1);
+                animateValue(cgpaEl, parseFloat(cgpaEl.innerText), cgpa, 1500, 2);
+                panel.classList.add('visible');
+                
+                // Scroll to result
+                panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                credEl.innerText = credits.toFixed(1);
+                pointEl.innerText = points.toFixed(1);
+                cgpaEl.innerText = cgpa.toFixed(2);
+            }
+        }
 
-            panel.classList.add('visible');
+        function removeCourse(btn) {
+            const row = btn.closest('.course-row');
+            // If it was already added to final, we might need to remove it from array?
+            // For simplicity in this UI, let's just let them reset if they made a mistake
+            // or we can try to find it in the array if we had IDs.
+            // Let's just remove the row for now.
+            row.style.opacity = '0';
+            row.style.transform = 'translateY(10px)';
+            setTimeout(() => row.remove(), 300);
+        }
+
+        function validateInput(input) {
+            if (input.value < 0) input.value = 0;
+            if (input.value > 20) input.value = 20;
         }
 
         function animateValue(obj, start, end, duration, decimals = 2) {
@@ -726,13 +731,9 @@
         }
 
         function resetCalculator() {
-            const rows = document.querySelectorAll('.course-row');
-            rows.forEach(row => {
-                row.querySelector('.input-name').value = '';
-                row.querySelector('.input-credit').value = '';
-                row.querySelector('.input-grade').value = ''; 
-                row.style.background = '';
-            });
+            addedCourses = [];
+            listContainer.innerHTML = '';
+            addCourse();
             
             document.getElementById('resultPanel').classList.remove('visible');
             setTimeout(() => {
@@ -743,7 +744,6 @@
         }
 
         function showToast(message, type = 'info') {
-            // Check if existing toast
             let toast = document.querySelector('.warning-toast');
             if(!toast) {
                 toast = document.createElement('div');
@@ -751,10 +751,12 @@
                 document.body.appendChild(toast);
             }
             
-            let icon = type === 'error' || type === 'warning' ? 'fa-triangle-exclamation' : 'fa-circle-info';
-            let color = type === 'error' || type === 'warning' ? '#ef4444' : '#10b981';
+            let icon = type === 'error' || type === 'warning' ? 'fa-triangle-exclamation' : 
+                       type === 'success' ? 'fa-circle-check' : 'fa-circle-info';
             
-            toast.style.background = type === 'error' ? 'rgba(239, 68, 68, 0.9)' : 'rgba(16, 185, 129, 0.9)';
+            toast.style.background = type === 'error' || type === 'warning' ? '#ef4444' : 
+                                     type === 'success' ? '#10b981' : '#6D001A';
+            toast.style.color = '#FFFFFF';
             
             toast.innerHTML = `
                 <i class="fa-solid ${icon}"></i>
