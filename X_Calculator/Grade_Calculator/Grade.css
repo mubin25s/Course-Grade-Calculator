@@ -1130,7 +1130,7 @@ tr:hover td {
     border: 1px solid rgba(109, 0, 26, 0.2);
     transform: translateX(400px);
     transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    z-index: 3000;
+    z-index: 11000;
     font-weight: 500;
     display: flex;
     align-items: center;
@@ -2477,6 +2477,7 @@ tr:hover td {
     text-shadow: 0 4px 15px rgba(109, 0, 26, 0.6) !important;
     background: linear-gradient(to right, #FFFFFF, #FFB3C6) !important;
     -webkit-background-clip: text !important;
+    background-clip: text !important;
     -webkit-text-fill-color: transparent !important;
 }
 

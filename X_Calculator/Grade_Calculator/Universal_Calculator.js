@@ -355,6 +355,15 @@ function clearSemester() {
     });
 }
 
+function goToCGPAPage() {
+    const results = JSON.parse(localStorage.getItem('semesterResults')) || [];
+    if (results.length === 0) {
+        showToast('Add at least one subject first!', 'error');
+        return;
+    }
+    window.location.href = '../../X_Calculator/CGPA_Calculator/CGPA_Result.html';
+}
+
 function calculateSemesterGPA() {
     const results = JSON.parse(localStorage.getItem('semesterResults')) || [];
     
