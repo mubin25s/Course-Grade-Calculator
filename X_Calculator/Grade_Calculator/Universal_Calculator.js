@@ -93,14 +93,22 @@ function applyConfig() {
     document.getElementById('quiz-badge').textContent = `Best ${config.quizSettings.count} of ${config.quizSettings.total} (${methodText})`;
     
     document.getElementById('configSummary').textContent = `Quiz: ${config.distribution.quiz}% | Mid: ${config.distribution.mid}% | Final: ${config.distribution.final}%`;
+
+    // Hide sections if their weight is 0
+    document.querySelector('.quiz-section').style.display = config.distribution.quiz === 0 ? 'none' : 'block';
+    document.querySelector('.presentation-section').style.display = config.distribution.presentation === 0 ? 'none' : 'block';
+    document.querySelector('.assignment-section').style.display = config.distribution.assignment === 0 ? 'none' : 'block';
+    document.querySelector('.attendance-section').style.display = config.distribution.attendance === 0 ? 'none' : 'block';
+    document.querySelector('.midterm-section').style.display = config.distribution.mid === 0 ? 'none' : 'block';
+    document.querySelector('.final-section').style.display = config.distribution.final === 0 ? 'none' : 'block';
 }
 
 function renderQuizzes() {
     const container = document.getElementById('quiz-inputs-container');
     container.innerHTML = '';
     
-    // Default max for a single quiz is 10, or the section weight if Sum method is used
-    const quizMax = config.quizSettings.method === 'sum' ? config.distribution.quiz : 10;
+    // Default max for a single quiz is the section weight
+    const quizMax = config.distribution.quiz;
     
     for (let i = 1; i <= config.quizSettings.total; i++) {
         const div = document.createElement('div');
@@ -158,8 +166,7 @@ function calculateTotal() {
     
     if (config.quizSettings.method === 'avg') {
         const avg = bestQuizzes.length > 0 ? bestQuizzes.reduce((a, b) => a + b, 0) / config.quizSettings.count : 0;
-        // Assume each quiz is out of 10 for normalization if it's average
-        quizScore = (avg / 10) * config.distribution.quiz;
+        quizScore = avg;
     } else {
         // Sum method: Sum of best N. Assume the total possible sum = section weight.
         // Or if sum, each quiz might be e.g. 5 marks. 
