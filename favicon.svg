@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background: wine red rounded square, no transparency -->
+  <rect width="512" height="512" rx="96" ry="96" fill="#6D001A"/>
+
+  <!-- === GRADUATION CAP === -->
+  <g fill="white">
+
+    <!-- BOARD TOP: wide flat diamond/parallelogram -->
+    <polygon points="
+      256,118
+      452,218
+      430,232
+      256,142
+      82,232
+      60,218
+    "/>
+    <!-- Full board fill -->
+    <polygon points="256,118  452,218  256,318  60,218"/>
+
+    <!-- CAP BODY: sits below the board with a V gap showing through -->
+    <!-- Left side wall -->
+    <path d="
+      M 116,240
+      L 116,348
+      C 116,348 165,410 256,415
+      C 347,410 396,348 396,348
+      L 396,240
+      L 256,320
+      Z
+    "/>
+
+    <!-- V-notch cutout to show red through between board and body -->
+    <polygon points="256,310  116,235  116,248  256,325  396,248  396,235" fill="#6D001A"/>
+
+    <!-- TASSEL CORD: thin vertical line from board right -->
+    <rect x="421" y="218" width="10" height="96" rx="5"/>
+
+    <!-- TASSEL KNOB: small circle -->
+    <circle cx="426" cy="320" r="14"/>
+
+    <!-- TASSEL BODY: widens slightly from knob downward -->
+    <path d="M 415,334  L 405,400  L 426,408  L 447,400  L 437,334 Z"/>
+
+  </g>
+</svg>
