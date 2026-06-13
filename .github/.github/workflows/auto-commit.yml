@@ -1,0 +1,16 @@
+name: Auto Commit
+on:
+  schedule:
+    - cron: '0 0 * * 0' # every Sunday
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Update timestamp
+        run: echo "Last updated: $(date)" > last-updated.txt
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: auto update timestamp"

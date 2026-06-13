@@ -9,6 +9,7 @@ window.addEventListener('DOMContentLoaded', function() {
     const uniElement = document.getElementById('universityName');
     if (uniElement) {
         uniElement.textContent = universityNameDisplay;
+        
     }
     
     // Initialize event listeners
