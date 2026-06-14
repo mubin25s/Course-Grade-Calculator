@@ -524,13 +524,10 @@
     </div>
 
     <!-- Back Navigation -->
-    <div class="back-nav" style="display: flex; gap: 1rem;">
+    <div class="back-nav">
         <a href="../Grade_Calculator/index.html" class="back-link">
             <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
         </a>
-        <button id="install-app-btn" class="back-link" style="display: none; border: 1px solid var(--primary); cursor: pointer; background: #fff;">
-            <i class="fa-solid fa-download"></i> Install App
-        </button>
     </div>
 
     <div class="container cgpa-container">
@@ -781,36 +778,12 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // --- PWA Service Worker & Install Logic ---
+        // --- PWA Service Worker Registration ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed: ', err));
             });
         }
-
-        let deferredPrompt;
-        const installAppBtn = document.getElementById('install-app-btn');
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            if (installAppBtn) installAppBtn.style.display = 'inline-flex';
-        });
-
-        if (installAppBtn) {
-            installAppBtn.addEventListener('click', async () => {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    deferredPrompt = null;
-                    installAppBtn.style.display = 'none';
-                }
-            });
-        }
-
-        window.addEventListener('appinstalled', () => {
-            if (installAppBtn) installAppBtn.style.display = 'none';
-        });
     </script>
 </body>
 </html>

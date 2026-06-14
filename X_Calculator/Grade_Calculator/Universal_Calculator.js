@@ -438,7 +438,7 @@ window.onclick = function(event) {
     }
 }
 
-// --- PWA Service Worker & Install Logic ---
+// --- PWA Service Worker Registration ---
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').then(registration => {
@@ -449,38 +449,3 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-let deferredPrompt;
-const installAppBtn = document.getElementById('install-app-btn');
-
-window.addEventListener('beforeinstallprompt', (e) => {
-    // Prevent Chrome 67 and earlier from automatically showing the prompt
-    e.preventDefault();
-    // Stash the event so it can be triggered later.
-    deferredPrompt = e;
-    // Update UI to notify the user they can add to home screen
-    if (installAppBtn) {
-        installAppBtn.style.display = 'flex'; // It's an inline-flex button naturally
-    }
-});
-
-if (installAppBtn) {
-    installAppBtn.addEventListener('click', async () => {
-        if (deferredPrompt) {
-            // Show the prompt
-            deferredPrompt.prompt();
-            // Wait for the user to respond to the prompt
-            const { outcome } = await deferredPrompt.userChoice;
-            console.log(`User response to the install prompt: ${outcome}`);
-            // We've used the prompt, and can't use it again, throw it away
-            deferredPrompt = null;
-            installAppBtn.style.display = 'none';
-        }
-    });
-}
-
-window.addEventListener('appinstalled', () => {
-    if (installAppBtn) {
-        installAppBtn.style.display = 'none';
-    }
-    console.log('PWA was installed');
-});
