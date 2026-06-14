@@ -592,19 +592,119 @@ tr:hover td {
     transform: translateX(-5px);
 }
 
+/* ===== RESPONSIVE MEDIA QUERIES ===== */
+@media (max-width: 900px) {
+    .header-inputs {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    .header-input-group input {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
 @media (max-width: 768px) {
     header h1 { font-size: 2rem; }
-    .inputs-row { flex-direction: column; }
-    .results-footer {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1.5rem;
+    
+    .course-table th, .course-table td {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+    .setup-modal-content {
+        padding: 2rem;
         width: 95%;
-        bottom: 1rem;
     }
+    .setup-modal h2 { font-size: 1.8rem; }
+    .setup-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Quiz Input Grid Transformation */
+    .inputs-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+    }
+    
+    /* Compact Horizontal Results Footer for Mobile */
+    .results-footer {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.8rem 1rem;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        transform: none;
+        border-radius: 20px 20px 0 0;
+        justify-content: space-between;
+        box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.6);
+        position: fixed;
+    }
+    
+    /* Stats containers scale down */
+    .results-footer > div:not(.add-to-result-container) {
+        flex: 1 1 25%;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    /* Hide dividers to save space */
+    .results-footer .result-divider { display: none; }
+    
+    /* Full width add button row */
+    .results-footer .add-to-result-container {
+        flex: 1 1 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 0.25rem;
+    }
+    
+    .results-footer .add-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.6rem 1.25rem;
+        font-size: 0.9rem;
+    }
+    
+    .results-footer .score-value,
+    .results-footer .status-value {
+        font-size: 1.1rem;
+    }
+    
+    .results-footer .score-label,
+    .results-footer .status-label {
+        font-size: 0.65rem;
+        margin-bottom: 0.1rem;
+    }
+    
     .calculator-grid {
-        margin-bottom: 15rem; /* More space for stacked footer */
+        margin-bottom: 11rem; /* Space for the bottom footer */
     }
+    
+    /* Table Responsive adjustments for mobile */
+    .course-table th, .course-table td {
+        padding: 0.6rem 0.4rem;
+        font-size: 0.8rem;
+    }
+    .action-btn {
+        width: 32px;
+        height: 32px;
+    }
+    .action-btn i { font-size: 1rem; }
+}
+
+@media (max-width: 400px) {
+    .inputs-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    header h1 { font-size: 1.6rem; }
 }
 
 /* ===== DASHBOARD STYLES ===== */
