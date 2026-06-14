@@ -2603,3 +2603,33 @@ tr:hover td {
     transform: translateY(-50%);
     right: 0;
 }
+
+/* ===== SETUP MODAL HEADER - MOBILE FIX ===== */
+@media (max-width: 576px) {
+    .setup-header-custom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding-right: 2.5rem; /* Space for absolute close button */
+    }
+
+    .setup-subtitle {
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 0;
+        border-left: none;
+        border-top: 1px dashed rgba(109, 0, 26, 0.3);
+        padding-top: 0.75rem;
+        width: 100%;
+        font-size: 0.9rem;
+    }
+
+    .setup-title-text h2 {
+        font-size: 1.3rem !important;
+    }
+
+    .setup-header-custom .modal-close {
+        top: 0;
+        transform: none;
+    }
+}
