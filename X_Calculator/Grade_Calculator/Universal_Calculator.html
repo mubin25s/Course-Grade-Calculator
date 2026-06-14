@@ -14,6 +14,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // If opened as an installed PWA (standalone mode) without navigating from dashboard, go to dashboard first
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+        const cameFromDashboard = document.referrer.includes('Grade_Calculator') || document.referrer.includes('index.html') || sessionStorage.getItem('from-dashboard');
+        if (isStandalone && !cameFromDashboard) {
+            window.location.replace('index.html');
+        }
+    </script>
 </head>
 <body class="universal-calc-page">
     <div class="background-globes">
