@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universal Course Calculator</title>
-    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#6D001A">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
     <link rel="stylesheet" href="Grade.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +23,12 @@
     </div>
 
     <div class="container">
-        <a href="index.html" class="back-link">← Back to Dashboard</a>
+        <div class="top-nav" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <a href="index.html" class="back-link" style="margin-bottom: 0;">← Back to Dashboard</a>
+            <button id="install-app-btn" class="add-btn" style="display: none; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.9rem;">
+                <i class="fa-solid fa-download"></i> Install App
+            </button>
+        </div>
         
         <header>
             <h1 class="dashboard-title">Universal Course Calculator</h1>

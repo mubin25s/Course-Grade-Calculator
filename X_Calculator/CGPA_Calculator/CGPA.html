@@ -6,6 +6,11 @@
     <title>CGPA Calculator | Grade Master</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#6D001A">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
     <link rel="stylesheet" href="../Grade_Calculator/Grade.css">
     <style>
         /* Specific Styles for CGPA Calculator */
@@ -519,10 +524,13 @@
     </div>
 
     <!-- Back Navigation -->
-    <div class="back-nav">
+    <div class="back-nav" style="display: flex; gap: 1rem;">
         <a href="../Grade_Calculator/index.html" class="back-link">
             <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
         </a>
+        <button id="install-app-btn" class="back-link" style="display: none; border: 1px solid var(--primary); cursor: pointer; background: #fff;">
+            <i class="fa-solid fa-download"></i> Install App
+        </button>
     </div>
 
     <div class="container cgpa-container">
@@ -772,6 +780,37 @@
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
+
+        // --- PWA Service Worker & Install Logic ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed: ', err));
+            });
+        }
+
+        let deferredPrompt;
+        const installAppBtn = document.getElementById('install-app-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (installAppBtn) installAppBtn.style.display = 'inline-flex';
+        });
+
+        if (installAppBtn) {
+            installAppBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    deferredPrompt = null;
+                    installAppBtn.style.display = 'none';
+                }
+            });
+        }
+
+        window.addEventListener('appinstalled', () => {
+            if (installAppBtn) installAppBtn.style.display = 'none';
+        });
     </script>
 </body>
 </html>

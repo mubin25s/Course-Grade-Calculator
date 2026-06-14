@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Final CGPA | Grade Calculator</title>
-    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#6D001A">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -263,9 +267,14 @@
     <div class="bg-orb orb-2"></div>
 
     <div class="page-wrapper">
-        <a href="../Grade_Calculator/Universal_Calculator.html" class="back-btn">
-            <i class="fa-solid fa-arrow-left"></i> Back to Calculator
-        </a>
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <a href="../Grade_Calculator/Universal_Calculator.html" class="back-btn" style="position: relative; top: auto; left: auto; margin-bottom: 2rem;">
+                <i class="fa-solid fa-arrow-left"></i> Back to Calculator
+            </a>
+            <button id="install-app-btn" class="back-btn" style="position: relative; top: auto; left: auto; margin-bottom: 2rem; display: none; background: rgba(255,255,255,0.1); cursor: pointer; border: 1px solid var(--primary);">
+                <i class="fa-solid fa-download"></i> Install App
+            </button>
+        </div>
 
         <div class="page-header">
             <div class="icon-wrap"><i class="fa-solid fa-chart-pie"></i></div>
@@ -423,6 +432,37 @@
 
         // Initial render
         render();
+
+        // --- PWA Service Worker & Install Logic ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed: ', err));
+            });
+        }
+
+        let deferredPrompt;
+        const installAppBtn = document.getElementById('install-app-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (installAppBtn) installAppBtn.style.display = 'inline-flex';
+        });
+
+        if (installAppBtn) {
+            installAppBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    deferredPrompt = null;
+                    installAppBtn.style.display = 'none';
+                }
+            });
+        }
+
+        window.addEventListener('appinstalled', () => {
+            if (installAppBtn) installAppBtn.style.display = 'none';
+        });
     </script>
 </body>
 </html>
