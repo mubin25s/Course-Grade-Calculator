@@ -4,7 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>University Course Grading System - Dashboard</title>
-    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#6D001A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Grade Calculator">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
     <link rel="stylesheet" href="Grade.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,6 +32,25 @@
             </div>
             <h1 class="dashboard-title">Universal Grade Calculator</h1>
             <p class="dashboard-subtitle">Configure your marks distribution and calculate your grades instantly</p>
+        </div>
+
+        <!-- PWA Install Banner -->
+        <div id="pwa-install-banner" style="display:none; align-items:center; justify-content:space-between; gap:1rem; background:rgba(109,0,26,0.15); border:1px solid rgba(109,0,26,0.35); border-radius:20px; padding:1rem 1.25rem; margin-bottom:1.5rem; backdrop-filter:blur(10px);">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+                <img src="/icons/icon-192x192.png" style="width:42px; height:42px; border-radius:10px;" alt="App Icon">
+                <div>
+                    <div style="font-weight:700; font-size:0.95rem; color:#fff;">Install Grade Calculator</div>
+                    <div style="font-size:0.78rem; color:rgba(255,255,255,0.6);">Add to your home screen for quick access</div>
+                </div>
+            </div>
+            <div style="display:flex; gap:0.5rem; flex-shrink:0;">
+                <button id="pwa-install-btn" style="background:linear-gradient(135deg,#6D001A,#A51D3A); color:#fff; border:none; padding:0.55rem 1.1rem; border-radius:50px; font-weight:700; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; gap:0.4rem;">
+                    <i class="fa-solid fa-download"></i> Install
+                </button>
+                <button id="pwa-dismiss-btn" style="background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.5); border:1px solid rgba(255,255,255,0.15); padding:0.55rem 0.75rem; border-radius:50px; font-size:0.85rem; cursor:pointer;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
         </div>
 
         <div class="dashboard-card main-entry">
@@ -305,6 +331,47 @@
         function proceedToCGPA() {
             window.location.href = '../../X_Calculator/CGPA_Calculator/CGPA.html';
         }
+
+        // --- PWA Service Worker & Install ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(r => console.log('SW registered:', r.scope))
+                    .catch(e => console.error('SW failed:', e));
+            });
+        }
+
+        let deferredPrompt = null;
+        const banner = document.getElementById('pwa-install-banner');
+        const installBtn = document.getElementById('pwa-install-btn');
+        const dismissBtn = document.getElementById('pwa-dismiss-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (!sessionStorage.getItem('pwa-dismissed')) {
+                banner.style.display = 'flex';
+            }
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log('Install outcome:', outcome);
+            deferredPrompt = null;
+            banner.style.display = 'none';
+        });
+
+        dismissBtn.addEventListener('click', () => {
+            banner.style.display = 'none';
+            sessionStorage.setItem('pwa-dismissed', '1');
+        });
+
+        window.addEventListener('appinstalled', () => {
+            banner.style.display = 'none';
+            deferredPrompt = null;
+        });
     </script>
 </body>
 </html>
