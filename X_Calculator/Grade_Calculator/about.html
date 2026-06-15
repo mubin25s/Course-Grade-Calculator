@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Universal Grade Calculator</title>
+    <link rel="icon" type="image/png" href="../../LOGO.png">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json?v=3">
+    <meta name="theme-color" content="#6D001A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="About">
+    <link rel="apple-touch-icon" href="../../LOGO.png">
+    <link rel="stylesheet" href="Grade.css">
+    <style>
+        /* Force pinkish-white on social icons — bypasses SW cache */
+        .social-links { display:flex; justify-content:center; align-items:center; gap:1.5rem; margin-top:0.9rem; margin-bottom:0; }
+        .social-raw-icon { font-size:1.4rem !important; color:#f2c4ce !important; text-decoration:none !important; display:inline-flex; align-items:center; justify-content:center; transition:all 0.35s ease; filter: drop-shadow(0 3px 12px rgba(0,0,0,0.5)) drop-shadow(1px 2px 0 rgba(255,180,190,0.15)) drop-shadow(-1px -1px 0 rgba(0,0,0,0.6)); }
+        .social-raw-icon * { color:#f2c4ce !important; }
+        .social-raw-icon:hover { color:#fce4e9 !important; transform:translateY(-4px) scale(1.1); filter: drop-shadow(0 10px 24px rgba(109,0,26,0.7)) drop-shadow(0 0 18px rgba(242,100,130,0.5)); }
+        .social-raw-icon:hover * { color:#fce4e9 !important; }
+
+        /* Compact layout — fits entire page in one viewport */
+        body.dashboard-page { padding: 2rem 2rem !important; }
+        .dashboard-header { margin-bottom: 1.1rem !important; gap: 0.5rem !important; }
+        .header-icon img { width:62px !important; height:62px !important; }
+        .dashboard-title { font-size: 2.2rem !important; margin-bottom: 0.2rem !important; }
+        .dashboard-subtitle { font-size: 0.95rem !important; }
+        .about-card { padding: 1.75rem 2rem !important; margin-top: 0 !important; }
+        .about-description { font-size: 1.05rem !important; margin-bottom: 1rem !important; }
+        .about-divider { margin: 1rem 0 !important; }
+        .about-developer { margin-bottom: 1rem !important; }
+        .about-developer .label { font-size: 0.85rem !important; margin-bottom: 0.3rem !important; }
+        .about-developer .name { font-size: 1.5rem !important; }
+        .about-disclaimer-box { padding: 0.9rem 1.2rem !important; margin-bottom: 1.25rem !important; }
+        .about-disclaimer-box p { font-size: 0.78rem !important; }
+        .dashboard-btn { padding: 0.9rem 1.5rem !important; font-size: 1.05rem !important; }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+        <div class="globe globe-3"></div>
+    </div>
+
+    <div class="dashboard-container" style="min-height: auto;">
+        <div class="dashboard-header">
+            <div class="header-icon">
+                <img src="../../LOGO.png" alt="Logo" style="width:72px; height:72px; object-fit:contain; display:block;">
+            </div>
+            <h1 class="dashboard-title">About the App</h1>
+            <p class="dashboard-subtitle">Universal Course Grading System</p>
+        </div>
+
+        <div class="about-card">
+            <p class="about-description">
+                Calculate your course grades with precision and track your academic progress
+            </p>
+            
+            <div class="about-divider"></div>
+            
+            <div class="about-developer">
+                <span class="label">Designed & Developed by</span>
+                <span class="name">K. M. Fathum Mubin Sachcha</span>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/mubin25s/" target="_blank" rel="noopener noreferrer" class="social-raw-icon" title="LinkedIn">
+                        <i class="fa-brands fa-linkedin-in" style="color:#f2c4ce !important;"></i>
+                    </a>
+                    <a href="https://github.com/mubin25s" target="_blank" rel="noopener noreferrer" class="social-raw-icon" title="GitHub">
+                        <i class="fa-brands fa-github" style="color:#f2c4ce !important;"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="about-disclaimer-box">
+                <p>
+                    This is an independent, unofficial student resource and is not affiliated with or endorsed by any university. 
+                    Grading information is based on publicly available sources and may change.
+                </p>
+            </div>
+
+            <button class="dashboard-btn" onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Back to Dashboard</span>
+            </button>
+        </div>
+    </div>
+</body>
+</html>

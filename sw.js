@@ -1,4 +1,4 @@
-const CACHE_NAME = 'grade-calculator-cache-v4';
+const CACHE_NAME = 'grade-calculator-cache-v6';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -8,6 +8,7 @@ const ASSETS_TO_CACHE = [
   '/icons/icon-512x512.png',
   '/icons/apple-touch-icon.png',
   '/X_Calculator/Grade_Calculator/Universal_Calculator.html',
+  '/X_Calculator/Grade_Calculator/about.html',
   '/X_Calculator/Grade_Calculator/Universal_Calculator.js',
   '/X_Calculator/Grade_Calculator/Grade.css',
   '/X_Calculator/CGPA_Calculator/CGPA.html',
