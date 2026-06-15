@@ -1,8 +1,8 @@
-const CACHE_NAME = 'grade-calculator-cache-v3';
+const CACHE_NAME = 'grade-calculator-cache-v4';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
-  '/manifest.json',
+  '/manifest.json?v=3',
   '/LOGO.png',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
