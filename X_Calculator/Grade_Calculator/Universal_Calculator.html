@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Course Calculator</title>
+    <link rel="icon" type="image/png" href="/LOGO.png">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json?v=3">
+    <meta name="theme-color" content="#6D001A">
+    <link rel="apple-touch-icon" href="/LOGO.png">
+    <link rel="stylesheet" href="Grade.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // If opened as an installed PWA (standalone mode) without navigating from dashboard, go to dashboard first
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+        const cameFromDashboard = document.referrer.includes('Grade_Calculator') || document.referrer.includes('index.html') || sessionStorage.getItem('from-dashboard');
+        if (isStandalone && !cameFromDashboard) {
+            window.location.replace('index.html');
+        }
+    </script>
+</head>
+<body class="universal-calc-page">
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+        <div class="globe globe-3"></div>
+    </div>
+
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Dashboard</a>
+        
+        <header>
+            <h1 class="dashboard-title">Universal Course Calculator</h1>
+            <div class="header-inputs">
+                <div class="header-input-group">
+                    <label><i class="fa-solid fa-book"></i> Course Name</label>
+                    <input type="text" id="course-name" placeholder="e.g. Mathematics II">
+                </div>
+                <div class="header-input-group">
+                    <label><i class="fa-solid fa-star"></i> Credits</label>
+                    <input type="number" id="course-credits" placeholder="3.0" step="0.5" min="1" max="6">
+                </div>
+            </div>
+            <p class="dashboard-subtitle" id="configSummary">Custom Marks Distribution</p>
+        </header>
+
+        <main class="calculator-grid">
+            <!-- Quizzes Section -->
+            <section class="card quiz-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-pen-to-square"></i> Quizzes</h2>
+                    <span class="badge" id="quiz-badge">Best 3 of 5</span>
+                </div>
+                <div id="quiz-inputs-container" class="inputs-row">
+                    <!-- Dynamic -->
+                </div>
+                <div class="result-display" id="quiz-avg-display">Avg Score: 0.00</div>
+            </section>
+
+            <!-- Other Sections -->
+            <section class="card presentation-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-person-chalkboard"></i> Presentation</h2>
+                    <span class="badge" id="presentation-badge">Max 10</span>
+                </div>
+                <div class="selection-grid" id="presentation-selection">
+                    <button class="select-btn poor" onclick="setSelection('presentation', 'poor')">
+                        <span class="emoji">😟</span>
+                        <span>Poor</span>
+                    </button>
+                    <button class="select-btn good" onclick="setSelection('presentation', 'good')">
+                        <span class="emoji">😊</span>
+                        <span>Good</span>
+                    </button>
+                    <button class="select-btn excellent" onclick="setSelection('presentation', 'excellent')">
+                        <span class="emoji">🤩</span>
+                        <span>Excellent</span>
+                    </button>
+                </div>
+                <div class="result-display" id="presentation-display-val">Points: 0</div>
+            </section>
+
+            <section class="card assignment-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-book"></i> Assignment</h2>
+                    <span class="badge" id="assignment-badge">Max 5</span>
+                </div>
+                <div class="selection-grid" id="assignment-selection">
+                    <button class="select-btn poor" onclick="setSelection('assignment', 'poor')">
+                        <span class="emoji">😟</span>
+                        <span>Poor</span>
+                    </button>
+                    <button class="select-btn good" onclick="setSelection('assignment', 'good')">
+                        <span class="emoji">😊</span>
+                        <span>Good</span>
+                    </button>
+                    <button class="select-btn excellent" onclick="setSelection('assignment', 'excellent')">
+                        <span class="emoji">🤩</span>
+                        <span>Excellent</span>
+                    </button>
+                </div>
+                <div class="result-display" id="assignment-display-val">Points: 0</div>
+            </section>
+
+            <section class="card attendance-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-user-check"></i> Attendance</h2>
+                    <span class="badge" id="attendance-badge">Max 10</span>
+                </div>
+                <div class="input-group">
+                    <label>Attendance Percentage (%)</label>
+                    <input type="number" id="attendance-percent" placeholder="100" oninput="enforceLimit(this); calculateTotal()">
+                </div>
+                <div class="result-display" id="attendance-display">Points: 10.00</div>
+            </section>
+
+            <section class="card midterm-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-file-lines"></i> Mid Term</h2>
+                    <span class="badge" id="mid-badge">Max 20</span>
+                </div>
+                <div class="input-group">
+                    <label>Obtained Marks</label>
+                    <input type="number" id="mid-term" placeholder="0" oninput="enforceLimit(this); calculateTotal()">
+                </div>
+            </section>
+
+            <section class="card final-section">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-graduation-cap"></i> Final Exam</h2>
+                    <span class="badge" id="final-badge">Max 40</span>
+                </div>
+                <div class="input-group">
+                    <label>Obtained Marks</label>
+                    <input type="number" id="final-exam" placeholder="0" oninput="enforceLimit(this); calculateTotal()">
+                </div>
+            </section>
+        </main>
+
+        <!-- Final Results -->
+        <div class="results-footer">
+            <div class="result-item total-marks-container">
+                <span class="status-label">Total Marks</span>
+                <span class="status-value" id="total-marks">0.00</span>
+            </div>
+            <div class="result-divider"></div>
+            <div class="result-item grade-container">
+                <span class="status-label">Predicted Grade</span>
+                <span class="status-value" id="grade-status">F (0.00)</span>
+            </div>
+            <div class="result-divider"></div>
+            <div class="result-item milestone-container">
+                <span class="status-label" id="milestone-label">Next Milestone</span>
+                <span class="status-value" id="needed-pass">Loading...</span>
+            </div>
+            <div class="result-divider"></div>
+            <div class="add-to-result-container">
+                <button class="add-btn" onclick="addToSemester()">
+                    <i class="fa-solid fa-plus-circle"></i>
+                    <span>Add to Semester</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Target Grades Table -->
+        <section class="card grade-targets">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-bullseye"></i> Grade Targets</h2>
+                <button class="icon-btn" onclick="openSystemModal()"><i class="fa-solid fa-gear"></i></button>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Grade</th>
+                            <th>Points</th>
+                            <th>Range</th>
+                            <th>Requirement</th>
+                        </tr>
+                    </thead>
+                    <tbody id="grade-targets-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Semester Summary Section -->
+        <section class="card semester-summary-section">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-list-check"></i> Semester Summary</h2>
+                <div class="summary-actions">
+                    <button class="icon-btn text-danger" onclick="clearSemester()" title="Clear All"><i class="fa-solid fa-trash-can"></i></button>
+                    <button class="dashboard-btn sm" onclick="goToCGPAPage()">
+                        <i class="fa-solid fa-calculator"></i>
+                        <span>Final CGPA</span>
+                    </button>
+                </div>
+            </div>
+            <div id="semester-list" class="semester-list">
+                <!-- Populated by JS -->
+                <div class="empty-state">No subjects added yet.</div>
+            </div>
+        </section>
+    </div>
+
+    <!-- System Selection Modal -->
+    <div id="systemModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-graduation-cap"></i> Select Grading System</h3>
+                <button class="close-modal" onclick="closeSystemModal()">&times;</button>
+            </div>
+            <p class="instruction">Choose the grading standard that matches your university.</p>
+            <div class="system-options">
+                <div class="system-card" onclick="applySystem(1)">
+                    <div class="system-info">
+                        <h4>Standard</h4>
+                        <p>A+ starts at 80</p>
+                    </div>
+                    <i class="fa-solid fa-check-circle"></i>
+                </div>
+                <div class="system-card" onclick="applySystem(2)">
+                    <div class="system-info">
+                        <h4>Advanced</h4>
+                        <p>A starts at 90</p>
+                    </div>
+                    <i class="fa-solid fa-check-circle"></i>
+                </div>
+                <div class="system-card" onclick="applySystem(3)">
+                    <div class="system-info">
+                        <h4>Strict (Decimal)</h4>
+                        <p>A+ starts at 94</p>
+                    </div>
+                    <i class="fa-solid fa-check-circle"></i>
+                </div>
+                <div class="system-card" onclick="applySystem(4)">
+                    <div class="system-info">
+                        <h4>Elite</h4>
+                        <p>A starts at 93 | F below 60</p>
+                    </div>
+                    <i class="fa-solid fa-check-circle"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h3 id="confirm-title">Confirm Action</h3>
+            </div>
+            <p id="confirm-msg" class="modal-body-text"></p>
+            <div class="modal-actions-centered">
+                <button class="dashboard-btn secondary" onclick="closeConfirmModal()">Cancel</button>
+                <button class="dashboard-btn" id="confirm-action-btn">Proceed</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Semester Result Modal -->
+    <div id="semesterResultModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-chart-line"></i> Semester GPA Result</h3>
+                <button class="close-modal" onclick="closeSemesterResultModal()">&times;</button>
+            </div>
+            <div class="gpa-result-card">
+                <div class="gpa-main-val" id="final-gpa-val">0.00</div>
+                <div class="gpa-label">Semester GPA</div>
+            </div>
+            <div class="gpa-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Total Credits</span>
+                    <span class="stat-value" id="total-credits-val">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Total Points</span>
+                    <span class="stat-value" id="total-points-val">0</span>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="dashboard-btn" onclick="closeSemesterResultModal()">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="Universal_Calculator.js"></script>
+</body>
+</html>

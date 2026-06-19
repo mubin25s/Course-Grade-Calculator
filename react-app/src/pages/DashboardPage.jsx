@@ -88,16 +88,10 @@ export default function DashboardPage() {
         )}
 
         {/* Main Card */}
-        <div className="dashboard-card main-entry" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div className="dashboard-card main-entry">
           <button className="dashboard-btn" onClick={() => setSetupOpen(true)}>
             <i className="fa-solid fa-sliders"></i>
             <span>Configure &amp; Start Calculator</span>
-            <i className="fa-solid fa-arrow-right"></i>
-          </button>
-
-          <button className="dashboard-btn" onClick={() => navigate('/cgpa')} style={{ background: 'linear-gradient(135deg, rgba(109, 0, 26, 0.4), rgba(139, 17, 43, 0.6))', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-            <i className="fa-solid fa-calculator"></i>
-            <span>Manual CGPA Calculator</span>
             <i className="fa-solid fa-arrow-right"></i>
           </button>
 

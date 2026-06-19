@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Course Grading System - Dashboard</title>
+    <link rel="icon" type="image/png" href="/LOGO.png">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json?v=3">
+    <meta name="theme-color" content="#6D001A">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Grade Calculator">
+    <link rel="apple-touch-icon" href="/LOGO.png">
+    <link rel="stylesheet" href="Grade.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="dashboard-page">
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+        <div class="globe globe-3"></div>
+    </div>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div class="header-icon">
+                <img src="../../LOGO.png" alt="Logo" style="width:72px; height:72px; object-fit:contain; display:block;">
+            </div>
+            <h1 class="dashboard-title">Universal Grade Calculator</h1>
+            <p class="dashboard-subtitle">Configure your marks distribution and calculate your grades instantly</p>
+        </div>
+
+        <!-- PWA Install Banner -->
+        <div id="pwa-install-banner" style="display:none; align-items:center; justify-content:space-between; gap:1rem; background:rgba(109,0,26,0.15); border:1px solid rgba(109,0,26,0.35); border-radius:20px; padding:1rem 1.25rem; margin-bottom:1.5rem; backdrop-filter:blur(10px);">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+                <img src="/LOGO.png" style="width:42px; height:42px; border-radius:10px;" alt="App Icon">
+                <div>
+                    <div style="font-weight:700; font-size:0.95rem; color:#fff;">Install Grade Calculator</div>
+                    <div style="font-size:0.78rem; color:rgba(255,255,255,0.6);">Add to your home screen for quick access</div>
+                </div>
+            </div>
+            <div style="display:flex; gap:0.5rem; flex-shrink:0;">
+                <button id="pwa-install-btn" style="background:linear-gradient(135deg,#6D001A,#A51D3A); color:#fff; border:none; padding:0.55rem 1.1rem; border-radius:50px; font-weight:700; font-size:0.85rem; cursor:pointer; display:flex; align-items:center; gap:0.4rem;">
+                    <i class="fa-solid fa-download"></i> Install
+                </button>
+                <button id="pwa-dismiss-btn" style="background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.5); border:1px solid rgba(255,255,255,0.15); padding:0.55rem 0.75rem; border-radius:50px; font-size:0.85rem; cursor:pointer;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="dashboard-card main-entry">
+            <button class="dashboard-btn" onclick="openSetupModal()">
+                <i class="fa-solid fa-sliders"></i>
+                <span>Configure & Start Calculator</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            
+
+        </div>
+
+            <div class="dashboard-features">
+                <div class="feature-item">
+                    <i class="fa-solid fa-calculator"></i>
+                    <span>Grade Calculator</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Grade Targets</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fa-solid fa-trophy"></i>
+                    <span>Achievement Tracking</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-footer">
+            <div class="about-btn-container">
+                <a href="about.html" class="about-btn">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>About the App</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Configuration Modal -->
+    <div class="modal-overlay" id="setupModal">
+        <div class="modal-content setup-modal">
+            <div class="modal-header setup-header-custom">
+                <div class="setup-title-area">
+                    <div class="modal-icon-glow">
+                        <i class="fa-solid fa-gear"></i>
+                    </div>
+                    <div class="setup-title-text">
+                        <h2>Calculator<br>Setup</h2>
+                    </div>
+                </div>
+                <div class="setup-subtitle">
+                    <p>Configure your marks<br>distribution</p>
+                </div>
+                <button class="modal-close" onclick="closeSetupModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="setup-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Marks Distribution</span>
+                    <div class="total-badge" id="totalBadge">100 / 100</div>
+                </div>
+                <div class="marks-grid">
+                    <div class="mark-input-group">
+                        <label>Quiz</label>
+                        <input type="number" id="dist-quiz" value="15" oninput="updateTotal()">
+                    </div>
+                    <div class="mark-input-group">
+                        <label>Presentation</label>
+                        <input type="number" id="dist-presentation" value="8" oninput="updateTotal()">
+                    </div>
+                    <div class="mark-input-group">
+                        <label>Assignment</label>
+                        <input type="number" id="dist-assignment" value="5" oninput="updateTotal()">
+                    </div>
+                    <div class="mark-input-group">
+                        <label>Attendance</label>
+                        <input type="number" id="dist-attendance" value="7" oninput="updateTotal()">
+                    </div>
+                    <div class="mark-input-group">
+                        <label>Mid Term</label>
+                        <input type="number" id="dist-mid" value="25" oninput="updateTotal()">
+                    </div>
+                    <div class="mark-input-group">
+                        <label>Final Exam</label>
+                        <input type="number" id="dist-final" value="40" oninput="updateTotal()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="setup-section">
+                <div class="section-title">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Quiz Configuration</span>
+                </div>
+                <div class="quiz-config-grid">
+                    <div class="mark-input-group">
+                        <label>Total Quizzes</label>
+                        <input type="number" id="quiz-total" value="3">
+                    </div>
+                    <div class="mark-input-group">
+                        <label>Quizzes to Count</label>
+                        <input type="number" id="quiz-count" value="3">
+                    </div>
+                    <div class="mark-input-group full-width">
+                        <label>Calculation Method</label>
+                        <div class="method-toggle">
+                            <button class="method-btn active" id="method-avg" onclick="setMethod('avg')">Average</button>
+                            <button class="method-btn" id="method-sum" onclick="setMethod('sum')">Sum / Total</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="dashboard-btn" onclick="launchCalculator()">
+                    <i class="fa-solid fa-rocket"></i>
+                    <span>Launch Calculator</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Available Universities Modal -->
+    <div class="modal-overlay" id="availableModal" onclick="closeAvailableModal()">
+        <div class="modal-available" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeAvailableModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="available-icon">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h2>Available Universities</h2>
+            <p class="modal-message">These universities are fully configured and ready to use!</p>
+            
+            <div class="completed-universities">
+                <div class="uni-carousel" id="uniCarousel">
+                    <!-- Universities will be dynamically populated -->
+                </div>
+                <div class="carousel-dots" id="carouselDots">
+                    <!-- Dots will be dynamically populated -->
+                </div>
+            </div>
+            
+            <button class="modal-btn" onclick="closeAvailableModal()">
+                <span>Back to Dashboard</span>
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Upcoming Feature Modal -->
+    <div class="modal-overlay" id="upcomingModal" onclick="closeUpcomingModal()">
+        <div class="modal-construction" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeUpcomingModal()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="construction-icon">
+                <i class="fa-solid fa-rocket"></i>
+            </div>
+            <h2>New feature is upcoming!</h2>
+            <p class="modal-message">Under construction.</p>
+            <p class="modal-submessage">Please wait until the new feature is added. We are working hard to bring you the best CGPA calculation tools.</p>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn" onclick="proceedToCGPA()">
+                    <span>Proceed Anyway</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+                <button class="modal-btn secondary" onclick="closeUpcomingModal()">
+                    <span>Got it</span>
+                    <i class="fa-solid fa-check"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let quizMethod = 'avg';
+
+        function openSetupModal() {
+            const modal = document.getElementById('setupModal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('show'), 10);
+            updateTotal();
+        }
+
+        function closeSetupModal() {
+            const modal = document.getElementById('setupModal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 300);
+        }
+
+        function updateTotal() {
+            const quiz = parseInt(document.getElementById('dist-quiz').value) || 0;
+            const presentation = parseInt(document.getElementById('dist-presentation').value) || 0;
+            const assignment = parseInt(document.getElementById('dist-assignment').value) || 0;
+            const attendance = parseInt(document.getElementById('dist-attendance').value) || 0;
+            const mid = parseInt(document.getElementById('dist-mid').value) || 0;
+            const final = parseInt(document.getElementById('dist-final').value) || 0;
+
+            const total = quiz + presentation + assignment + attendance + mid + final;
+            const badge = document.getElementById('totalBadge');
+            badge.textContent = `${total} / 100`;
+
+            if (total !== 100) {
+                badge.classList.add('error');
+            } else {
+                badge.classList.remove('error');
+            }
+        }
+
+        function setMethod(method) {
+            quizMethod = method;
+            document.getElementById('method-avg').classList.toggle('active', method === 'avg');
+            document.getElementById('method-sum').classList.toggle('active', method === 'sum');
+        }
+
+        function launchCalculator() {
+            const quiz = parseInt(document.getElementById('dist-quiz').value) || 0;
+            const presentation = parseInt(document.getElementById('dist-presentation').value) || 0;
+            const assignment = parseInt(document.getElementById('dist-assignment').value) || 0;
+            const attendance = parseInt(document.getElementById('dist-attendance').value) || 0;
+            const mid = parseInt(document.getElementById('dist-mid').value) || 0;
+            const final = parseInt(document.getElementById('dist-final').value) || 0;
+            
+            const total = quiz + presentation + assignment + attendance + mid + final;
+
+            if (total !== 100) {
+                showToast(`Total marks must be 100! Currently: ${total}`);
+                return;
+            }
+
+            const config = {
+                distribution: { quiz, presentation, assignment, attendance, mid, final },
+                quizSettings: {
+                    total: parseInt(document.getElementById('quiz-total').value) || 5,
+                    count: parseInt(document.getElementById('quiz-count').value) || 3,
+                    method: quizMethod
+                }
+            };
+
+            localStorage.setItem('calculatorConfig', JSON.stringify(config));
+            
+            // Add loading effect
+            const btn = event.target.closest('button');
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Initializing...';
+            
+            setTimeout(() => {
+                sessionStorage.setItem('from-dashboard', '1');
+                window.location.href = 'Universal_Calculator.html';
+            }, 600);
+        }
+
+        function showToast(message) {
+            const existingToast = document.querySelector('.dashboard-toast');
+            if (existingToast) existingToast.remove();
+            
+            const toast = document.createElement('div');
+            toast.className = 'dashboard-toast';
+            toast.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${message}`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        function proceedToCGPA() {
+            window.location.href = '../../X_Calculator/CGPA_Calculator/CGPA.html';
+        }
+
+        // --- PWA Service Worker & Install ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(r => console.log('SW registered:', r.scope))
+                    .catch(e => console.error('SW failed:', e));
+            });
+        }
+
+        let deferredPrompt = null;
+        const banner = document.getElementById('pwa-install-banner');
+        const installBtn = document.getElementById('pwa-install-btn');
+        const dismissBtn = document.getElementById('pwa-dismiss-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (!sessionStorage.getItem('pwa-dismissed')) {
+                banner.style.display = 'flex';
+            }
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log('Install outcome:', outcome);
+            deferredPrompt = null;
+            banner.style.display = 'none';
+        });
+
+        dismissBtn.addEventListener('click', () => {
+            banner.style.display = 'none';
+            sessionStorage.setItem('pwa-dismissed', '1');
+        });
+
+        window.addEventListener('appinstalled', () => {
+            banner.style.display = 'none';
+            deferredPrompt = null;
+        });
+    </script>
+</body>
+</html>

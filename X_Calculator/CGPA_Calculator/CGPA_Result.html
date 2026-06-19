@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final CGPA | Grade Calculator</title>
+    <link rel="icon" type="image/png" href="/LOGO.png">
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json?v=3">
+    <meta name="theme-color" content="#6D001A">
+    <link rel="apple-touch-icon" href="/LOGO.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6D001A;
+            --primary-glow: rgba(109, 0, 26, 0.35);
+            --glass-border: rgba(109, 0, 26, 0.2);
+            --text-main: #FFFFFF;
+            --text-muted: #9B4D5E;
+            --danger: #EF4444;
+            --success: #10B981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+
+        body {
+            background: #000000;
+            min-height: 100vh;
+            color: var(--text-main);
+            padding: 2rem 1rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background orbs */
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .orb-1 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(109,0,26,0.2), transparent); top: -150px; left: -150px; }
+        .orb-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(109,0,26,0.15), transparent); bottom: -100px; right: -100px; }
+
+        .page-wrapper {
+            max-width: 760px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Back button */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 0.7rem 1.25rem;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.03);
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+        .back-btn:hover { color: var(--text-main); border-color: var(--primary); background: rgba(109,0,26,0.1); transform: translateX(-3px); }
+
+        /* Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .page-header .icon-wrap {
+            width: 72px; height: 72px;
+            background: linear-gradient(135deg, rgba(109,0,26,0.4), rgba(109,0,26,0.1));
+            border: 2px solid var(--primary);
+            border-radius: 24px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.25rem;
+            box-shadow: 0 0 30px var(--primary-glow);
+            font-size: 2rem; color: #fff;
+        }
+        .page-header h1 { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 0.4rem; }
+        .page-header p { color: var(--text-muted); font-size: 1rem; }
+
+        /* CGPA Result Card */
+        .result-hero {
+            background: linear-gradient(135deg, rgba(109,0,26,0.25), rgba(109,0,26,0.08));
+            border: 1px solid rgba(109,0,26,0.4);
+            border-radius: 24px;
+            padding: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            display: none;
+        }
+        .result-hero.visible { display: block; animation: fadeUp 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .result-hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(109,0,26,0.3), transparent 60%);
+            pointer-events: none;
+        }
+        .cgpa-number {
+            font-size: 5.5rem;
+            font-weight: 800;
+            line-height: 1;
+            background: linear-gradient(to right, #FFFFFF, #FFB3C6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+            margin-bottom: 0.25rem;
+        }
+        .cgpa-label { color: var(--text-muted); text-transform: uppercase; letter-spacing: 3px; font-size: 0.75rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .cgpa-stats { display: flex; justify-content: center; gap: 3rem; }
+        .stat { text-align: center; }
+        .stat-val { font-size: 1.6rem; font-weight: 700; color: var(--text-main); }
+        .stat-lbl { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 0.2rem; }
+        .grade-badge {
+            display: inline-block;
+            padding: 0.4rem 1.25rem;
+            border-radius: 50px;
+            background: rgba(109,0,26,0.3);
+            border: 1px solid var(--primary);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            color: #FFB3C6;
+        }
+
+        /* Course list */
+        .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .section-title h2 { font-size: 1.1rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .count-badge { background: rgba(109,0,26,0.3); border: 1px solid var(--glass-border); color: var(--text-muted); font-size: 0.8rem; font-weight: 600; padding: 0.25rem 0.75rem; border-radius: 50px; }
+
+        .course-list { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
+
+        .course-card {
+            display: grid;
+            grid-template-columns: 1fr auto auto auto;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--glass-border);
+            padding: 1rem 1.25rem;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            animation: cardIn 0.4s ease backwards;
+        }
+        .course-card:hover { border-color: rgba(109,0,26,0.5); background: rgba(109,0,26,0.06); transform: translateX(4px); }
+        @keyframes cardIn { from { opacity:0; transform:translateX(-15px); } to { opacity:1; transform:translateX(0); } }
+
+        .course-name { font-weight: 600; font-size: 0.95rem; }
+        .course-credits { font-size: 0.8rem; color: var(--text-muted); text-align: center; white-space: nowrap; }
+        .course-grade {
+            font-weight: 800; font-size: 1rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 8px;
+            background: rgba(109,0,26,0.2);
+            color: #FFB3C6;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .del-btn {
+            background: none; border: none;
+            color: rgba(239,68,68,0.5);
+            cursor: pointer; font-size: 0.9rem;
+            padding: 0.4rem; border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .del-btn:hover { color: var(--danger); background: rgba(239,68,68,0.1); }
+
+        .empty-state {
+            text-align: center; padding: 4rem 2rem;
+            color: var(--text-muted);
+            border: 1px dashed var(--glass-border);
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+        .empty-state i { font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.5; }
+        .empty-state p { font-size: 0.95rem; }
+
+        /* Actions */
+        .actions { display: flex; gap: 1rem; }
+
+        .btn {
+            flex: 1; padding: 1rem 1.5rem;
+            border: none; border-radius: 16px;
+            font-family: inherit; font-weight: 700; font-size: 1rem;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+            transition: all 0.3s ease; letter-spacing: 0.3px;
+        }
+        .btn-calculate {
+            background: linear-gradient(135deg, #6D001A, #A51D3A);
+            color: white;
+            box-shadow: 0 8px 25px rgba(109,0,26,0.35);
+        }
+        .btn-calculate:hover { transform: translateY(-3px); box-shadow: 0 14px 35px rgba(109,0,26,0.5); }
+        .btn-calculate:active { transform: translateY(0); }
+        .btn-clear {
+            flex: 0 0 auto; padding: 1rem 1.25rem;
+            background: rgba(239,68,68,0.08);
+            color: var(--danger);
+            border: 1px solid rgba(239,68,68,0.2);
+            border-radius: 16px;
+        }
+        .btn-clear:hover { background: var(--danger); color: white; border-color: var(--danger); }
+
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+        /* ===== RESPONSIVE LAYOUT ===== */
+        @media (max-width: 768px) {
+            .back-btn {
+                position: relative;
+                top: auto; left: auto;
+                margin-bottom: 1.5rem;
+                display: inline-flex;
+            }
+            .page-wrapper {
+                padding-top: 2rem;
+            }
+            .page-header h1 { font-size: 2rem; }
+            .cgpa-number { font-size: 4.5rem; }
+            .result-hero { padding: 2rem 1.5rem; }
+            .cgpa-stats { gap: 1.5rem; }
+            
+            .course-card {
+                grid-template-columns: 1fr auto;
+                gap: 0.5rem 1rem;
+                position: relative;
+                padding-right: 3rem; /* Space for absolute delete button */
+            }
+            .course-name { grid-column: 1 / 3; margin-bottom: 0.2rem; }
+            .course-credits { grid-column: 1; text-align: left; font-size: 0.85rem; }
+            .course-grade { grid-column: 2; margin-right: 0.5rem; }
+            .del-btn { 
+                position: absolute; 
+                right: 0.75rem; 
+                top: 50%; 
+                transform: translateY(-50%); 
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 { font-size: 1.8rem; }
+            .cgpa-number { font-size: 3.5rem; }
+            .cgpa-stats { flex-direction: column; gap: 1rem; }
+            .actions { flex-direction: column; }
+            .btn-clear { width: 100%; justify-content: center; margin-top: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+
+    <div class="page-wrapper">
+        <a href="../Grade_Calculator/Universal_Calculator.html" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i> Back to Calculator
+        </a>
+
+        <div class="page-header">
+            <div class="icon-wrap" style="display:flex; align-items:center; justify-content:center; padding: 0;">
+                <img src="../../LOGO.png" alt="Logo" style="width:50px; height:50px; object-fit:contain; display:block;">
+            </div>
+            <h1>Final CGPA</h1>
+            <p>Review your courses and calculate your cumulative grade point average</p>
+        </div>
+
+        <!-- CGPA Result Hero -->
+        <div class="result-hero" id="result-hero">
+            <div class="cgpa-number" id="cgpa-display">0.00</div>
+            <div class="cgpa-label">Cumulative GPA</div>
+            <div class="cgpa-stats">
+                <div class="stat">
+                    <div class="stat-val" id="total-credits-display">0</div>
+                    <div class="stat-lbl">Total Credits</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-val" id="total-points-display">0.00</div>
+                    <div class="stat-lbl">Total Points</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-val" id="total-courses-display">0</div>
+                    <div class="stat-lbl">Courses</div>
+                </div>
+            </div>
+            <div class="grade-badge" id="grade-badge"></div>
+        </div>
+
+        <!-- Course List -->
+        <div class="section-title">
+            <h2><i class="fa-solid fa-list-check"></i> &nbsp;Added Courses</h2>
+            <span class="count-badge" id="course-count">0 courses</span>
+        </div>
+
+        <div class="course-list" id="course-list">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="actions">
+            <button class="btn btn-calculate" id="calc-btn" onclick="calculateCGPA()">
+                <i class="fa-solid fa-calculator"></i>
+                Calculate Final CGPA
+            </button>
+            <button class="btn btn-clear" onclick="clearAll()" title="Clear all courses">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let courses = JSON.parse(localStorage.getItem('semesterResults')) || [];
+
+        function render() {
+            const list = document.getElementById('course-list');
+            const countEl = document.getElementById('course-count');
+            const calcBtn = document.getElementById('calc-btn');
+
+            countEl.textContent = `${courses.length} course${courses.length !== 1 ? 's' : ''}`;
+            calcBtn.disabled = courses.length === 0;
+
+            if (courses.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <p>No courses added yet.<br>Go back to the calculator and add courses to your semester.</p>
+                    </div>`;
+                document.getElementById('result-hero').classList.remove('visible');
+                return;
+            }
+
+            list.innerHTML = courses.map((c, i) => `
+                <div class="course-card" style="animation-delay: ${i * 0.05}s">
+                    <div class="course-name">${c.name}</div>
+                    <div class="course-credits">${c.credits} CR</div>
+                    <div class="course-grade">${c.grade} (${c.gp.toFixed(2)})</div>
+                    <button class="del-btn" onclick="deleteCourse(${i})" title="Remove">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function deleteCourse(index) {
+            courses.splice(index, 1);
+            save();
+            render();
+            // Re-calculate if result is visible
+            if (document.getElementById('result-hero').classList.contains('visible')) {
+                calculateCGPA();
+            }
+        }
+
+        function clearAll() {
+            if (courses.length === 0) return;
+            if (!confirm('Clear all courses? This cannot be undone.')) return;
+            courses = [];
+            save();
+            render();
+        }
+
+        function save() {
+            localStorage.setItem('semesterResults', JSON.stringify(courses));
+        }
+
+        function calculateCGPA() {
+            if (courses.length === 0) return;
+
+            let totalCredits = 0;
+            let totalPoints = 0;
+
+            courses.forEach(c => {
+                totalCredits += c.credits;
+                totalPoints += c.gp * c.credits;
+            });
+
+            const cgpa = totalPoints / totalCredits;
+            const hero = document.getElementById('result-hero');
+
+            document.getElementById('total-credits-display').textContent = totalCredits.toFixed(1);
+            document.getElementById('total-points-display').textContent = totalPoints.toFixed(2);
+            document.getElementById('total-courses-display').textContent = courses.length;
+
+            // Determine letter grade
+            let letter = 'F';
+            if (cgpa >= 3.75) letter = 'A+ / Excellent';
+            else if (cgpa >= 3.50) letter = 'A / Very Good';
+            else if (cgpa >= 3.25) letter = 'B+ / Good';
+            else if (cgpa >= 3.00) letter = 'B / Above Average';
+            else if (cgpa >= 2.50) letter = 'C+ / Average';
+            else if (cgpa >= 2.00) letter = 'C / Passing';
+            else if (cgpa >= 1.00) letter = 'D / Marginal';
+            else letter = 'F / Fail';
+
+            document.getElementById('grade-badge').textContent = letter;
+
+            // Animate the CGPA number
+            hero.classList.add('visible');
+            animateNumber(document.getElementById('cgpa-display'), 0, cgpa, 1200, 2);
+
+            // Scroll to result
+            setTimeout(() => hero.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
+        }
+
+        function animateNumber(el, from, to, duration, decimals) {
+            const start = performance.now();
+            function step(now) {
+                const progress = Math.min((now - start) / duration, 1);
+                const ease = 1 - Math.pow(1 - progress, 3);
+                el.textContent = (from + (to - from) * ease).toFixed(decimals);
+                if (progress < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        }
+
+        // Initial render
+        render();
+
+        // --- PWA Service Worker Registration ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed: ', err));
+            });
+        }
+    </script>
+</body>
+</html>

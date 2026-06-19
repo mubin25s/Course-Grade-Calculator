@@ -78,7 +78,7 @@ export function useCalculator() {
   const isFinalEntered = finalMarks !== '';
 
   const getMilestone = () => {
-    if (isFinalEntered) return { text: `Archived ${currentGrade.grade}`, cls: getGradeColorClass(currentGrade.grade) };
+    if (isFinalEntered) return { text: `Achieved ${currentGrade.grade}`, cls: getGradeColorClass(currentGrade.grade) };
     if (total >= 80) return { text: 'Perfect! A+ Achieved', cls: 'grade-a-plus' };
     const next = [...gradeThresholds].reverse().find(t => t.min > total);
     if (next) return { text: `${formatNum(next.min - total)} more for ${next.grade}`, cls: getGradeColorClass(next.grade) };
