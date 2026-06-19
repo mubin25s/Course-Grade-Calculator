@@ -221,7 +221,7 @@ export default function CalculatorPage() {
                 <span className="badge" id="mid-badge">Max {dist.mid}</span>
               </div>
               <div className="input-group">
-                <label>Obtained Marks</label>
+                <label>Estimated Marks</label>
                 <input
                   type="number"
                   placeholder="0"
@@ -245,7 +245,7 @@ export default function CalculatorPage() {
                 <span className="badge" id="final-badge">Max {dist.final}</span>
               </div>
               <div className="input-group">
-                <label>Obtained Marks</label>
+                <label>Estimated Marks</label>
                 <input
                   type="number"
                   placeholder="0"

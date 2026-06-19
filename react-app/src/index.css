@@ -1482,6 +1482,7 @@ tr:hover td {
 }
 
 .modal-overlay.show {
+    display: flex;
     opacity: 1;
 }
 
