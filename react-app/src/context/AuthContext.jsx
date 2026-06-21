@@ -4,6 +4,10 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  RecaptchaVerifier,
+  signInWithPhoneNumber
 } from 'firebase/auth';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from '../firebase';
@@ -77,6 +81,42 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const loginWithGoogle = async () => {
+    setLoading(true);
+    try {
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+      await processPendingSave(userCredential.user.uid);
+      return { success: true };
+    } catch (error) {
+      setLoading(false);
+      return { success: false, error };
+    }
+  };
+
+  const setupRecaptcha = (containerId) => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
+        size: 'invisible',
+        callback: (response) => {
+          // reCAPTCHA solved
+        }
+      });
+    }
+  };
+
+  const loginWithPhone = async (phoneNumber, appVerifier) => {
+    setLoading(true);
+    try {
+      const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
+      setLoading(false);
+      return { success: true, confirmationResult };
+    } catch (error) {
+      setLoading(false);
+      return { success: false, error };
+    }
+  };
+
   const logout = () => {
     return signOut(auth);
   };
@@ -99,8 +139,12 @@ export function AuthProvider({ children }) {
     loading,
     login,
     register,
+    loginWithGoogle,
+    setupRecaptcha,
+    loginWithPhone,
     logout,
     saveCgpaRecord,
+    processPendingSave
   };
 
   return (
