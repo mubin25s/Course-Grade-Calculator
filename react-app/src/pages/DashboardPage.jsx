@@ -156,7 +156,7 @@ export default function DashboardPage() {
         )}
 
         {/* Main Cards for Calculators */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', width: '100%', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', width: '100%', maxWidth: '500px', margin: '0 auto 2rem auto' }}>
           
           <div className="dashboard-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1 }}>
             <h2 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', textAlign: 'center' }}>Course Grade Calculator</h2>
@@ -166,18 +166,6 @@ export default function DashboardPage() {
             <button className="dashboard-btn" onClick={() => setSetupOpen(true)} style={{ marginTop: 'auto', width: '100%', padding: '1rem', borderRadius: '15px' }}>
               <i className="fa-solid fa-sliders"></i>
               <span>Start Course Calculator</span>
-              <i className="fa-solid fa-arrow-right"></i>
-            </button>
-          </div>
-
-          <div className="dashboard-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1 }}>
-            <h2 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', textAlign: 'center' }}>CGPA Calculator</h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textAlign: 'center', lineHeight: 1.5, marginBottom: '1rem' }}>
-              Calculate your overall cumulative grade point average (CGPA) by adding up multiple courses and credits.
-            </p>
-            <button className="dashboard-btn" onClick={() => navigate('/cgpa')} style={{ marginTop: 'auto', width: '100%', padding: '1rem', borderRadius: '15px' }}>
-              <i className="fa-solid fa-calculator"></i>
-              <span>Start CGPA Calculator</span>
               <i className="fa-solid fa-arrow-right"></i>
             </button>
           </div>
