@@ -1,86 +1,184 @@
-# 🎓 Project Documentation: Course Grade Calculator (React Version)
+# 🎓 Project Documentation: Course Grade Calculator
 
 ## 🌟 Project Overview
-The **Course Grade Calculator** is a modern React web application built with Vite and React Router, designed for university students to track, predict, and calculate their grades. It provides two main tools:
 
-1. **Universal Grade Calculator** — Renders dynamically based on a custom setup of marks distribution weights (Quiz, Presentation, Assignment, Attendance, Mid Term, Final Exam). Components with a weight of 0% are hidden automatically.
-2. **Cumulative CGPA Calculator** — Enables credit-weighted GPA calculation, both automatically (by saving grades from the Universal Calculator) and manually (using direct course inputs).
+The **Course Grade Calculator** is a full-stack React web application built with Vite, React Router, and Firebase. It is designed for university students to calculate grades, track CGPA across semesters, and save academic records to the cloud.
+
+🌐 **Live:** [https://course-grade-calculator-25s.web.app](https://course-grade-calculator-25s.web.app)
 
 ---
 
 ## 🛠️ Technology Stack
-- **React 18** — Component-driven user interface
-- **Vite** — Fast production builder and hot module replacement
-- **React Router Dom v6** — Client-side SPA navigation
-- **CSS3 (Vanilla)** — Custom premium glassmorphism theme (`index.css`)
-- **Font Awesome 6** — Modern icons
-- **Service Worker** — Dynamic caching for offline PWA installation
+
+| Layer | Technology |
+|---|---|
+| UI Framework | React 18 (Vite) |
+| Routing | React Router DOM v6 |
+| Styling | Vanilla CSS (`index.css`) + inline styles per page |
+| Icons | Font Awesome 6 (CDN) |
+| Fonts | Google Fonts — Inter |
+| Authentication | Firebase Auth (Email, Google, Phone/OTP) |
+| Database | Cloud Firestore (NoSQL, per-user subcollections) |
+| Hosting | Firebase Hosting (CDN, global) |
+| PWA | Service Worker (`sw.js`) with dynamic caching |
 
 ---
 
-## 📂 React Project Architecture
+## 📂 Architecture
 
 ```text
-react-app/
-├── public/                            # Static assets and PWA files
-│   ├── LOGO.png                       # High resolution branding icon
-│   ├── manifest.json                  # PWA metadata configuration
-│   └── sw.js                          # Dynamic cache service worker
-├── src/
-│   ├── main.jsx                       # Renders React tree to DOM
-│   ├── App.jsx                        # Routing configuration (5 routes)
-│   ├── index.css                      # Unified premium design system styles
-│   ├── data/
-│   │   └── gradingSystems.js          # Predefined grading systems data
-│   ├── hooks/
-│   │   └── useCalculator.js           # Custom state and grading prediction logic
-│   ├── components/                    # Focused layout UI elements
-│   │   ├── BackgroundGlobes.jsx       # Animated aesthetic globes
-│   │   ├── SetupModal.jsx             # Calculator configuration modal
-│   │   ├── SelectionButtons.jsx       # Poor/Good/Excellent score picker
-│   │   ├── QuizInputs.jsx             # Dynamic quiz inputs list
-│   │   ├── ResultsFooter.jsx          # Live score preview & Add to Semester button
-│   │   ├── GradeTargetsTable.jsx      # Target grade threshold visualizer
-│   │   ├── SemesterSummary.jsx        # Current session course summary list
-│   │   ├── GradingSystemModal.jsx     # Grading systems chooser
-│   │   ├── ConfirmModal.jsx           # Action confirmation popups
-│   │   └── Toast.jsx                  # Custom alert toast messages
-│   └── pages/                         # Core router pages
-│       ├── DashboardPage.jsx          # Welcome landing, presets selection
-│       ├── CalculatorPage.jsx         # Live grade entry and milestones
-│       ├── AboutPage.jsx              # Author info and disclaimer
-│       ├── CGPAPage.jsx               # Manual course inputs CGPA tool
-│       └── CGPAResultPage.jsx         # Saved semester courses evaluation page
+react-app/src/
+├── main.jsx                    # Entry point — mounts React tree
+├── App.jsx                     # Root — AuthProvider → Router → AppLoader → PageTransition → Routes
+├── firebase.js                 # Firebase SDK init (auth, db, analytics)
+├── index.css                   # Global design tokens, dark theme, glassmorphism
+│
+├── context/
+│   └── AuthContext.jsx         # Global auth state, Firebase calls, Firestore save helper
+│
+├── components/
+│   ├── AppLoader.jsx           # Branded splash screen during Firebase auth resolution
+│   ├── PageTransition.jsx      # Fade+slide animation wrapper for all route changes
+│   ├── Toast.jsx               # Floating notification toasts (success / error)
+│   ├── ConfirmModal.jsx        # Reusable action confirmation dialog
+│   ├── SetupModal.jsx          # Calculator configuration modal (marks distribution)
+│   ├── GradingSystemModal.jsx  # Grading system chooser dialog
+│   ├── SelectionButtons.jsx    # Poor / Good / Excellent picker buttons
+│   ├── QuizInputs.jsx          # Dynamic per-quiz mark entry
+│   ├── ResultsFooter.jsx       # Live score summary + Add to Semester CTA
+│   ├── GradeTargetsTable.jsx   # Grade threshold status table
+│   ├── SemesterSummary.jsx     # Current session course list
+│   └── BackgroundGlobes.jsx    # Decorative animated background elements
+│
+├── pages/
+│   ├── DashboardPage.jsx       # Home — calculator card entry points
+│   ├── AuthPage.jsx            # Auth — sliding panel (Login + Register)
+│   ├── ProfilePage.jsx         # User profile — saved CGPA records from Firestore
+│   ├── CalculatorPage.jsx      # Grade entry with milestone predictions
+│   ├── CGPAPage.jsx            # Manual CGPA calculator (add courses manually)
+│   ├── CGPAResultPage.jsx      # Saved semester courses viewer + cloud save
+│   └── AboutPage.jsx           # About, tech stack, disclaimer
+│
+├── hooks/
+│   └── useCalculator.js        # Calculator state: quiz scoring, grade prediction, milestones
+│
+└── data/
+    └── gradingSystems.js       # Predefined grading system configs (CGPA scales)
 ```
 
 ---
 
-## ⚙️ Routing & State Management
+## 🔐 Authentication (`AuthContext.jsx`)
 
-### Route Paths
-| Route | Component | Page Role |
-|---|---|---|
-| `/` | `DashboardPage` | Main entrance and config modal launcher |
-| `/calculator` | `CalculatorPage` | Custom distribution grade entry sheet |
-| `/cgpa` | `CGPAPage` | Manual credits/grades aggregator |
-| `/cgpa-result` | `CGPAResultPage` | Saved semester results analyzer |
-| `/about` | `AboutPage` | Developer and legal information |
+Provides global auth state to the entire app via React Context.
 
-### Hook: `useCalculator`
-All calculator logic is decoupled from UI elements in `useCalculator.js`:
-- Maintains values for quizzes, presentation quality, assignments, attendance percentage, mid-term, and final exam.
-- Live-calculates quiz score based on chosen method (Average vs Sum) and quiz counts.
-- Dynamically predicts grades using the selected grading system thresholds.
-- Evaluates grade milestone requirements ("How many marks are needed in the final to reach B+?").
-- Exports grade targeting statistics for tables.
+### Supported Methods
+| Method | Provider |
+|---|---|
+| Email & Password | `signInWithEmailAndPassword` / `createUserWithEmailAndPassword` |
+| Google Sign-In | `GoogleAuthProvider` + `signInWithPopup` |
+| Phone / OTP | `signInWithPhoneNumber` + invisible reCAPTCHA |
+
+### Exported API
+```js
+const {
+  user,               // Firebase user object (null if not logged in)
+  loading,            // true while Firebase resolves initial auth state
+  login,              // (email, password) → { success, error }
+  register,           // (email, password) → { success, error }
+  loginWithGoogle,    // () → { success, error }
+  setupRecaptcha,     // (containerId) → sets up invisible reCAPTCHA
+  loginWithPhone,     // (phone, verifier) → { success, confirmationResult }
+  logout,             // () → signs out
+  saveCgpaRecord,     // (userId, record) → saves to Firestore
+  processPendingSave, // () → processes sessionStorage pending save after login
+} = useAuth();
+```
 
 ---
 
-## 📌 PWA Service Worker & Caching
-The application includes service worker support in `/sw.js`:
-- Pre-caches core assets on installation.
-- Utilizes **dynamic caching** to store built Vite script bundles (`.js`/`.css`) on-demand.
-- Implements an SPA navigation fallback, ensuring offline access to the calculator pages even on deep links.
+## ☁️ Cloud Firestore Database
+
+### Structure
+```
+users/
+  {userId}/
+    records/
+      {recordId}/
+        cgpa: number
+        totalCredits: number
+        totalPoints: number
+        courses: Array<{ name, credits, gp, grade }>
+        calculatorType: string
+        timestamp: Timestamp
+```
+
+### Security Rules
+```js
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+```
+Each user can only access their own data. All operations require authentication.
+
+---
+
+## 🎬 UI / UX Architecture
+
+### Loading & Transitions
+| Component | Purpose |
+|---|---|
+| `AppLoader` | Branded splash screen (icon, ring spinner, animated bars) shown while Firebase resolves auth state. Prevents black screen on cold start. |
+| `PageTransition` | Wraps all routes with a 220ms fade + translateY transition. Eliminates black flash on navigation. |
+
+### Auth Page Sliding Panel
+`AuthPage.jsx` uses a **50/50 split full-screen layout**:
+- **Left half**: Always contains the login form (dark background)
+- **Right half**: Always contains the register form (dark background)  
+- **Red panel** (50% wide, `position: absolute`): Physically slides between the two halves
+  - `translateX(100%)` → covers right half → login form visible
+  - `translateX(0%)` → covers left half → register form visible
+  - Transition: `0.78s cubic-bezier(0.76, 0, 0.24, 1)`
+
+---
+
+## ⚙️ Routing
+
+| Path | Page | Auth Required |
+|---|---|---|
+| `/` | `DashboardPage` | No |
+| `/calculator` | `CalculatorPage` | No |
+| `/cgpa` | `CGPAPage` | No |
+| `/cgpa-result` | `CGPAResultPage` | No (save requires auth) |
+| `/auth` | `AuthPage` | No (redirect if logged in) |
+| `/profile` | `ProfilePage` | Yes |
+| `/about` | `AboutPage` | No |
+
+---
+
+## 🛠️ Scripts
+
+From project root:
+
+| Command | Action |
+|---|---|
+| `npm run dev` | Start local dev server (proxies to `react-app`) |
+| `npm run build` | Build production bundle in `react-app/dist` |
+| `npm run deploy` | Build + deploy to Firebase Hosting |
+
+---
+
+## 📌 PWA Service Worker
+
+The app includes PWA support via `/public/sw.js`:
+- Pre-caches core assets on install
+- Dynamic caching for Vite JS/CSS bundles
+- SPA navigation fallback for offline deep links
 
 ---
 
