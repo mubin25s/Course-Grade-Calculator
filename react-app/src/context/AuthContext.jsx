@@ -16,9 +16,9 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  // Start as true — will resolve quickly, but show skeleton not black screen
   const [loading, setLoading] = useState(true);
 
-  // Expose function to save a CGPA record to Firestore
   const saveCgpaRecord = async (userId, record) => {
     try {
       const recordData = {
@@ -29,17 +29,15 @@ export function AuthProvider({ children }) {
         calculatorType: record.calculatorType || 'universal',
         timestamp: serverTimestamp(),
       };
-      
       const userRecordsRef = collection(db, 'users', userId, 'records');
       await addDoc(userRecordsRef, recordData);
       return { success: true };
     } catch (error) {
-      console.error('Error saving record to Firestore:', error);
+      console.error('Error saving record:', error);
       return { success: false, error };
     }
   };
 
-  // Check and process any pending saved calculation in sessionStorage
   const processPendingSave = async (uid) => {
     const pendingRaw = sessionStorage.getItem('pendingSaveCGPA');
     if (pendingRaw) {
@@ -51,45 +49,39 @@ export function AuthProvider({ children }) {
           sessionStorage.setItem('justSavedPending', 'true');
         }
       } catch (err) {
-        console.error('Failed to parse or save pending record:', err);
+        console.error('Failed to process pending save:', err);
       }
     }
   };
 
-  // Auth functions
   const login = async (email, password) => {
-    setLoading(true);
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      await processPendingSave(userCredential.user.uid);
+      const cred = await signInWithEmailAndPassword(auth, email, password);
+      await processPendingSave(cred.user.uid);
       return { success: true };
     } catch (error) {
-      setLoading(false);
       return { success: false, error };
     }
   };
 
   const register = async (email, password) => {
-    setLoading(true);
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await processPendingSave(userCredential.user.uid);
+      const cred = await createUserWithEmailAndPassword(auth, email, password);
+      await processPendingSave(cred.user.uid);
       return { success: true };
     } catch (error) {
-      setLoading(false);
       return { success: false, error };
     }
   };
 
   const loginWithGoogle = async () => {
-    setLoading(true);
     try {
       const provider = new GoogleAuthProvider();
-      const userCredential = await signInWithPopup(auth, provider);
-      await processPendingSave(userCredential.user.uid);
+      provider.setCustomParameters({ prompt: 'select_account' });
+      const cred = await signInWithPopup(auth, provider);
+      await processPendingSave(cred.user.uid);
       return { success: true };
     } catch (error) {
-      setLoading(false);
       return { success: false, error };
     }
   };
@@ -98,35 +90,26 @@ export function AuthProvider({ children }) {
     if (!window.recaptchaVerifier) {
       window.recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
         size: 'invisible',
-        callback: (response) => {
-          // reCAPTCHA solved
-        }
+        callback: () => {},
       });
     }
   };
 
   const loginWithPhone = async (phoneNumber, appVerifier) => {
-    setLoading(true);
     try {
       const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, appVerifier);
-      setLoading(false);
       return { success: true, confirmationResult };
     } catch (error) {
-      setLoading(false);
       return { success: false, error };
     }
   };
 
-  const logout = () => {
-    return signOut(auth);
-  };
+  const logout = () => signOut(auth);
 
-  // Set up auth state listener
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
-        // Double-check pending save on state change (just in case)
         await processPendingSave(currentUser.uid);
       }
       setLoading(false);
@@ -135,29 +118,22 @@ export function AuthProvider({ children }) {
   }, []);
 
   const value = {
-    user,
-    loading,
-    login,
-    register,
-    loginWithGoogle,
-    setupRecaptcha,
-    loginWithPhone,
-    logout,
-    saveCgpaRecord,
-    processPendingSave
+    user, loading,
+    login, register, loginWithGoogle,
+    setupRecaptcha, loginWithPhone,
+    logout, saveCgpaRecord, processPendingSave,
   };
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {/* Always render children — loading state handled by AppLoader in App.jsx */}
+      {children}
     </AuthContext.Provider>
   );
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
+  if (!context) throw new Error('useAuth must be used within an AuthProvider');
   return context;
 }
