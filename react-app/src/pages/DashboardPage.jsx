@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import BackgroundGlobes from '../components/BackgroundGlobes';
 import SetupModal from '../components/SetupModal';
 import Toast from '../components/Toast';
+import { useAuth } from '../context/AuthContext';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [setupOpen, setSetupOpen] = useState(false);
   const [toast, setToast] = useState({ message: '', type: 'success' });
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -45,6 +47,72 @@ export default function DashboardPage() {
       <BackgroundGlobes />
 
       <div className="dashboard-container">
+        {/* User Navigation Bar */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: '1rem',
+          width: '100%',
+          marginBottom: '2rem',
+          padding: '0.6rem 1.25rem',
+          background: 'rgba(109, 0, 26, 0.03)',
+          border: '1px solid var(--glass-border)',
+          borderRadius: '50px',
+          backdropFilter: 'blur(10px)'
+        }}>
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <i className="fa-solid fa-graduation-cap" style={{ color: 'var(--primary)' }}></i>
+            <span>Course Grade Portal</span>
+          </span>
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)' }} className="hide-on-mobile">
+                Hi, <strong style={{ color: '#fff' }}>{user.email.split('@')[0]}</strong>
+              </span>
+              <button 
+                onClick={() => navigate('/profile')} 
+                style={{
+                  background: 'rgba(109, 0, 26, 0.1)',
+                  border: '1px solid var(--glass-border)',
+                  color: '#fff',
+                  padding: '0.4rem 0.9rem',
+                  borderRadius: '50px',
+                  fontSize: '0.75rem',
+                  cursor: 'pointer',
+                  fontWeight: 600,
+                  transition: 'all 0.2s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem'
+                }}
+              >
+                <i className="fa-solid fa-circle-user"></i> Profile
+              </button>
+            </div>
+          ) : (
+            <button 
+              onClick={() => navigate('/auth')} 
+              style={{
+                background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
+                border: 'none',
+                color: '#fff',
+                padding: '0.4rem 1rem',
+                borderRadius: '50px',
+                fontSize: '0.75rem',
+                cursor: 'pointer',
+                fontWeight: 700,
+                transition: 'all 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.4rem'
+              }}
+            >
+              <i className="fa-solid fa-right-to-bracket"></i> Login / Register
+            </button>
+          )}
+        </div>
+
         {/* Header */}
         <div className="dashboard-header">
           <div className="header-icon">
@@ -87,13 +155,36 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Main Card */}
-        <div className="dashboard-card main-entry">
-          <button className="dashboard-btn" onClick={() => setSetupOpen(true)}>
-            <i className="fa-solid fa-sliders"></i>
-            <span>Configure &amp; Start Calculator</span>
-            <i className="fa-solid fa-arrow-right"></i>
-          </button>
+        {/* Main Cards for Calculators */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', width: '100%', marginBottom: '2rem' }}>
+          
+          <div className="dashboard-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1 }}>
+            <h2 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', textAlign: 'center' }}>Course Grade Calculator</h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textAlign: 'center', lineHeight: 1.5, marginBottom: '1rem' }}>
+              Calculate grades for individual courses with custom assessment weightages (e.g. Midterm 30%, Final 40%).
+            </p>
+            <button className="dashboard-btn" onClick={() => setSetupOpen(true)} style={{ marginTop: 'auto', width: '100%', padding: '1rem', borderRadius: '15px' }}>
+              <i className="fa-solid fa-sliders"></i>
+              <span>Start Course Calculator</span>
+              <i className="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div className="dashboard-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1 }}>
+            <h2 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', textAlign: 'center' }}>CGPA Calculator</h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textAlign: 'center', lineHeight: 1.5, marginBottom: '1rem' }}>
+              Calculate your overall cumulative grade point average (CGPA) by adding up multiple courses and credits.
+            </p>
+            <button className="dashboard-btn" onClick={() => navigate('/cgpa')} style={{ marginTop: 'auto', width: '100%', padding: '1rem', borderRadius: '15px' }}>
+              <i className="fa-solid fa-calculator"></i>
+              <span>Start CGPA Calculator</span>
+              <i className="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+        </div>
+
+        <div className="dashboard-card main-entry" style={{ padding: '1.5rem' }}>
 
           <div className="dashboard-features">
             <div className="feature-item">

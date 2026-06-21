@@ -6,9 +6,5 @@
     "build": "npm run build --prefix react-app",
     "preview": "npm run preview --prefix react-app",
     "deploy": "npm run build && npx firebase deploy"
-  },
-  "dependencies": {
-    "firebase": "^12.15.0"
   }
 }
-

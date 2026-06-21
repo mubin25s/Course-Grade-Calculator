@@ -1,15 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import ConfirmModal from '../components/ConfirmModal';
 import Toast from '../components/Toast';
 
 export default function CGPAResultPage() {
   const navigate = useNavigate();
+  const { user, saveCgpaRecord } = useAuth();
   const [courses, setCourses] = useState([]);
   const [results, setResults] = useState({ cgpa: 0, credits: 0, points: 0, letter: '' });
   const [showResult, setShowResult] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [toast, setToast] = useState({ message: '', type: 'success' });
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [savedToDb, setSavedToDb] = useState(false);
+  const [savePromptOpen, setSavePromptOpen] = useState(false);
+  const [pendingAction, setPendingAction] = useState(null);
 
   // Load courses on mount
   useEffect(() => {
@@ -85,12 +91,64 @@ export default function CGPAResultPage() {
 
     setResults({ cgpa, credits: totalCredits, points: totalPoints, letter });
     setShowResult(true);
-
+    setSavedToDb(false);
+ 
     // Smooth scroll to results
     setTimeout(() => {
       const hero = document.getElementById('result-hero');
       if (hero) hero.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 50);
+  };
+ 
+  const handleSaveRecord = async () => {
+    if (courses.length === 0) return;
+     
+    const record = {
+      cgpa: results.cgpa,
+      credits: results.credits,
+      points: results.points,
+      courses: courses.map(c => ({
+        name: c.name,
+        credits: c.credits,
+        gp: c.gp,
+        grade: c.grade
+      })),
+      calculatorType: 'universal'
+    };
+ 
+    if (!user) {
+      sessionStorage.setItem('pendingSaveCGPA', JSON.stringify(record));
+      showToast('Redirecting to login to save your record...', 'warning');
+      setTimeout(() => {
+        navigate('/auth?redirect=save-pending');
+      }, 1500);
+      return;
+    }
+ 
+    setSaveLoading(true);
+    try {
+      const res = await saveCgpaRecord(user.uid, record);
+      if (res.success) {
+        setSavedToDb(true);
+        showToast('CGPA record successfully saved to your profile!', 'success');
+      } else {
+        showToast('Failed to save record.', 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      showToast('An error occurred while saving.', 'error');
+    } finally {
+      setSaveLoading(false);
+    }
+  };
+ 
+  const handleBackClick = (targetPath) => {
+    if (showResult && !savedToDb) {
+      setPendingAction(targetPath);
+      setSavePromptOpen(true);
+    } else {
+      navigate(targetPath);
+    }
   };
 
   return (
@@ -100,7 +158,7 @@ export default function CGPAResultPage() {
       <div className="bg-orb orb-2" style={{ position: 'fixed', borderRadius: '50%', filter: 'blur(80px)', pointerEvents: 'none', zIndex: 0, width: 400, height: 400, background: 'radial-gradient(circle, rgba(109,0,26,0.15), transparent)', bottom: -100, right: -100 }}></div>
 
       <div className="page-wrapper" style={{ maxWidth: 760, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        <a href="/calculator" onClick={(e) => { e.preventDefault(); navigate('/calculator'); }} className="back-btn">
+        <a href="/calculator" onClick={(e) => { e.preventDefault(); handleBackClick('/calculator'); }} className="back-btn">
           <i className="fa-solid fa-arrow-left"></i> Back to Calculator
         </a>
 
@@ -160,16 +218,44 @@ export default function CGPAResultPage() {
         </div>
 
         {/* Action Buttons */}
-        <div className="actions" style={{ display: 'flex', gap: '1rem' }}>
+        <div className="actions" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <button
             className="btn btn-calculate"
             id="calc-btn"
             onClick={() => calculateCGPA()}
             disabled={courses.length === 0}
+            style={{ flex: 1, minWidth: '180px' }}
           >
             <i className="fa-solid fa-calculator"></i>
             Calculate Final CGPA
           </button>
+          {showResult && (
+            <button
+              type="button"
+              className="btn btn-calculate"
+              style={{
+                background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
+                flex: 1,
+                minWidth: '180px'
+              }}
+              onClick={handleSaveRecord}
+              disabled={saveLoading || savedToDb}
+            >
+              {saveLoading ? (
+                <>
+                  <i className="fa-solid fa-circle-notch fa-spin"></i> Saving...
+                </>
+              ) : savedToDb ? (
+                <>
+                  <i className="fa-solid fa-check"></i> Saved to Profile
+                </>
+              ) : (
+                <>
+                  <i className="fa-solid fa-floppy-disk"></i> Save to Profile
+                </>
+              )}
+            </button>
+          )}
           <button className="btn btn-clear" onClick={handleClearAll} title="Clear all courses">
             <i className="fa-solid fa-trash-can"></i>
           </button>
@@ -182,6 +268,44 @@ export default function CGPAResultPage() {
         message="Are you sure you want to clear all courses from your semester history? This cannot be undone."
         onConfirm={confirmClearAll}
         onCancel={() => setConfirmOpen(false)}
+      />
+
+      <ConfirmModal
+        isOpen={savePromptOpen}
+        title="Save CGPA Record?"
+        message="Do you want to save your calculated CGPA record to your account before leaving?"
+        onConfirm={async () => {
+          setSavePromptOpen(false);
+          const record = {
+            cgpa: results.cgpa,
+            credits: results.credits,
+            points: results.points,
+            courses: courses.map(c => ({
+              name: c.name,
+              credits: c.credits,
+              gp: c.gp,
+              grade: c.grade
+            })),
+            calculatorType: 'universal'
+          };
+          if (!user) {
+            sessionStorage.setItem('pendingSaveCGPA', JSON.stringify(record));
+            navigate('/auth?redirect=save-pending');
+          } else {
+            await saveCgpaRecord(user.uid, record);
+            if (pendingAction) {
+              navigate(pendingAction);
+            }
+          }
+        }}
+        onCancel={() => {
+          setSavePromptOpen(false);
+          if (pendingAction) {
+            navigate(pendingAction);
+          }
+        }}
+        confirmText="Yes, Save"
+        cancelText="No, Discard"
       />
 
       <Toast
