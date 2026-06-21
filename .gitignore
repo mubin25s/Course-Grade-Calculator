@@ -1,3 +1,24 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+firebase-debug.log*
+
+# Dependencies
+node_modules/
+
+# Production / Build
+dist/
+react-app/dist/
+
+# Firebase
+.firebase/
+
+# OS/Editors
+.DS_Store
+.vscode/
+.idea/
+
 # wrangler files
 .wrangler
 .dev.vars*
