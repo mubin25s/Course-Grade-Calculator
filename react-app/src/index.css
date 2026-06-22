@@ -1470,15 +1470,15 @@ tr:hover td {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(109, 0, 26, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: radial-gradient(circle at center, #5c0216 0%, #0c0003 100%);
     display: none;
     justify-content: center;
     align-items: center;
     z-index: 10000;
     opacity: 0;
     transition: opacity 0.3s ease;
+    overflow-y: auto;
+    padding: 2rem 1rem;
 }
 
 .modal-overlay.show {
@@ -1523,9 +1523,14 @@ tr:hover td {
 
 /* Setup Modal Styles */
 .setup-modal {
+    background: #0A0A0A !important;
+    border: 1.5px solid rgba(109, 0, 26, 0.45) !important;
+    border-radius: 28px !important;
+    box-shadow: 0 0 35px rgba(109, 0, 26, 0.35), 0 25px 60px rgba(0, 0, 0, 0.9) !important;
     max-width: 600px;
     width: 95%;
     padding: 2.5rem;
+    position: relative;
 }
 
 .setup-section {
@@ -1541,25 +1546,34 @@ tr:hover td {
     align-items: center;
     gap: 0.75rem;
     margin-bottom: 1.25rem;
-    color: var(--primary);
+    color: #A51D3A !important;
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: 0.85rem !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.section-title i {
+    font-size: 1rem;
+    color: #A51D3A;
 }
 
 .total-badge {
     margin-left: auto;
-    background: var(--glass-bg-accent);
-    padding: 0.4rem 1rem;
-    border-radius: 50px;
-    font-size: 0.85rem;
-    border: 1px solid var(--glass-border);
-    color: var(--primary);
+    background: transparent !important;
+    padding: 0.3rem 0.8rem !important;
+    border-radius: 50px !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    border: 1px solid #A51D3A !important;
+    color: #FFFFFF !important;
+    letter-spacing: 0.5px;
 }
 
 .total-badge.error {
-    color: var(--danger);
-    border-color: var(--danger);
-    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444 !important;
+    border-color: #EF4444 !important;
+    background: rgba(239, 68, 68, 0.1) !important;
     animation: shake 0.5s ease;
 }
 
@@ -1584,52 +1598,66 @@ tr:hover td {
 }
 
 .mark-input-group label {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    font-weight: 500;
+    font-size: 0.75rem !important;
+    color: #9B4D5E !important;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
 }
 
 .mark-input-group input {
-    background: #0A0A0A;
-    border: 1.5px solid var(--glass-border);
-    color: #FFFFFF;
-    padding: 0.8rem;
-    border-radius: 12px;
+    background: #060606 !important;
+    border: 1.5px solid rgba(109, 0, 26, 0.25) !important;
+    color: #FFFFFF !important;
+    padding: 1rem 0.5rem !important;
+    border-radius: 14px !important;
     text-align: center;
-    font-weight: 600;
-    font-size: 1.1rem;
+    font-weight: 700 !important;
+    font-size: 1.25rem !important;
+    transition: all 0.3s ease;
+    outline: none;
 }
 
 .mark-input-group input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 15px var(--primary-glow);
+    border-color: #A51D3A !important;
+    box-shadow: 0 0 15px rgba(165, 29, 58, 0.4) !important;
+    background: #0D0D0D !important;
+}
+
+/* Hide input number spinners */
+.mark-input-group input[type=number]::-webkit-inner-spin-button,
+.mark-input-group input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.mark-input-group input[type=number] {
+    -moz-appearance: textfield;
 }
 
 .method-toggle {
     display: flex;
-    background: #0A0A0A;
-    border: 1.5px solid var(--glass-border);
-    border-radius: 12px;
+    background: #060606 !important;
+    border: 1.5px solid rgba(109, 0, 26, 0.25) !important;
+    border-radius: 14px !important;
     padding: 0.25rem;
 }
 
 .method-btn {
     flex: 1;
-    padding: 0.6rem;
+    padding: 0.75rem !important;
     border: none;
-    background: transparent;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    font-weight: 600;
+    background: transparent !important;
+    color: #9B4D5E !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 10px !important;
     transition: all 0.3s ease;
 }
 
 .method-btn.active {
-    background: var(--primary);
-    color: #FFFFFF;
-    box-shadow: 0 4px 12px var(--primary-glow);
+    background: #6D001A !important;
+    color: #FFFFFF !important;
+    box-shadow: 0 4px 12px rgba(109, 0, 26, 0.4) !important;
 }
 
 @keyframes fadeInUp {
@@ -1643,7 +1671,25 @@ tr:hover td {
     75% { transform: translateX(5px); }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
+    .setup-modal {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100% !important;
+        min-height: 100vh !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        border: none !important;
+        padding: 1.5rem !important;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        box-shadow: none !important;
+    }
+    .modal-overlay {
+        padding: 0 !important;
+    }
     .marks-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1653,6 +1699,42 @@ tr:hover td {
     .mark-input-group.full-width {
         grid-column: span 1;
     }
+}
+
+/* Custom button styles for setup modal launch */
+.setup-modal .modal-footer {
+    margin-top: 2.5rem;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.setup-modal .dashboard-btn {
+    background: #6D001A !important;
+    border: none !important;
+    color: #FFFFFF !important;
+    padding: 1.1rem 2rem !important;
+    border-radius: 50px !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    box-shadow: 0 8px 24px rgba(109, 0, 26, 0.35) !important;
+    transition: all 0.3s ease;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    cursor: pointer;
+}
+.setup-modal .dashboard-btn:hover:not(:disabled) {
+    transform: translateY(-2px) scale(1.01) !important;
+    box-shadow: 0 12px 30px rgba(109, 0, 26, 0.5), 0 0 15px rgba(109, 0, 26, 0.2) !important;
+    background: #8B112B !important;
+}
+.setup-modal .dashboard-btn:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 .modal-overlay.show .modal-construction {
@@ -2500,8 +2582,8 @@ tr:hover td {
     align-items: center;
     gap: 1.5rem;
     padding-bottom: 1.5rem;
-    margin-bottom: 2rem;
-    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(109, 0, 26, 0.25);
     position: relative;
 }
 
@@ -2516,8 +2598,8 @@ tr:hover td {
     content: '';
     position: absolute;
     inset: -15px -25px -15px -20px;
-    background: radial-gradient(circle at center, var(--primary-glow) 0%, transparent 70%);
-    border-radius: 30px;
+    background: radial-gradient(circle at center, rgba(109, 0, 26, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
     z-index: -1;
     opacity: 0.8;
 }
@@ -2525,35 +2607,25 @@ tr:hover td {
 .modal-icon-glow {
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, rgba(109, 0, 26, 0.4), rgba(109, 0, 26, 0.1));
-    border: 2px solid var(--primary);
-    border-radius: 20px;
+    background: rgba(109, 0, 26, 0.15) !important;
+    border: 2px solid var(--primary) !important;
+    border-radius: 50% !important;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    box-shadow: 0 0 25px var(--primary-glow), inset 0 0 15px rgba(255, 255, 255, 0.1);
-    transform: rotate(-5deg);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 0 25px rgba(109, 0, 26, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.05);
+    transform: none !important;
+    transition: all 0.4s ease;
 }
 
 .modal-icon-glow:hover {
-    transform: rotate(0deg) scale(1.1);
-    box-shadow: 0 0 35px var(--primary), inset 0 0 20px rgba(255, 255, 255, 0.2);
+    transform: scale(1.05) !important;
+    box-shadow: 0 0 35px var(--primary), inset 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .modal-icon-glow::before {
-    content: '';
-    position: absolute;
-    inset: -4px;
-    border-radius: 22px;
-    background: linear-gradient(45deg, transparent, var(--primary), transparent);
-    z-index: -1;
-    animation: borderSpin 3s linear infinite;
-}
-
-@keyframes borderSpin {
-    100% { transform: rotate(360deg); }
+    display: none !important;
 }
 
 .modal-icon-glow i {
@@ -2585,12 +2657,12 @@ tr:hover td {
 .setup-subtitle {
     margin-left: auto;
     padding-left: 1.5rem;
-    border-left: 2px dashed rgba(109, 0, 26, 0.3);
-    color: var(--text-muted);
+    border-left: 2px dotted rgba(165, 29, 58, 0.6) !important;
+    color: #9B4D5E !important;
     font-size: 1.05rem;
     line-height: 1.4;
     font-weight: 500;
-    margin-right: 4rem;
+    margin-right: 4.5rem;
 }
 
 .setup-subtitle p {
@@ -2600,29 +2672,50 @@ tr:hover td {
 /* Ensure modal-close stays in center right */
 .setup-header-custom .modal-close {
     position: absolute;
-    top: calc(50% - 0.75rem);
-    transform: translateY(-50%);
+    top: 50%;
+    transform: translateY(-50%) !important;
     right: 0;
+    background: #000000 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    color: white !important;
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 50% !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem !important;
+}
+
+.setup-header-custom .modal-close:hover {
+    background: #6D001A !important;
+    border-color: #A51D3A !important;
+    transform: translateY(-50%) rotate(90deg) scale(1.1) !important;
+    box-shadow: 0 0 15px rgba(109, 0, 26, 0.6) !important;
 }
 
 /* ===== SETUP MODAL HEADER - MOBILE FIX ===== */
 @media (max-width: 576px) {
     .setup-header-custom {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-        padding-right: 2.5rem; /* Space for absolute close button */
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.75rem !important;
+        padding-bottom: 1rem !important;
+        margin-bottom: 1.5rem !important;
+        padding-right: 2.5rem !important; /* Space for absolute close button */
     }
 
     .setup-subtitle {
-        margin-left: 0;
-        margin-right: 0;
-        padding-left: 0;
-        border-left: none;
-        border-top: 1px dashed rgba(109, 0, 26, 0.3);
-        padding-top: 0.75rem;
-        width: 100%;
-        font-size: 0.9rem;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        padding-left: 0 !important;
+        border-left: none !important;
+        border-top: 1px dotted rgba(165, 29, 58, 0.6) !important;
+        padding-top: 0.75rem !important;
+        width: 100% !important;
+        font-size: 0.9rem !important;
     }
 
     .setup-title-text h2 {
@@ -2630,8 +2723,8 @@ tr:hover td {
     }
 
     .setup-header-custom .modal-close {
-        top: 0;
-        transform: none;
+        top: 1rem !important;
+        transform: none !important;
     }
 }
 
