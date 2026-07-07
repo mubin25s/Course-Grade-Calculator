@@ -3,8 +3,6 @@
 A **premium, full-stack React web application** for university students to calculate course grades and CGPA — with Firebase authentication, Firestore cloud storage, and a polished, animated UI.
 
 🌐 **Live App:** [https://course-grade-calculator-25s.web.app](https://course-grade-calculator-25s.web.app)
-📦 **GitHub:** [https://github.com/mubin25s/Course-Grade-Calculator](https://github.com/mubin25s/Course-Grade-Calculator)
-
 ---
 
 ## ✨ Key Features
