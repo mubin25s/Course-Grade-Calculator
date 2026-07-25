@@ -217,32 +217,30 @@ export default function CGPAPage() {
   };
 
   return (
-    <div className="universal-calc-page" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '2rem 0' }}>
+    <div className="universal-calc-page" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 'clamp(1rem, 3vw, 2rem) clamp(0.75rem, 3vw, 1.25rem)' }}>
       <BackgroundGlobes />
 
-      {/* Under Construction Banner */}
-      <div className="construction-banner">
-        <i className="fa-solid fa-screwdriver-wrench"></i>
-        <span>New features are currently under construction! More tools coming soon.</span>
-      </div>
-
-      {/* Back Navigation */}
-      <div className="back-nav" style={{ position: 'absolute', top: '2rem', left: '2rem', zIndex: 100 }}>
-        <a href="/" onClick={(e) => { e.preventDefault(); handleBackClick('/'); }} className="back-link">
-          <i className="fa-solid fa-arrow-left"></i> Back to Dashboard
-        </a>
-      </div>
-
-      <div className="container cgpa-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <header style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-          <div className="header-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
-            <img src="/LOGO.png" alt="Logo" style={{ width: 80, height: 80, objectFit: 'contain', display: 'block' }} />
+      <div className="container cgpa-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+        {/* Top Navigation Row */}
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.5rem' }}>
+          <a href="/" onClick={(e) => { e.preventDefault(); handleBackClick('/'); }} className="back-link" style={{ marginBottom: 0 }}>
+            <i className="fa-solid fa-arrow-left"></i> Dashboard
+          </a>
+          <div className="construction-banner" style={{ position: 'static', margin: 0 }}>
+            <i className="fa-solid fa-screwdriver-wrench"></i>
+            <span>More tools coming soon!</span>
           </div>
-          <h1 style={{ fontSize: '3.5rem', fontWeight: 800, letterSpacing: '-1px', marginBottom: '0.5rem', color: 'var(--primary)' }}>CGPA Calculator</h1>
-          <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', maxWidth: 500, margin: '0 auto' }}>Calculate your cumulative grade point average with modern precision and style.</p>
+        </div>
+
+        <header style={{ textAlign: 'center', marginBottom: 'clamp(1.5rem, 5vw, 3.5rem)', width: '100%' }}>
+          <div className="header-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem' }}>
+            <img src="/LOGO.png" alt="Logo" style={{ width: 'clamp(54px, 14vw, 80px)', height: 'clamp(54px, 14vw, 80px)', objectFit: 'contain', display: 'block' }} />
+          </div>
+          <h1 style={{ fontSize: 'clamp(2rem, 7vw, 3.5rem)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '0.5rem', color: 'var(--primary)' }}>CGPA Calculator</h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: 'clamp(0.85rem, 2.5vw, 1.1rem)', maxWidth: 500, margin: '0 auto', lineHeight: 1.5 }}>Calculate your cumulative grade point average with modern precision and style.</p>
         </header>
 
-        <div className="calculator-card" style={{ width: '100%', maxWidth: '1000px' }}>
+        <div className="calculator-card" style={{ width: '100%', maxWidth: 'min(1000px, 100%)' }}>
           <div className="course-list" id="courseList">
             {/* Render Finalized Courses */}
             {addedCourses.map((course, idx) => (
@@ -297,7 +295,7 @@ export default function CGPAPage() {
                     className="course-input input-grade"
                     value={row.gradePoint}
                     onChange={(e) => handleActiveRowChange(row.id, 'gradePoint', e.target.value)}
-                    style={{ background: '#0A0A0A', color: '#FFFFFF' }}
+                    style={{ background: '#F3F0EB', color: '#23212C', width: '100%' }}
                   >
                     <option value="" disabled>Select</option>
                     <option value="4.00">A+ (4.00)</option>

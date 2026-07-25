@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 
 const DEFAULT_DIST = { quiz: 15, presentation: 8, assignment: 5, attendance: 7, mid: 25, final: 40 };
 const DEFAULT_QUIZ = { total: 3, count: 3, method: 'avg' };
@@ -10,7 +11,14 @@ export default function SetupModal({ isOpen, onClose, onLaunch }) {
   const total = Object.values(dist).reduce((a, b) => a + (parseInt(b) || 0), 0);
   const isValid = total === 100;
 
-  const handleDist = (key, val) => setDist(prev => ({ ...prev, [key]: parseInt(val) || 0 }));
+  const handleDist = (key, val) => {
+    if (val === '') {
+      setDist(prev => ({ ...prev, [key]: '' }));
+      return;
+    }
+    const num = Math.min(100, Math.max(0, parseInt(val, 10) || 0));
+    setDist(prev => ({ ...prev, [key]: num }));
+  };
 
   const handleLaunch = () => {
     if (!isValid) return;
@@ -33,23 +41,21 @@ export default function SetupModal({ isOpen, onClose, onLaunch }) {
     { key: 'final',        label: 'Final Exam' },
   ];
 
-  return (
+  return createPortal(
     <div className={`modal-overlay ${isOpen ? 'show' : ''}`} id="setupModal">
       <div className="modal-content setup-modal">
         {/* Header */}
         <div className="modal-header setup-header-custom">
           <div className="setup-title-area">
             <div className="modal-icon-glow">
-              <i className="fa-solid fa-gear"></i>
+              <i className="fa-solid fa-gear" style={{ color: '#111111' }}></i>
             </div>
             <div className="setup-title-text">
-              <h2>Calculator<br />Setup</h2>
+              <h2>Calculator Setup</h2>
+              <p className="setup-subtitle-text">Configure your marks distribution</p>
             </div>
           </div>
-          <div className="setup-subtitle">
-            <p>Configure your marks<br />distribution</p>
-          </div>
-          <button className="modal-close" onClick={onClose}>
+          <button className="modal-close" onClick={onClose} aria-label="Close setup modal">
             <i className="fa-solid fa-xmark"></i>
           </button>
         </div>
@@ -70,6 +76,8 @@ export default function SetupModal({ isOpen, onClose, onLaunch }) {
                 <input
                   type="number"
                   id={`dist-${key}`}
+                  min="0"
+                  max="100"
                   value={dist[key]}
                   onChange={e => handleDist(key, e.target.value)}
                 />
@@ -90,8 +98,13 @@ export default function SetupModal({ isOpen, onClose, onLaunch }) {
               <input
                 type="number"
                 id="quiz-total"
+                min="1"
+                max="20"
                 value={quiz.total}
-                onChange={e => setQuiz(q => ({ ...q, total: parseInt(e.target.value) || 1 }))}
+                onChange={e => {
+                  const val = Math.min(20, Math.max(1, parseInt(e.target.value, 10) || 1));
+                  setQuiz(q => ({ ...q, total: val, count: Math.min(q.count, val) }));
+                }}
               />
             </div>
             <div className="mark-input-group">
@@ -99,8 +112,13 @@ export default function SetupModal({ isOpen, onClose, onLaunch }) {
               <input
                 type="number"
                 id="quiz-count"
+                min="1"
+                max={quiz.total}
                 value={quiz.count}
-                onChange={e => setQuiz(q => ({ ...q, count: parseInt(e.target.value) || 1 }))}
+                onChange={e => {
+                  const val = Math.min(quiz.total, Math.max(1, parseInt(e.target.value, 10) || 1));
+                  setQuiz(q => ({ ...q, count: val }));
+                }}
               />
             </div>
             <div className="mark-input-group full-width">
@@ -133,6 +151,7 @@ export default function SetupModal({ isOpen, onClose, onLaunch }) {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

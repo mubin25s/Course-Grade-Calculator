@@ -25,10 +25,13 @@ export default function PageTransition({ children }) {
     <div
       style={{
         opacity: stage === 'in' ? 1 : 0,
-        transform: stage === 'in' ? 'translateY(0)' : 'translateY(6px)',
+        transform: stage === 'in' ? 'none' : 'translateY(6px)',
         transition: 'opacity 0.22s ease, transform 0.22s ease',
         minHeight: '100vh',
         width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
       }}
     >
       {children}

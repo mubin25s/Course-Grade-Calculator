@@ -1,3 +1,4 @@
+import { createPortal } from 'react-dom';
 import { systemsData } from '../data/gradingSystems';
 
 export default function GradingSystemModal({ isOpen, onClose, onApply }) {
@@ -10,7 +11,7 @@ export default function GradingSystemModal({ isOpen, onClose, onApply }) {
     { id: 4, name: 'Elite',           desc: 'A starts at 93 | F below 60' },
   ];
 
-  return (
+  return createPortal(
     <div id="systemModal" className={`modal ${isOpen ? 'show' : ''}`} onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
@@ -30,6 +31,7 @@ export default function GradingSystemModal({ isOpen, onClose, onApply }) {
           ))}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

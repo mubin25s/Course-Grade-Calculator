@@ -270,18 +270,20 @@ export default function CalculatorPage() {
           onAddToSemester={handleAddToSemester}
         />
 
-        <GradeTargetsTable
-          targets={calc.getGradeTargets()}
-          getGradeColorClass={calc.getGradeColorClass}
-          onOpenSystem={() => setSystemModalOpen(true)}
-        />
+        <div className="calculator-bottom-grid">
+          <GradeTargetsTable
+            targets={calc.getGradeTargets()}
+            getGradeColorClass={calc.getGradeColorClass}
+            onOpenSystem={() => setSystemModalOpen(true)}
+          />
 
-        <SemesterSummary
-          results={semesterResults}
-          getGradeColorClass={calc.getGradeColorClass}
-          onClear={handleClearSemester}
-          onGoToCGPA={handleGoToCGPA}
-        />
+          <SemesterSummary
+            results={semesterResults}
+            getGradeColorClass={calc.getGradeColorClass}
+            onClear={handleClearSemester}
+            onGoToCGPA={handleGoToCGPA}
+          />
+        </div>
       </div>
 
       <GradingSystemModal

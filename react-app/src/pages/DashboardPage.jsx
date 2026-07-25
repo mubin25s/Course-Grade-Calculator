@@ -155,37 +155,37 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Main Cards for Calculators */}
-        <div style={{ display: 'flex', justifyContent: 'center', width: '100%', maxWidth: '500px', margin: '0 auto 2rem auto' }}>
-          
-          <div className="dashboard-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1 }}>
-            <h2 style={{ fontSize: '1.25rem', color: '#fff', marginBottom: '0.5rem', textAlign: 'center' }}>Course Grade Calculator</h2>
-            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textAlign: 'center', lineHeight: 1.5, marginBottom: '1rem' }}>
-              Calculate grades for individual courses with custom assessment weightages (e.g. Midterm 30%, Final 40%).
+        {/* Main Card for Calculator */}
+        <div style={{ width: '100%', maxWidth: '580px', margin: '0 auto 2rem auto' }}>
+          <div className="dashboard-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(196, 30, 58, 0.1)', border: '1px solid rgba(196, 30, 58, 0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--primary)', fontSize: '1.25rem', margin: '0 auto' }}>
+              <i className="fa-solid fa-calculator"></i>
+            </div>
+            <h2 style={{ fontSize: '1.25rem', color: '#23212C', textAlign: 'center', fontWeight: 700 }}>Course Grade Calculator</h2>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textAlign: 'center', lineHeight: 1.5, marginBottom: '0.5rem' }}>
+              Calculate grades for individual courses with custom assessment weightages (Quizzes, Midterm, Final, Attendance, Assignments).
             </p>
-            <button className="dashboard-btn" onClick={() => setSetupOpen(true)} style={{ marginTop: 'auto', width: '100%', padding: '1rem', borderRadius: '15px' }}>
+            <button className="dashboard-btn" onClick={() => setSetupOpen(true)} style={{ marginTop: 'auto', width: '100%', padding: '0.9rem 1.25rem', borderRadius: '14px' }}>
               <i className="fa-solid fa-sliders"></i>
               <span>Start Course Calculator</span>
               <i className="fa-solid fa-arrow-right"></i>
             </button>
           </div>
-
         </div>
 
-        <div className="dashboard-card main-entry" style={{ padding: '1.5rem' }}>
-
+        <div className="dashboard-card main-entry" style={{ padding: '1.5rem', marginBottom: '2rem' }}>
           <div className="dashboard-features">
             <div className="feature-item">
               <i className="fa-solid fa-calculator"></i>
-              <span>Grade Calculator</span>
+              <span>Custom Weightages</span>
             </div>
             <div className="feature-item">
               <i className="fa-solid fa-chart-line"></i>
-              <span>Grade Targets</span>
+              <span>Grade Target Tracker</span>
             </div>
             <div className="feature-item">
               <i className="fa-solid fa-trophy"></i>
-              <span>Achievement Tracking</span>
+              <span>CGPA & Multi-Term</span>
             </div>
           </div>
         </div>

@@ -1,6 +1,8 @@
+import { createPortal } from 'react-dom';
+
 export default function ConfirmModal({ isOpen, title, message, onConfirm, onCancel, confirmText = 'Proceed', cancelText = 'Cancel' }) {
   if (!isOpen) return null;
-  return (
+  return createPortal(
     <div id="confirmModal" className={`modal ${isOpen ? 'show' : ''}`}>
       <div className="modal-content small">
         <div className="modal-header">
@@ -12,6 +14,7 @@ export default function ConfirmModal({ isOpen, title, message, onConfirm, onCanc
           <button className="dashboard-btn" onClick={onConfirm}>{confirmText}</button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

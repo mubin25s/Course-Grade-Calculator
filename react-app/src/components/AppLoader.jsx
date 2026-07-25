@@ -1,6 +1,6 @@
 /**
  * AppLoader — shown during initial Firebase auth state resolution.
- * Replaces the black void with a branded, animated splash screen.
+ * Styled in Red Wine, Off-White, and Cosmic #23212C palette.
  */
 export default function AppLoader() {
   return (
@@ -13,20 +13,18 @@ export default function AppLoader() {
           to   { opacity: 1; transform: scale(1); }
         }
         @keyframes loaderPulse {
-          0%, 100% { opacity: 0.4; transform: scale(1); }
-          50%       { opacity: 1;   transform: scale(1.06); }
-        }
-        @keyframes loaderSpin {
-          to { stroke-dashoffset: 0; }
+          0%, 100% { opacity: 0.85; transform: scale(1); }
+          50%       { opacity: 1;    transform: scale(1.05); }
         }
         @keyframes loaderDot {
           0%, 80%, 100% { transform: scaleY(0.5); opacity: 0.3; }
           40%           { transform: scaleY(1);   opacity: 1; }
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         .apl-root {
           position: fixed; inset: 0;
-          background: #080808;
+          background: #FAF8F5;
           display: flex; flex-direction: column;
           align-items: center; justify-content: center;
           z-index: 9999;
@@ -40,7 +38,7 @@ export default function AppLoader() {
           position: absolute; top: -200px; left: 50%;
           transform: translateX(-50%);
           width: 600px; height: 600px; border-radius: 50%;
-          background: radial-gradient(circle, rgba(140,0,28,0.18) 0%, transparent 65%);
+          background: radial-gradient(circle, rgba(196,30,58,0.12) 0%, transparent 65%);
           pointer-events: none;
         }
 
@@ -53,7 +51,7 @@ export default function AppLoader() {
           width: 88px; height: 88px; border-radius: 22px;
           background: linear-gradient(145deg, #6D001A, #C41E3A);
           display: flex; align-items: center; justify-content: center;
-          box-shadow: 0 16px 48px rgba(109,0,26,0.5), 0 0 0 1px rgba(255,255,255,0.06);
+          box-shadow: 0 16px 48px rgba(196,30,58,0.35);
         }
 
         /* Spinning ring around the icon */
@@ -62,22 +60,21 @@ export default function AppLoader() {
           width: 108px; height: 108px;
           border-radius: 50%;
           border: 2px solid transparent;
-          border-top-color: rgba(196,30,58,0.7);
+          border-top-color: rgba(196,30,58,0.8);
           border-right-color: rgba(196,30,58,0.3);
           animation: spin 1s linear infinite;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
 
         .apl-title {
           font-size: 1.35rem; font-weight: 900;
-          color: #fff; letter-spacing: -0.5px;
+          color: #23212C; letter-spacing: -0.5px;
           text-transform: uppercase; margin-bottom: 0.35rem;
           text-align: center;
         }
         .apl-sub {
-          font-size: 0.78rem; color: rgba(255,255,255,0.28);
+          font-size: 0.78rem; color: rgba(35,33,44,0.6);
           letter-spacing: 1px; margin-bottom: 2.5rem;
-          text-align: center;
+          text-align: center; font-weight: 600;
         }
 
         /* Three animated bars */

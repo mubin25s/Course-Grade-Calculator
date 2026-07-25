@@ -75,20 +75,16 @@ Provides global auth state to the entire app via React Context.
 ### Supported Methods
 | Method | Provider |
 |---|---|
-| Email & Password | `signInWithEmailAndPassword` / `createUserWithEmailAndPassword` |
-| Google Sign-In | `GoogleAuthProvider` + `signInWithPopup` |
-| Phone / OTP | `signInWithPhoneNumber` + invisible reCAPTCHA |
+| Gmail (Google) Sign-In | `GoogleAuthProvider` + `signInWithPopup` |
+| GitHub Sign-In | `GithubAuthProvider` + `signInWithPopup` |
 
 ### Exported API
 ```js
 const {
   user,               // Firebase user object (null if not logged in)
   loading,            // true while Firebase resolves initial auth state
-  login,              // (email, password) → { success, error }
-  register,           // (email, password) → { success, error }
   loginWithGoogle,    // () → { success, error }
-  setupRecaptcha,     // (containerId) → sets up invisible reCAPTCHA
-  loginWithPhone,     // (phone, verifier) → { success, confirmationResult }
+  loginWithGithub,    // () → { success, error }
   logout,             // () → signs out
   saveCgpaRecord,     // (userId, record) → saves to Firestore
   processPendingSave, // () → processes sessionStorage pending save after login

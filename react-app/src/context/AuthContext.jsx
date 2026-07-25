@@ -5,6 +5,7 @@ import {
   signOut,
   onAuthStateChanged,
   GoogleAuthProvider,
+  GithubAuthProvider,
   signInWithPopup,
   RecaptchaVerifier,
   signInWithPhoneNumber
@@ -86,6 +87,17 @@ export function AuthProvider({ children }) {
     }
   };
 
+  const loginWithGithub = async () => {
+    try {
+      const provider = new GithubAuthProvider();
+      const cred = await signInWithPopup(auth, provider);
+      await processPendingSave(cred.user.uid);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error };
+    }
+  };
+
   const setupRecaptcha = (containerId) => {
     if (!window.recaptchaVerifier) {
       window.recaptchaVerifier = new RecaptchaVerifier(auth, containerId, {
@@ -119,7 +131,7 @@ export function AuthProvider({ children }) {
 
   const value = {
     user, loading,
-    login, register, loginWithGoogle,
+    login, register, loginWithGoogle, loginWithGithub,
     setupRecaptcha, loginWithPhone,
     logout, saveCgpaRecord, processPendingSave,
   };
