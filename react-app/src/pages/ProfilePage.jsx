@@ -98,28 +98,35 @@ export default function ProfilePage() {
     <>
       <style>{`
         .profile-page {
-          min-height: 100vh;
+          height: 100dvh;
+          max-height: 100dvh;
+          overflow: hidden;
           display: flex;
           flex-direction: column;
           align-items: center;
-          padding: clamp(1.25rem, 4vw, 2rem) clamp(0.75rem, 3vw, 1.25rem);
+          padding: clamp(0.5rem, 2vw, 1rem) clamp(0.75rem, 3vw, 1.25rem);
           position: relative;
           width: 100%;
           box-sizing: border-box;
         }
         .profile-container {
           width: 100%;
-          max-width: min(800px, 100%);
+          max-width: min(780px, 100%);
           position: relative;
           z-index: 1;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          overflow: hidden;
         }
         .profile-topbar {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+          margin-bottom: clamp(0.4rem, 1.5vw, 0.75rem);
           flex-wrap: wrap;
-          gap: 0.75rem;
+          gap: 0.5rem;
+          flex-shrink: 0;
         }
         .profile-back-btn {
           display: inline-flex;
@@ -162,34 +169,41 @@ export default function ProfilePage() {
         }
         .profile-header {
           text-align: center;
-          margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+          margin-bottom: clamp(0.4rem, 1.5vw, 0.75rem);
+          flex-shrink: 0;
         }
         .profile-avatar {
-          width: clamp(56px, 12vw, 72px);
-          height: clamp(56px, 12vw, 72px);
+          width: clamp(40px, 8vw, 52px);
+          height: clamp(40px, 8vw, 52px);
           background: linear-gradient(135deg, #C41E3A, #960E26);
-          border-radius: 20px;
-          box-shadow: 0 10px 25px rgba(196, 30, 58, 0.25);
+          border-radius: 14px;
+          box-shadow: 0 6px 16px rgba(196, 30, 58, 0.25);
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 0 auto 1.25rem;
+          margin: 0 auto 0.5rem;
+          overflow: hidden;
+        }
+        .profile-avatar img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
         }
         .profile-avatar i {
           color: #fff;
-          font-size: clamp(1.8rem, 5vw, 2.4rem);
+          font-size: clamp(1.2rem, 3.5vw, 1.6rem);
         }
         .profile-title {
-          font-size: clamp(1.8rem, 6vw, 2.5rem);
+          font-size: clamp(1.2rem, 3.5vw, 1.65rem);
           font-weight: 900;
           color: #C41E3A;
-          margin-bottom: 0.35rem;
+          margin-bottom: 0.2rem;
           text-transform: uppercase;
           letter-spacing: -0.5px;
         }
         .profile-email {
           color: rgba(35, 33, 44, 0.7);
-          font-size: clamp(0.8rem, 2.5vw, 1rem);
+          font-size: clamp(0.72rem, 1.8vw, 0.85rem);
           font-weight: 500;
           word-break: break-all;
         }
@@ -200,19 +214,20 @@ export default function ProfilePage() {
         .stat-cards {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(min(200px, 45%), 1fr));
-          gap: 1rem;
-          margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+          gap: 0.6rem;
+          margin-bottom: clamp(0.4rem, 1.5vw, 0.75rem);
+          flex-shrink: 0;
         }
         .stat-card {
-          padding: clamp(1.25rem, 4vw, 1.75rem) clamp(1rem, 3vw, 1.5rem);
+          padding: clamp(0.6rem, 2vw, 0.9rem) clamp(0.75rem, 2vw, 1.1rem);
           text-align: center;
           background: #FFFFFF;
           border: 1.5px solid rgba(35, 33, 44, 0.12);
-          border-radius: 20px;
-          box-shadow: 0 10px 30px rgba(35, 33, 44, 0.06);
+          border-radius: 14px;
+          box-shadow: 0 6px 18px rgba(35, 33, 44, 0.06);
         }
         .stat-label {
-          font-size: clamp(0.68rem, 2vw, 0.78rem);
+          font-size: clamp(0.62rem, 1.5vw, 0.72rem);
           color: rgba(35, 33, 44, 0.65);
           text-transform: uppercase;
           letter-spacing: 1px;
@@ -223,17 +238,18 @@ export default function ProfilePage() {
           margin-right: 5px;
         }
         .stat-value {
-          font-size: clamp(2rem, 7vw, 2.75rem);
+          font-size: clamp(1.4rem, 4vw, 2rem);
           font-weight: 900;
           display: block;
-          margin-top: 0.35rem;
+          margin-top: 0.2rem;
         }
         .stat-value.primary { color: #23212C; }
         .stat-value.accent  { color: #C41E3A; }
         .section-heading {
           display: flex;
           align-items: center;
-          margin-bottom: 1.25rem;
+          margin-bottom: 0.6rem;
+          flex-shrink: 0;
         }
         .section-heading h2 {
           font-size: clamp(0.9rem, 3vw, 1.15rem);
@@ -249,16 +265,20 @@ export default function ProfilePage() {
         .records-list {
           display: flex;
           flex-direction: column;
-          gap: 1rem;
+          gap: 0.55rem;
+          overflow-y: auto;
+          flex: 1;
+          padding-right: 2px;
         }
         .record-card {
           background: #FFFFFF;
           border: 1.5px solid rgba(35, 33, 44, 0.12);
-          border-radius: 20px;
-          padding: clamp(1rem, 3vw, 1.5rem);
+          border-radius: 14px;
+          padding: clamp(0.65rem, 2vw, 0.95rem);
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 6px 20px rgba(35, 33, 44, 0.05);
+          box-shadow: 0 4px 14px rgba(35, 33, 44, 0.05);
+          flex-shrink: 0;
         }
         .record-card.expanded {
           border-left: 4px solid #C41E3A;
@@ -402,44 +422,45 @@ export default function ProfilePage() {
         }
         .empty-card {
           text-align: center;
-          padding: clamp(2.5rem, 8vw, 3.5rem) clamp(1rem, 4vw, 2rem);
+          padding: clamp(1.25rem, 4vw, 2rem) clamp(1rem, 4vw, 1.5rem);
           background: #FFFFFF;
           border: 1.5px solid rgba(35, 33, 44, 0.12);
-          border-radius: 24px;
+          border-radius: 18px;
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 1rem;
-          box-shadow: 0 10px 30px rgba(35, 33, 44, 0.06);
+          gap: 0.6rem;
+          box-shadow: 0 6px 20px rgba(35, 33, 44, 0.06);
+          flex: 1;
         }
         .empty-icon {
-          font-size: clamp(2.2rem, 7vw, 3rem);
+          font-size: clamp(1.6rem, 4vw, 2.2rem);
           color: rgba(35, 33, 44, 0.3);
         }
         .empty-title {
           font-weight: 800;
           color: #23212C;
-          font-size: clamp(1.1rem, 3.5vw, 1.3rem);
+          font-size: clamp(0.95rem, 2.5vw, 1.1rem);
         }
         .empty-desc {
           color: rgba(35, 33, 44, 0.65);
           max-width: 400px;
-          font-size: clamp(0.82rem, 2.5vw, 0.92rem);
-          line-height: 1.6;
+          font-size: clamp(0.75rem, 2vw, 0.85rem);
+          line-height: 1.5;
         }
         .calc-now-btn {
-          margin-top: 0.25rem;
-          padding: 0.85rem 2rem;
+          margin-top: 0.15rem;
+          padding: 0.6rem 1.5rem;
           background: #C41E3A;
           color: #fff;
           border: none;
           border-radius: 50px;
           font-weight: 800;
-          font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+          font-size: clamp(0.78rem, 2vw, 0.88rem);
           cursor: pointer;
           display: inline-flex;
           align-items: center;
-          gap: 0.6rem;
+          gap: 0.5rem;
           transition: all 0.25s ease;
           font-family: inherit;
         }
@@ -483,7 +504,11 @@ export default function ProfilePage() {
           {/* User Header */}
           <div className="profile-header">
             <div className="profile-avatar">
-              <i className="fa-solid fa-circle-user"></i>
+              {user?.photoURL ? (
+                <img src={user.photoURL} alt="Profile" />
+              ) : (
+                <i className="fa-solid fa-circle-user"></i>
+              )}
             </div>
             <h1 className="profile-title">My Profile</h1>
             <p className="profile-email">

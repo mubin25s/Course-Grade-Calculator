@@ -2,7 +2,7 @@
   "name": "Universal Grade Calculator",
   "short_name": "Grade Calculator",
   "description": "Calculate your grades and CGPA easily with this beautiful and dynamic calculator.",
-  "start_url": "/X_Calculator/Grade_Calculator/index.html",
+  "start_url": "/",
   "display": "standalone",
   "scope": "/",
   "background_color": "#6D001A",

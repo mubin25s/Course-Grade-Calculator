@@ -1,86 +1,75 @@
-const CACHE_NAME = 'grade-calculator-cache-v7';
-const ASSETS_TO_CACHE = [
+const CACHE_NAME = 'grade-calc-pwa-v12';
+const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/LOGO.png'
+  '/LOGO.png',
+  '/favicon.svg'
 ];
 
-// Install: pre-cache the index and logo
+// Install: pre-cache shell assets & skip waiting
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    }).catch(err => console.error('Cache addAll failed:', err))
-  );
-  self.skipWaiting();
-});
-
-// Activate: clear out old caches
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.filter(name => name !== CACHE_NAME).map(name => caches.delete(name))
-      );
+      return cache.addAll(STATIC_ASSETS).catch(err => console.warn('Pre-cache warning:', err));
     })
   );
-  self.clients.claim();
 });
 
-// Fetch: cache-first with network fallback for same-origin assets
+// Activate: delete all old caches immediately & claim clients
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.map(key => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+// Fetch: Network-first for navigation & assets, fallback to cache
 self.addEventListener('fetch', event => {
   const { request } = event;
-
   if (request.method !== 'GET') return;
 
   const url = new URL(request.url);
-  const isSameOrigin = url.origin === self.location.origin;
+  if (url.origin !== self.location.origin) return;
 
-  // Handle SPA routing: fallback to index.html for navigation requests
-  if (isSameOrigin && request.mode === 'navigate') {
+  // HTML / Navigation requests -> Always network-first so new bundle hashes load
+  if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
     event.respondWith(
       fetch(request)
-        .then(response => {
-          if (response.ok) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+        .then(networkResponse => {
+          if (networkResponse && networkResponse.status === 200) {
+            const copy = networkResponse.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put('/index.html', copy));
           }
-          return response;
+          return networkResponse;
         })
-        .catch(() => caches.match('/index.html'))
+        .catch(() => {
+          return caches.match('/index.html').then(cached => cached || caches.match('/'));
+        })
     );
     return;
   }
 
-  // Handle same-origin static assets
-  if (isSameOrigin) {
-    event.respondWith(
-      caches.match(request).then(cached => {
-        if (cached) return cached;
-        return fetch(request).then(response => {
-          if (response.ok) {
-            const clone = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
-          }
-          return response;
-        });
-      })
-    );
-    return;
-  }
-
-  // Cross-origin requests (Google Fonts, CDNs)
+  // Assets (JS, CSS, Images, SVGs) -> Network-first, fallback to cache
   event.respondWith(
-    caches.match(request).then(cached => {
-      if (cached) return cached;
-      return fetch(request).then(response => {
-        if (response.ok) {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then(cache => cache.put(request, clone));
+    fetch(request)
+      .then(networkResponse => {
+        if (networkResponse && networkResponse.status === 200) {
+          const copy = networkResponse.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
         }
-        return response;
-      }).catch(() => fetch(request));
-    })
+        return networkResponse;
+      })
+      .catch(() => {
+        return caches.match(request);
+      })
   );
 });

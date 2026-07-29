@@ -48,7 +48,7 @@ export default function SetupModal({ isOpen, onClose, onLaunch }) {
         <div className="modal-header setup-header-custom">
           <div className="setup-title-area">
             <div className="modal-icon-glow">
-              <i className="fa-solid fa-gear" style={{ color: '#111111' }}></i>
+              <i className="fa-solid fa-gear" style={{ color: '#C41E3A' }}></i>
             </div>
             <div className="setup-title-text">
               <h2>Calculator Setup</h2>
@@ -123,8 +123,10 @@ export default function SetupModal({ isOpen, onClose, onLaunch }) {
             </div>
             <div className="mark-input-group full-width">
               <label>Calculation Method</label>
-              <div className="method-toggle">
+              <div className={`method-toggle ${quiz.method}`}>
+                <div className="method-slider"></div>
                 <button
+                  type="button"
                   className={`method-btn${quiz.method === 'avg' ? ' active' : ''}`}
                   id="method-avg"
                   onClick={() => setQuiz(q => ({ ...q, method: 'avg' }))}
@@ -132,6 +134,7 @@ export default function SetupModal({ isOpen, onClose, onLaunch }) {
                   Average
                 </button>
                 <button
+                  type="button"
                   className={`method-btn${quiz.method === 'sum' ? ' active' : ''}`}
                   id="method-sum"
                   onClick={() => setQuiz(q => ({ ...q, method: 'sum' }))}

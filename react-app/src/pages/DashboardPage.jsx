@@ -173,22 +173,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="dashboard-card main-entry" style={{ padding: '1.5rem', marginBottom: '2rem' }}>
-          <div className="dashboard-features">
-            <div className="feature-item">
-              <i className="fa-solid fa-calculator"></i>
-              <span>Custom Weightages</span>
-            </div>
-            <div className="feature-item">
-              <i className="fa-solid fa-chart-line"></i>
-              <span>Grade Target Tracker</span>
-            </div>
-            <div className="feature-item">
-              <i className="fa-solid fa-trophy"></i>
-              <span>CGPA & Multi-Term</span>
-            </div>
-          </div>
-        </div>
+
 
         {/* Footer */}
         <div className="dashboard-footer">

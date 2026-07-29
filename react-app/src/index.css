@@ -34,6 +34,12 @@
     font-family: 'Neuhaus', 'Neue Haas Grotesk', 'Neue Haas', 'Outfit', sans-serif;
 }
 
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
 body {
     background: var(--bg-dark);
     color: var(--text-main);
@@ -41,7 +47,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: clamp(0.75rem, 3vw, 2rem);
+    padding: 0;
+    margin: 0;
     overflow-x: hidden;
     position: relative;
     box-sizing: border-box;
@@ -65,39 +72,39 @@ body::before {
 
 /* Custom Global Scrollbar */
 ::-webkit-scrollbar {
-    width: 10px;
+    width: 5px;
+    height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.4);
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, var(--primary), var(--secondary));
+    background: rgba(196, 30, 58, 0.35);
     border-radius: 10px;
-    border: 3px solid rgba(15, 23, 42, 0);
-    background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to bottom, var(--secondary), var(--accent));
-    background-clip: padding-box;
+    background: var(--primary);
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(196, 30, 58, 0.35) transparent;
 }
 
 /* Dashboard specific: Force vertical stacking */
 body.dashboard-page {
-    overflow-y: auto;
     flex-direction: column;
     align-items: center;
-    padding: clamp(1.25rem, 4vw, 4rem) clamp(0.75rem, 3vw, 2rem);
 }
 
 @media (max-height: 700px), (max-width: 768px) {
     body.dashboard-page {
-        overflow-y: auto;
         flex-direction: column;
         align-items: center;
-        padding: clamp(1rem, 3vw, 2rem) clamp(0.5rem, 2vw, 1rem);
     }
 }
 
@@ -1544,8 +1551,8 @@ tr:hover td {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.25s ease;
-    overflow-y: auto;
-    padding: clamp(1rem, 3vw, 2rem) !important;
+    overflow: hidden !important;
+    padding: clamp(0.5rem, 2vw, 1.25rem) !important;
     box-sizing: border-box !important;
 }
 
@@ -1594,54 +1601,55 @@ tr:hover td {
 .setup-modal {
     background: #FFFFFF !important;
     border: 1.5px solid rgba(35, 33, 44, 0.14) !important;
-    border-radius: 24px !important;
+    border-radius: 20px !important;
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.04) !important;
-    max-width: min(580px, 94vw) !important;
+    max-width: min(520px, 94vw) !important;
     width: 100% !important;
-    padding: clamp(1.25rem, 4vw, 2.25rem) clamp(1rem, 4vw, 2rem) !important;
+    padding: clamp(0.75rem, 2.5vw, 1.25rem) clamp(0.85rem, 3vw, 1.5rem) !important;
     position: relative !important;
     box-sizing: border-box !important;
     margin: auto !important;
+    overflow: hidden !important;
 }
 
 .setup-header-custom {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-bottom: 1.25rem;
-    margin-bottom: 1.5rem;
+    padding-bottom: 0.65rem;
+    margin-bottom: 0.75rem;
     border-bottom: 1px solid rgba(35, 33, 44, 0.12);
 }
 
 .setup-title-area {
     display: flex;
     align-items: center;
-    gap: 0.85rem;
+    gap: 0.75rem;
     flex: 1;
     min-width: 0;
 }
 
 .modal-icon-glow {
-    width: 46px;
-    height: 46px;
+    width: 40px;
+    height: 40px;
     border-radius: 50% !important;
-    background: #F4F3F0 !important;
+    background: rgba(196, 30, 58, 0.08) !important;
     border: 2px solid #C41E3A !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #111111 !important;
-    font-size: 1.25rem;
+    color: #C41E3A !important;
+    font-size: 1.1rem;
     flex-shrink: 0;
     box-shadow: 0 4px 12px rgba(196, 30, 58, 0.15) !important;
 }
 
 .modal-icon-glow i {
-    color: #111111 !important;
+    color: #C41E3A !important;
 }
 
 .setup-title-text h2 {
-    font-size: 1.35rem !important;
+    font-size: 1.2rem !important;
     font-weight: 800 !important;
     color: #23212C !important;
     line-height: 1.2;
@@ -1649,14 +1657,14 @@ tr:hover td {
 }
 
 .setup-subtitle-text {
-    font-size: 0.85rem !important;
+    font-size: 0.78rem !important;
     color: rgba(35, 33, 44, 0.65) !important;
     font-weight: 500;
-    margin-top: 0.2rem;
+    margin-top: 0.15rem;
 }
 
 .setup-subtitle p {
-    font-size: 0.82rem !important;
+    font-size: 0.78rem !important;
     color: rgba(35, 33, 44, 0.65) !important;
     line-height: 1.4;
     text-align: right;
@@ -1664,7 +1672,7 @@ tr:hover td {
 }
 
 .setup-section {
-    margin-bottom: 1.75rem;
+    margin-bottom: 0.75rem;
     animation: fadeInUp 0.5s ease backwards;
 }
 
@@ -1674,8 +1682,8 @@ tr:hover td {
 .section-title {
     display: flex;
     align-items: center;
-    gap: 0.65rem;
-    margin-bottom: 1.1rem;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
     color: #C41E3A !important;
     font-weight: 800;
     font-size: 0.85rem !important;
@@ -1769,29 +1777,50 @@ tr:hover td {
 
 .method-toggle {
     display: flex;
+    position: relative;
     background: #F3F0EB !important;
     border: 1.5px solid rgba(35, 33, 44, 0.15) !important;
     border-radius: 14px !important;
     padding: 0.25rem;
+    overflow: hidden;
+}
+
+.method-slider {
+    position: absolute;
+    top: 0.25rem;
+    bottom: 0.25rem;
+    left: 0.25rem;
+    width: calc(50% - 0.25rem);
+    background: #C41E3A !important;
+    border-radius: 10px !important;
+    box-shadow: 0 4px 14px rgba(196, 30, 58, 0.3) !important;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+.method-toggle.sum .method-slider {
+    transform: translateX(100%);
 }
 
 .method-btn {
     flex: 1;
-    padding: 0.75rem !important;
+    position: relative;
+    z-index: 2;
+    padding: 0.5rem !important;
     border: none;
     background: transparent !important;
     color: rgba(35, 33, 44, 0.65) !important;
-    font-size: 0.85rem !important;
+    font-size: 0.82rem !important;
     font-weight: 700 !important;
     cursor: pointer;
     border-radius: 10px !important;
-    transition: all 0.3s ease;
+    transition: color 0.3s ease;
 }
 
 .method-btn.active {
-    background: #C41E3A !important;
+    background: transparent !important;
     color: #FFFFFF !important;
-    box-shadow: 0 4px 14px rgba(196, 30, 58, 0.3) !important;
+    box-shadow: none !important;
 }
 
 @keyframes fadeInUp {
@@ -1846,7 +1875,7 @@ tr:hover td {
 
 /* Custom button styles for setup modal launch */
 .setup-modal .modal-footer {
-    margin-top: 2rem;
+    margin-top: 0.75rem;
     display: flex;
     justify-content: center;
     width: 100%;
@@ -1855,9 +1884,9 @@ tr:hover td {
     background: #C41E3A !important;
     border: none !important;
     color: #FFFFFF !important;
-    padding: 1rem 2rem !important;
+    padding: 0.75rem 1.5rem !important;
     border-radius: 50px !important;
-    font-size: 1.05rem !important;
+    font-size: 0.95rem !important;
     font-weight: 800 !important;
     box-shadow: 0 8px 24px rgba(196, 30, 58, 0.3) !important;
     transition: all 0.3s ease;
@@ -2470,34 +2499,52 @@ tr:hover td {
 
 .header-inputs {
     display: flex;
-    gap: 1.5rem;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.75rem;
     justify-content: center;
-    margin-bottom: 1.5rem;
+    align-items: flex-end;
+    margin-bottom: 0.85rem;
+    width: 100%;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .header-input-group {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.35rem;
     text-align: left;
 }
 
+.header-input-group:first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.header-input-group:last-child {
+    flex: 0 0 95px;
+}
+
 .header-input-group label {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
-    font-weight: 600;
+    font-weight: 700;
+    white-space: nowrap;
 }
 
 .header-input-group input {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--glass-border);
-    padding: 0.75rem 1.25rem;
+    padding: 0.55rem 0.85rem;
     border-radius: 12px;
     color: var(--text-main);
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.95rem;
     transition: all 0.3s ease;
-    width: 250px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .header-input-group input:focus {
@@ -2508,7 +2555,8 @@ tr:hover td {
 }
 
 .header-input-group input[type='number'] {
-    width: 100px;
+    width: 100%;
+    text-align: center;
 }
 
 .add-btn {
@@ -2912,45 +2960,45 @@ tr:hover td {
 .about-card {
     background: #FFFFFF;
     border: 1.5px solid rgba(35, 33, 44, 0.12);
-    padding: 2.5rem;
-    border-radius: 30px;
-    box-shadow: 0 20px 60px rgba(35, 33, 44, 0.08);
+    padding: clamp(0.85rem, 2vw, 1.25rem) clamp(1rem, 2.5vw, 1.75rem);
+    border-radius: 20px;
+    box-shadow: 0 15px 45px rgba(35, 33, 44, 0.08);
     width: 100%;
-    max-width: 600px;
-    margin-top: 1.5rem;
+    max-width: 520px;
+    margin-top: 0.35rem;
     text-align: center;
 }
 
 .about-description {
-    font-size: 1.1rem;
-    line-height: 1.6;
+    font-size: clamp(0.82rem, 1.8vw, 0.95rem);
+    line-height: 1.45;
     color: #23212C;
-    margin-bottom: 2rem;
+    margin-bottom: 0.65rem;
     font-weight: 500;
 }
 
 .about-divider {
     height: 1px;
     background: rgba(35, 33, 44, 0.12);
-    margin: 2rem 0;
+    margin: 0.65rem 0;
 }
 
 .about-developer {
-    margin-bottom: 2rem;
+    margin-bottom: 0.65rem;
 }
 
 .about-developer .label {
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     color: rgba(35, 33, 44, 0.65);
     text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-bottom: 0.5rem;
+    letter-spacing: 1.2px;
+    margin-bottom: 0.2rem;
     display: block;
     font-weight: 700;
 }
 
 .about-developer .name {
-    font-size: 1.6rem;
+    font-size: clamp(1.1rem, 2.5vw, 1.35rem);
     font-weight: 900;
     color: #C41E3A;
     letter-spacing: 0.5px;
@@ -2960,14 +3008,14 @@ tr:hover td {
 .about-disclaimer-box {
     background: #F3F0EB;
     border: 1px solid rgba(35, 33, 44, 0.12);
-    padding: 1.25rem;
-    border-radius: 16px;
-    margin-bottom: 2.5rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: 12px;
+    margin-bottom: 0.85rem;
 }
 
 .about-disclaimer-box p {
-    font-size: 0.82rem;
-    line-height: 1.5;
+    font-size: 0.72rem;
+    line-height: 1.4;
     color: rgba(35, 33, 44, 0.75);
     font-weight: 500;
 }
@@ -2977,16 +3025,16 @@ tr:hover td {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
+    gap: 1.25rem;
+    margin-top: 0.4rem;
+    margin-bottom: 0.2rem;
 }
 
 .social-raw-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 3rem;
+    font-size: 1.8rem;
     color: #C41E3A !important;
     text-decoration: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -3742,3 +3790,348 @@ body.universal-calc-page,
     padding: 2rem 1rem;
     min-height: 100vh;
 }
+
+/* ===== DESKTOP COMPACT SCALING (min-width: 1024px) ===== */
+@media (min-width: 1024px) {
+
+    /* Base body/page padding */
+    body {
+        padding: 0;
+    }
+
+    body.dashboard-page {
+        padding: 0;
+    }
+
+    /* Page containers */
+    .container {
+        max-width: min(1100px, 94vw);
+    }
+
+    .cgpa-container {
+        max-width: min(980px, 94vw);
+    }
+
+    .dashboard-container {
+        max-width: min(820px, 92vw);
+    }
+
+    .universal-calc-page,
+    body.universal-calc-page {
+        padding: 1rem 0.75rem;
+    }
+
+    /* Header */
+    header {
+        margin-bottom: 1rem;
+    }
+
+    header h1 {
+        font-size: clamp(1.4rem, 3vw, 2rem);
+        margin-bottom: 0.3rem;
+    }
+
+    header p {
+        font-size: clamp(0.78rem, 1.5vw, 0.9rem);
+    }
+
+    /* Dashboard header */
+    .dashboard-header {
+        margin-bottom: 1.25rem;
+    }
+
+    .dashboard-title {
+        font-size: clamp(1.25rem, 3vw, 1.75rem);
+        margin-bottom: 0.3rem;
+    }
+
+    .dashboard-subtitle {
+        font-size: clamp(0.78rem, 1.5vw, 0.88rem);
+    }
+
+    .header-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.5rem;
+        margin-bottom: 0.65rem;
+    }
+
+    /* Cards */
+    .card {
+        padding: clamp(0.85rem, 1.8vw, 1.15rem);
+        border-radius: 18px;
+        gap: 0.65rem;
+    }
+
+    .card-header h2 {
+        font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+    }
+
+    .card:hover {
+        transform: translateY(-4px) scale(1.01);
+    }
+
+    /* Dashboard cards */
+    .dashboard-card {
+        border-radius: clamp(14px, 3vw, 24px);
+        padding: clamp(1rem, 3vw, 1.75rem);
+    }
+
+    .dashboard-cards-grid {
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    /* Calculator grids */
+    .calculator-grid {
+        gap: clamp(0.65rem, 1.5vw, 1rem);
+        margin-bottom: 1.25rem;
+    }
+
+    .calculator-bottom-grid {
+        gap: 1rem;
+        margin-bottom: clamp(4rem, 10vw, 7rem);
+    }
+
+    /* Inputs */
+    input, select {
+        padding: clamp(0.55rem, 1.2vw, 0.72rem) 0.75rem;
+        border-radius: 11px;
+        font-size: clamp(0.85rem, 1.6vw, 0.95rem);
+    }
+
+    /* Buttons */
+    .dashboard-btn {
+        padding: 0.9rem 1.5rem;
+        border-radius: 14px;
+        font-size: 1rem;
+        gap: 0.55rem;
+    }
+
+    .add-quiz-btn, .remove-quiz-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+    }
+
+    /* Results footer */
+    .results-footer {
+        width: clamp(260px, 88vw, 760px);
+        padding: clamp(0.45rem, 1.2vw, 0.7rem) clamp(0.75rem, 2vw, 1.35rem);
+        border-radius: 16px;
+        gap: 0.35rem;
+        bottom: clamp(0.4rem, 1vw, 1rem);
+    }
+
+    .score-value {
+        font-size: 1.55rem;
+    }
+
+    .score-label, .status-label {
+        font-size: 0.72rem;
+    }
+
+    .status-value {
+        font-size: 1rem;
+    }
+
+    /* Back link */
+    .back-link {
+        padding: 0.45rem 0.9rem;
+        font-size: clamp(0.72rem, 1.5vw, 0.8rem);
+        margin-bottom: 0.9rem;
+    }
+
+    /* Setup modal */
+    .setup-modal,
+    .modal-content {
+        max-width: min(500px, 92vw) !important;
+        padding: clamp(0.75rem, 2vw, 1.15rem) clamp(0.85rem, 2.5vw, 1.35rem) !important;
+        border-radius: 20px !important;
+        overflow: hidden !important;
+    }
+
+    .modal-icon-glow {
+        width: 36px;
+        height: 36px;
+        font-size: 0.95rem;
+    }
+
+    .setup-title-text h2 {
+        font-size: 1.1rem !important;
+    }
+
+    .setup-subtitle-text {
+        font-size: 0.75rem !important;
+    }
+
+    .section-title {
+        font-size: 0.75rem !important;
+        margin-bottom: 0.45rem;
+    }
+
+    .marks-grid {
+        gap: clamp(0.35rem, 1vw, 0.55rem);
+    }
+
+    .mark-input-group input {
+        padding: 0.45rem 0.35rem !important;
+        font-size: 1rem !important;
+        border-radius: 10px !important;
+    }
+
+    .mark-input-group label {
+        font-size: 0.65rem !important;
+    }
+
+    .setup-section {
+        margin-bottom: 1.15rem;
+    }
+
+    .setup-header-custom {
+        padding-bottom: 0.85rem;
+        margin-bottom: 1rem;
+    }
+
+    .method-btn {
+        padding: 0.55rem !important;
+        font-size: 0.78rem !important;
+    }
+
+    .total-badge {
+        padding: 0.25rem 0.65rem !important;
+        font-size: 0.72rem !important;
+    }
+
+    /* Table */
+    table {
+        font-size: 0.85rem;
+    }
+
+    th {
+        padding: 0.45rem 0.65rem;
+        font-size: 0.7rem;
+    }
+
+    td {
+        padding: 0.6rem 0.75rem;
+    }
+
+    /* Selection buttons */
+    .select-btn {
+        padding: 0.6rem 0.25rem;
+        font-size: 0.75rem;
+    }
+
+    .select-btn .emoji {
+        font-size: 1.4rem;
+    }
+
+    /* Feature items */
+    .feature-item {
+        padding: 0.55rem 0.35rem;
+        gap: 0.28rem;
+    }
+
+    .feature-item i {
+        font-size: 1.2rem;
+    }
+
+    .feature-item span {
+        font-size: 0.75rem;
+    }
+
+    /* CGPA page specifics */
+    .page-header h1 {
+        font-size: 2rem;
+    }
+
+    .cgpa-number {
+        font-size: 4.5rem;
+    }
+
+    .result-hero {
+        padding: 1.75rem 1.5rem;
+    }
+
+    .cgpa-stat-value {
+        font-size: 1.5rem;
+    }
+
+    /* University selector dropdown */
+    .dropdown-selected {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 20px;
+    }
+
+    /* Header inputs */
+    .header-inputs {
+        max-width: 540px;
+        margin-bottom: 1.1rem;
+    }
+
+    /* Empty state */
+    .empty-state {
+        padding: 2.5rem 1.5rem;
+    }
+
+    .empty-state i {
+        font-size: 2.25rem;
+    }
+
+    /* General spacing utilities */
+    .university-selector {
+        margin-bottom: 1.75rem;
+    }
+
+    .quiz-config-grid {
+        gap: clamp(0.45rem, 1.2vw, 0.72rem);
+    }
+
+    /* Pill buttons */
+    .pill-btn {
+        padding: 0.25rem 0.6rem;
+        font-size: 0.7rem;
+    }
+
+    /* Badge */
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.28rem 0.68rem;
+    }
+
+    /* Result display */
+    .result-display {
+        font-size: clamp(1rem, 2vw, 1.15rem);
+    }
+
+    /* CGPA actions */
+    .btn {
+        padding: 0.75rem 1.15rem;
+        font-size: 0.9rem;
+        border-radius: 13px;
+    }
+
+    /* Semester summary / CGPA stats */
+    .cgpa-stats {
+        gap: 1rem;
+    }
+
+    /* Card header padding */
+    .card-header {
+        padding-bottom: 0.65rem;
+    }
+
+    /* instruction text */
+    .instruction {
+        font-size: 0.82rem;
+    }
+
+    /* Inputs row */
+    .inputs-row {
+        gap: 0.35rem;
+    }
+}
+
