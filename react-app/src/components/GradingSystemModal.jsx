@@ -1,5 +1,4 @@
 import { createPortal } from 'react-dom';
-import { systemsData } from '../data/gradingSystems';
 
 export default function GradingSystemModal({ isOpen, onClose, onApply }) {
   if (!isOpen) return null;

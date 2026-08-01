@@ -3,15 +3,24 @@ import { useEffect, useRef, useState } from 'react';
 export default function Toast({ message, type = 'success', onDone }) {
   const [visible, setVisible] = useState(false);
   const timer = useRef(null);
+  const onDoneRef = useRef(onDone);
+
+  useEffect(() => {
+    onDoneRef.current = onDone;
+  }, [onDone]);
 
   useEffect(() => {
     if (!message) return;
-    setVisible(true);
-    timer.current = setTimeout(() => {
+    const showTimer = setTimeout(() => setVisible(true), 0);
+    const hideTimer = setTimeout(() => {
       setVisible(false);
-      setTimeout(onDone, 500);
+      setTimeout(() => onDoneRef.current(), 500);
     }, 3000);
-    return () => clearTimeout(timer.current);
+    timer.current = { showTimer, hideTimer };
+    return () => {
+      clearTimeout(showTimer);
+      clearTimeout(hideTimer);
+    };
   }, [message]);
 
   if (!message) return null;

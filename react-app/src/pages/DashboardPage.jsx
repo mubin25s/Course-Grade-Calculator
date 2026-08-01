@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import BackgroundGlobes from '../components/BackgroundGlobes';
 import SetupModal from '../components/SetupModal';
 import Toast from '../components/Toast';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -47,71 +47,91 @@ export default function DashboardPage() {
       <BackgroundGlobes />
 
       <div className="dashboard-container">
-        {/* User Navigation Bar */}
-        <div style={{
+        {/* Navigation Bar */}
+        <nav style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          gap: '1rem',
           width: '100%',
           marginBottom: '2rem',
-          padding: '0.6rem 1.25rem',
-          background: 'rgba(109, 0, 26, 0.03)',
-          border: '1px solid var(--glass-border)',
+          padding: '0.55rem 0.55rem 0.55rem 1.25rem',
+          background: '#FFFFFF',
+          border: '1.5px solid var(--glass-border)',
           borderRadius: '50px',
-          backdropFilter: 'blur(10px)'
+          boxShadow: '0 4px 20px rgba(35,33,44,0.06)',
         }}>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-            <i className="fa-solid fa-graduation-cap" style={{ color: 'var(--primary)' }}></i>
-            <span>Course Grade Portal</span>
-          </span>
+          {/* Brand */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <div style={{
+              width: 30, height: 30,
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexShrink: 0,
+            }}>
+              <i className="fa-solid fa-graduation-cap" style={{ color: '#fff', fontSize: '0.7rem' }}></i>
+            </div>
+            <span style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)', letterSpacing: '-0.2px' }}>
+              Course Grade Portal
+            </span>
+          </div>
+
+          {/* Right side */}
           {user ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)' }} className="hide-on-mobile">
-                Hi, <strong style={{ color: '#fff' }}>{user.email.split('@')[0]}</strong>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span className="hide-on-mobile" style={{
+                fontSize: '0.78rem', color: 'var(--text-muted)', paddingRight: '0.5rem',
+                borderRight: '1.5px solid var(--glass-border)',
+              }}>
+                Hi, <strong style={{ color: 'var(--text-main)', fontWeight: 700 }}>{user.email.split('@')[0]}</strong>
               </span>
-              <button 
-                onClick={() => navigate('/profile')} 
+              <button
+                onClick={() => navigate('/profile')}
                 style={{
-                  background: 'rgba(109, 0, 26, 0.1)',
-                  border: '1px solid var(--glass-border)',
-                  color: '#fff',
-                  padding: '0.4rem 0.9rem',
+                  background: 'rgba(196,30,58,0.07)',
+                  border: '1.5px solid rgba(196,30,58,0.2)',
+                  color: 'var(--primary)',
+                  padding: '0.45rem 1rem',
                   borderRadius: '50px',
-                  fontSize: '0.75rem',
+                  fontSize: '0.78rem',
                   cursor: 'pointer',
-                  fontWeight: 600,
-                  transition: 'all 0.2s',
+                  fontWeight: 700,
+                  transition: 'all 0.2s ease',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '0.4rem'
+                  gap: '0.4rem',
                 }}
+                onMouseEnter={e => { e.currentTarget.style.background = 'var(--primary)'; e.currentTarget.style.color = '#fff'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'rgba(196,30,58,0.07)'; e.currentTarget.style.color = 'var(--primary)'; }}
               >
                 <i className="fa-solid fa-circle-user"></i> Profile
               </button>
             </div>
           ) : (
-            <button 
-              onClick={() => navigate('/auth')} 
+            <button
+              onClick={() => navigate('/auth')}
               style={{
                 background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
                 border: 'none',
                 color: '#fff',
-                padding: '0.4rem 1rem',
+                padding: '0.5rem 1.15rem',
                 borderRadius: '50px',
-                fontSize: '0.75rem',
+                fontSize: '0.78rem',
                 cursor: 'pointer',
                 fontWeight: 700,
-                transition: 'all 0.2s',
+                transition: 'all 0.2s ease',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.4rem'
+                gap: '0.45rem',
+                boxShadow: '0 4px 14px rgba(196,30,58,0.25)',
               }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(196,30,58,0.35)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 14px rgba(196,30,58,0.25)'; }}
             >
               <i className="fa-solid fa-right-to-bracket"></i> Login / Register
             </button>
           )}
-        </div>
+        </nav>
 
         {/* Header */}
         <div className="dashboard-header">
@@ -132,8 +152,8 @@ export default function DashboardPage() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <img src="/LOGO.png" style={{ width: 42, height: 42, borderRadius: 10 }} alt="App Icon" />
               <div>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#fff' }}>Install Grade Calculator</div>
-                <div style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.6)' }}>Add to your home screen for quick access</div>
+                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--text-main)' }}>Install Grade Calculator</div>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>Add to your home screen for quick access</div>
               </div>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
@@ -145,8 +165,8 @@ export default function DashboardPage() {
                 <i className="fa-solid fa-download"></i> Install
               </button>
               <button id="pwa-dismiss-btn" onClick={handleDismiss} style={{
-                background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)',
-                border: '1px solid rgba(255,255,255,0.15)', padding: '0.55rem 0.75rem',
+                background: 'rgba(35,33,44,0.06)', color: 'rgba(35,33,44,0.55)',
+                border: '1px solid rgba(35,33,44,0.15)', padding: '0.55rem 0.75rem',
                 borderRadius: 50, fontSize: '0.85rem', cursor: 'pointer',
               }}>
                 <i className="fa-solid fa-xmark"></i>

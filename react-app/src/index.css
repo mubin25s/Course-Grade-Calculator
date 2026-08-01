@@ -2700,12 +2700,21 @@ tr:hover td {
 }
 
 .dashboard-btn.secondary {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
+    background: #FFFFFF;
+    border: 1.5px solid rgba(35, 33, 44, 0.15);
+    color: var(--text-main);
+    box-shadow: 0 4px 12px rgba(35, 33, 44, 0.06);
 }
 
 .dashboard-btn.secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: #F3F0EB;
+    border-color: rgba(35, 33, 44, 0.25);
+    box-shadow: 0 6px 18px rgba(35, 33, 44, 0.1);
+    transform: translateY(-2px) scale(1.01);
+}
+
+.dashboard-btn.secondary:hover i {
+    transform: none;
 }
 
 .gpa-result-card {
@@ -4132,6 +4141,13 @@ body.universal-calc-page,
     /* Inputs row */
     .inputs-row {
         gap: 0.35rem;
+    }
+}
+
+/* ===== SMALL SCREEN UTILITIES (max-width: 560px) ===== */
+@media (max-width: 560px) {
+    .hide-on-mobile {
+        display: none;
     }
 }
 

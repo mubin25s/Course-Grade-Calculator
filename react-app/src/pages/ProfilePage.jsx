@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import { collection, getDocs, doc, deleteDoc, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import BackgroundGlobes from '../components/BackgroundGlobes';
@@ -23,9 +23,10 @@ export default function ProfilePage() {
     if (!user) navigate('/auth');
   }, [user, navigate]);
 
-  const fetchRecords = async () => {
+  const showToast = useCallback((message, type = 'success') => setToast({ message, type }), []);
+
+  const fetchRecords = useCallback(async () => {
     if (!user) return;
-    setLoadingRecords(true);
     try {
       const recordsRef = collection(db, 'users', user.uid, 'records');
       const q = query(recordsRef, orderBy('timestamp', 'desc'));
@@ -35,9 +36,9 @@ export default function ProfilePage() {
         ...d.data(),
         dateString: d.data().timestamp
           ? new Date(d.data().timestamp.seconds * 1000).toLocaleDateString(undefined, {
-              year: 'numeric', month: 'short', day: 'numeric',
-              hour: '2-digit', minute: '2-digit'
-            })
+            year: 'numeric', month: 'short', day: 'numeric',
+            hour: '2-digit', minute: '2-digit'
+          })
           : new Date().toLocaleDateString()
       }));
       setRecords(fetched);
@@ -47,11 +48,11 @@ export default function ProfilePage() {
     } finally {
       setLoadingRecords(false);
     }
-  };
+  }, [user, showToast]);
 
-  useEffect(() => { fetchRecords(); }, [user]);
-
-  const showToast = (message, type = 'success') => setToast({ message, type });
+  // All state updates in fetchRecords occur after the awaited Firestore read
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { fetchRecords(); }, [fetchRecords]);
 
   const handleLogout = async () => {
     try {

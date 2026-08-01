@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useCallback } from 'react';
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
@@ -20,7 +20,7 @@ export function AuthProvider({ children }) {
   // Start as true — will resolve quickly, but show skeleton not black screen
   const [loading, setLoading] = useState(true);
 
-  const saveCgpaRecord = async (userId, record) => {
+  const saveCgpaRecord = useCallback(async (userId, record) => {
     try {
       const recordData = {
         cgpa: record.cgpa,
@@ -37,9 +37,9 @@ export function AuthProvider({ children }) {
       console.error('Error saving record:', error);
       return { success: false, error };
     }
-  };
+  }, []);
 
-  const processPendingSave = async (uid) => {
+  const processPendingSave = useCallback(async (uid) => {
     const pendingRaw = sessionStorage.getItem('pendingSaveCGPA');
     if (pendingRaw) {
       try {
@@ -53,7 +53,7 @@ export function AuthProvider({ children }) {
         console.error('Failed to process pending save:', err);
       }
     }
-  };
+  }, [saveCgpaRecord]);
 
   const login = async (email, password) => {
     try {
@@ -116,7 +116,11 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const logout = () => signOut(auth);
+  const logout = () => {
+    localStorage.removeItem('semesterResults');
+    localStorage.removeItem('calculatorConfig');
+    return signOut(auth);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -127,7 +131,7 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
     return unsubscribe;
-  }, []);
+  }, [processPendingSave]);
 
   const value = {
     user, loading,
@@ -144,8 +148,4 @@ export function AuthProvider({ children }) {
   );
 }
 
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth must be used within an AuthProvider');
-  return context;
-}
+export { AuthContext };

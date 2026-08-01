@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCalculator } from '../hooks/useCalculator';
 import BackgroundGlobes from '../components/BackgroundGlobes';
@@ -17,20 +17,16 @@ export default function CalculatorPage() {
 
   const [courseName, setCourseName] = useState('');
   const [courseCredits, setCourseCredits] = useState('');
-  const [semesterResults, setSemesterResults] = useState([]);
+  const [semesterResults, setSemesterResults] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('semesterResults')) || [];
+    } catch {
+      return [];
+    }
+  });
   const [toast, setToast] = useState({ message: '', type: 'success' });
   const [systemModalOpen, setSystemModalOpen] = useState(false);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-
-  // Load semester results on mount
-  useEffect(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem('semesterResults')) || [];
-      setSemesterResults(saved);
-    } catch {
-      setSemesterResults([]);
-    }
-  }, []);
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
@@ -58,9 +54,17 @@ export default function CalculatorPage() {
     localStorage.setItem('semesterResults', JSON.stringify(nextResults));
     showToast(`Added ${name} to Semester Results!`, 'success');
 
-    // Reset inputs for next entry
+    // Reset course name and credits for next entry
     setCourseName('');
     setCourseCredits('');
+
+    // Reset all calculator marks for next course
+    calc.setQuizValues(Array(calc.config.quizSettings.total).fill(''));
+    calc.setSelection('presentation', null);
+    calc.setSelection('assignment', null);
+    calc.setAttendancePercent('');
+    calc.setMidMarks('');
+    calc.setFinalMarks('');
   };
 
   const handleClearSemester = () => {

@@ -56,7 +56,7 @@ export function useCalculator() {
   // Computed values
   const quizNums = quizValues.map(v => parseFloat(v) || 0).sort((a, b) => b - a);
   const bestQuizzes = quizNums.slice(0, config.quizSettings.count);
-  let quizScore = 0;
+  let quizScore;
   if (config.quizSettings.method === 'avg') {
     quizScore = bestQuizzes.length > 0
       ? bestQuizzes.reduce((a, b) => a + b, 0) / config.quizSettings.count
@@ -79,7 +79,8 @@ export function useCalculator() {
 
   const getMilestone = () => {
     if (isFinalEntered) return { text: `Achieved ${currentGrade.grade}`, cls: getGradeColorClass(currentGrade.grade) };
-    if (total >= 80) return { text: 'Perfect! A+ Achieved', cls: 'grade-a-plus' };
+    const topGrade = gradeThresholds[0];
+    if (topGrade && total >= topGrade.min) return { text: `Perfect! ${topGrade.grade} Achieved`, cls: getGradeColorClass(topGrade.grade) };
     const next = [...gradeThresholds].reverse().find(t => t.min > total);
     if (next) return { text: `${formatNum(next.min - total)} more for ${next.grade}`, cls: getGradeColorClass(next.grade) };
     return { text: 'Max Grade Reached', cls: '' };
@@ -101,6 +102,10 @@ export function useCalculator() {
   };
 
   const setSelection = (type, level) => {
+    if (level === null) {
+      setSelections(prev => ({ ...prev, [type]: { level: null, value: 0 } }));
+      return;
+    }
     const max = config.distribution[type];
     const logic = selectionLogic[max] || { poor: [Math.floor(max * 0.5)], good: [Math.floor(max * 0.7)], excellent: [max] };
     const possibleValues = logic[level];

@@ -12,14 +12,17 @@ export default function PageTransition({ children }) {
 
   useEffect(() => {
     if (location.pathname !== displayLocation.pathname) {
-      setStage('out');
+      const outTimer = setTimeout(() => setStage('out'), 0);
       const t = setTimeout(() => {
         setDisplayLocation(location);
         setStage('in');
       }, 220); // match transition duration
-      return () => clearTimeout(t);
+      return () => {
+        clearTimeout(outTimer);
+        clearTimeout(t);
+      };
     }
-  }, [location]);
+  }, [location, displayLocation.pathname]);
 
   return (
     <div

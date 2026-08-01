@@ -1,4 +1,4 @@
-export default function SelectionButtons({ type, max, selection, onSelect }) {
+export default function SelectionButtons({ type, selection, onSelect }) {
   const levels = [
     { key: 'poor',      emoji: '😟', label: 'Poor' },
     { key: 'good',      emoji: '😊', label: 'Good' },

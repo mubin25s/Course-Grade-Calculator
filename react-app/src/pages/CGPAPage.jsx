@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context/useAuth';
 import BackgroundGlobes from '../components/BackgroundGlobes';
 import ConfirmModal from '../components/ConfirmModal';
 import Toast from '../components/Toast';
@@ -32,13 +32,6 @@ export default function CGPAPage() {
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
-  };
-
-  const handleAddRowInput = () => {
-    setActiveRows(prev => [
-      ...prev,
-      { id: rowIdCounter.current++, name: '', credit: '', gradePoint: '' }
-    ]);
   };
 
   const handleActiveRowChange = (id, field, value) => {
