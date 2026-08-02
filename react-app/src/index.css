@@ -171,7 +171,7 @@ body.dashboard-page {
 
 .container {
     width: 100%;
-    max-width: min(1320px, 96vw);
+    max-width: 98vw;
     position: relative;
     z-index: 1;
     box-sizing: border-box;
@@ -180,7 +180,7 @@ body.dashboard-page {
 
 .cgpa-container {
     width: 100%;
-    max-width: min(1200px, 96vw);
+    max-width: 98vw;
     box-sizing: border-box;
     padding: 0;
     margin: 0 auto;
@@ -789,7 +789,7 @@ tr:hover td {
 
 .dashboard-container {
     width: 100%;
-    max-width: min(960px, 95vw);
+    max-width: 98vw;
     position: relative;
     z-index: 1;
     animation: fadeIn 0.6s ease;
@@ -1773,6 +1773,7 @@ tr:hover td {
 }
 .mark-input-group input[type=number] {
     -moz-appearance: textfield;
+    appearance: textfield;
 }
 
 .method-toggle {
@@ -3814,15 +3815,15 @@ body.universal-calc-page,
 
     /* Page containers */
     .container {
-        max-width: min(1100px, 94vw);
+        max-width: 98vw;
     }
 
     .cgpa-container {
-        max-width: min(980px, 94vw);
+        max-width: 98vw;
     }
 
     .dashboard-container {
-        max-width: min(820px, 92vw);
+        max-width: 98vw;
     }
 
     .universal-calc-page,

@@ -141,8 +141,8 @@ export default function CalculatorPage() {
                 </span>
               </div>
               <QuizInputs
-                total={calc.config.quizSettings.total}
-                quizMax={dist.quiz}
+                total={calc.config.quizSettings.total || 0}
+                quizMax={calc.config.quizSettings.method === 'sum' && calc.config.quizSettings.count > 0 ? Number((dist.quiz / calc.config.quizSettings.count).toFixed(2)) : dist.quiz}
                 values={calc.quizValues}
                 onChange={calc.setQuizValues}
               />

@@ -4,10 +4,10 @@
   "scripts": {
     "dev": "npm run dev --prefix react-app",
     "build": "npm run build --prefix react-app",
-    "preview": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "preview": "firebase serve",
+    "deploy": "npm run build && firebase deploy"
   },
   "devDependencies": {
-    "wrangler": "^4.103.0"
+    "firebase-tools": "^13.0.0"
   }
 }

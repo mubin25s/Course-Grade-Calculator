@@ -113,8 +113,15 @@ users/
 - **Single-Line Header Inputs**: **Course Name** and **Credits** input fields are locked onto a single horizontal line (`flex-wrap: nowrap`) across all screen sizes.
 
 ### 3. Setup Modal (`SetupModal.jsx`)
+- **Dynamic Input Validation**: Supports `0` and empty values seamlessly for "Total Quizzes" and "Quizzes to Count", defaulting safely during calculation to prevent runtime crashes.
 - **Sliding Toggle Animation**: Smooth `cubic-bezier(0.4, 0, 0.2, 1)` sliding background pill indicator when toggling between *Average* and *Sum / Total* quiz calculation methods.
 - **Red Accent Styling**: Red gear icon (`#C41E3A`) with a soft glow background.
+
+### 4. Dynamic Quiz Module (`QuizInputs.jsx` & `useCalculator.js`)
+- **Auto-scaling Max Marks**: When using the **Sum / Total** calculation method, the max input allowed for each individual quiz is automatically calculated as `Total Quiz Marks / Quizzes to Count`. This ensures user inputs are precisely bounded to exactly what is mathematically needed.
+
+### 5. Full-Width Desktop Optimization
+- **Expanded Grid Constraints**: Removed restrictive `max-width` limitations (`1100px`) on desktop viewports. The global `.container` and grid rows now properly scale up to `98vw`, eliminating awkward blank gutters on large ultra-wide and 1080p monitors.
 
 ---
 

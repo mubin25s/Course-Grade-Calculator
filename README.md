@@ -21,20 +21,7 @@ A **premium, full-stack React web application** for university students to calcu
 
 ---
 
-## 🚀 Commands
 
-```bash
-# Start local development server
-npm run dev
-
-# Build production bundle
-npm run build
-
-# Build + deploy to Firebase Hosting
-npm run deploy
-```
-
----
 
 ## 📁 Project Structure
 
@@ -45,7 +32,6 @@ Course-Grade-Calculator/
 ├── package.json                      # Root scripts (dev, build, deploy)
 ├── firebase.json                     # Firebase Hosting configuration & Cache-Control headers
 ├── .firebaserc                       # Firebase project binding
-├── google-services.json              # Android Firebase config
 └── react-app/                        # React + Vite web application
     ├── public/
     │   ├── LOGO.png                  # App branding icon

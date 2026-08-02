@@ -22,9 +22,14 @@ export default function SetupModal({ isOpen, onClose, onLaunch }) {
 
   const handleLaunch = () => {
     if (!isValid) return;
+    const sanitizedQuiz = {
+      ...quiz,
+      total: typeof quiz.total === 'number' ? quiz.total : 0,
+      count: typeof quiz.count === 'number' ? quiz.count : 0,
+    };
     const config = {
       distribution: dist,
-      quizSettings: quiz,
+      quizSettings: sanitizedQuiz,
     };
     localStorage.setItem('calculatorConfig', JSON.stringify(config));
     onLaunch();
@@ -98,12 +103,16 @@ export default function SetupModal({ isOpen, onClose, onLaunch }) {
               <input
                 type="number"
                 id="quiz-total"
-                min="1"
+                min="0"
                 max="20"
                 value={quiz.total}
                 onChange={e => {
-                  const val = Math.min(20, Math.max(1, parseInt(e.target.value, 10) || 1));
-                  setQuiz(q => ({ ...q, total: val, count: Math.min(q.count, val) }));
+                  if (e.target.value === '') {
+                    setQuiz(q => ({ ...q, total: '', count: '' }));
+                    return;
+                  }
+                  const val = Math.min(20, Math.max(0, parseInt(e.target.value, 10) || 0));
+                  setQuiz(q => ({ ...q, total: val, count: typeof q.count === 'number' ? Math.min(q.count, val) : val }));
                 }}
               />
             </div>
@@ -112,11 +121,16 @@ export default function SetupModal({ isOpen, onClose, onLaunch }) {
               <input
                 type="number"
                 id="quiz-count"
-                min="1"
-                max={quiz.total}
+                min="0"
+                max={quiz.total === '' ? 20 : quiz.total}
                 value={quiz.count}
                 onChange={e => {
-                  const val = Math.min(quiz.total, Math.max(1, parseInt(e.target.value, 10) || 1));
+                  if (e.target.value === '') {
+                    setQuiz(q => ({ ...q, count: '' }));
+                    return;
+                  }
+                  const maxCount = typeof quiz.total === 'number' ? quiz.total : 20;
+                  const val = Math.min(maxCount, Math.max(0, parseInt(e.target.value, 10) || 0));
                   setQuiz(q => ({ ...q, count: val }));
                 }}
               />
