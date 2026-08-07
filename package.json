@@ -5,7 +5,7 @@
     "dev": "npm run dev --prefix react-app",
     "build": "npm run build --prefix react-app",
     "preview": "firebase serve",
-    "deploy": "npm run build && firebase deploy"
+    "deploy": "npm run build && npx -y firebase-tools@latest deploy"
   },
   "devDependencies": {
     "firebase-tools": "^13.0.0"
