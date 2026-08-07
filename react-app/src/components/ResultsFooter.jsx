@@ -1,6 +1,9 @@
 export default function ResultsFooter({
   total, currentGrade, milestone, getGradeColorClass, onAddToSemester,
 }) {
+  const isTopGrade = milestone.isTopGrade;
+  const milestoneLabel = isTopGrade ? 'Achievement' : 'Next Milestone';
+
   return (
     <div className="results-footer">
       <div className="results-footer-stats">
@@ -17,7 +20,7 @@ export default function ResultsFooter({
         </div>
         <div className="result-divider"></div>
         <div className="result-item milestone-container">
-          <span className="status-label" id="milestone-label">Next Milestone</span>
+          <span className="status-label" id="milestone-label">{milestoneLabel}</span>
           <span className={`status-value ${milestone.cls}`} id="needed-pass">{milestone.text}</span>
         </div>
       </div>

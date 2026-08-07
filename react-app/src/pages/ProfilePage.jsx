@@ -568,6 +568,12 @@ export default function ProfilePage() {
                   >
                     <div className="record-top">
                       <div className="record-meta">
+                        <div className="record-title-row" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.35rem' }}>
+                          <i className="fa-solid fa-bookmark" style={{ color: '#C41E3A', fontSize: '0.9rem' }}></i>
+                          <h4 style={{ margin: 0, fontSize: '1.05rem', fontWeight: '700', color: '#23212C' }}>
+                            {record.semesterName || record.title || 'Semester Result'}
+                          </h4>
+                        </div>
                         <div className="record-tags">
                           <span className={`record-type-badge ${record.calculatorType === 'universal' ? 'universal' : 'manual'}`}>
                             {record.calculatorType === 'universal' ? 'Universal Setup' : 'Manual Input'}

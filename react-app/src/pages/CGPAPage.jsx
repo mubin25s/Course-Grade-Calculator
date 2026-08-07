@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 import BackgroundGlobes from '../components/BackgroundGlobes';
 import ConfirmModal from '../components/ConfirmModal';
+import SaveSemesterModal from '../components/SaveSemesterModal';
 import Toast from '../components/Toast';
 
 export default function CGPAPage() {
@@ -20,6 +21,7 @@ export default function CGPAPage() {
   const [saveLoading, setSaveLoading] = useState(false);
   const [savedToDb, setSavedToDb] = useState(false);
   const [savePromptOpen, setSavePromptOpen] = useState(false);
+  const [saveModalOpen, setSaveModalOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState(null);
 
   const getGradeTextByGP = (gp) => {
@@ -158,10 +160,16 @@ export default function CGPAPage() {
     setSavedToDb(false);
   };
 
-  const handleSaveRecord = async () => {
+  const handleSaveRecord = () => {
     if (addedCourses.length === 0) return;
-    
+    setSaveModalOpen(true);
+  };
+
+  const handlePerformSave = async (semesterName) => {
+    if (addedCourses.length === 0) return;
+
     const record = {
+      semesterName,
       cgpa: results.cgpa,
       credits: results.credits,
       points: results.points,
@@ -177,9 +185,7 @@ export default function CGPAPage() {
     if (!user) {
       sessionStorage.setItem('pendingSaveCGPA', JSON.stringify(record));
       showToast('Redirecting to login to save your record...', 'warning');
-      setTimeout(() => {
-        navigate('/auth?redirect=save-pending');
-      }, 1500);
+      setTimeout(() => { navigate('/auth?redirect=save-pending'); }, 1200);
       return;
     }
 
@@ -188,7 +194,9 @@ export default function CGPAPage() {
       const res = await saveCgpaRecord(user.uid, record);
       if (res.success) {
         setSavedToDb(true);
+        setSaveModalOpen(false);
         showToast('CGPA record successfully saved to your profile!', 'success');
+        if (pendingAction) navigate(pendingAction);
       } else {
         showToast('Failed to save record.', 'error');
       }
@@ -382,38 +390,26 @@ export default function CGPAPage() {
         isOpen={savePromptOpen}
         title="Save CGPA Record?"
         message="Do you want to save your manually calculated CGPA record to your account before leaving?"
-        onConfirm={async () => {
+        onConfirm={() => {
           setSavePromptOpen(false);
-          const record = {
-            cgpa: results.cgpa,
-            credits: results.credits,
-            points: results.points,
-            courses: addedCourses.map(c => ({
-              name: c.name,
-              credits: c.credit,
-              gp: c.gradePoint,
-              grade: getGradeTextByGP(c.gradePoint)
-            })),
-            calculatorType: 'manual'
-          };
-          if (!user) {
-            sessionStorage.setItem('pendingSaveCGPA', JSON.stringify(record));
-            navigate('/auth?redirect=save-pending');
-          } else {
-            await saveCgpaRecord(user.uid, record);
-            if (pendingAction) {
-              navigate(pendingAction);
-            }
-          }
+          setSaveModalOpen(true);
         }}
         onCancel={() => {
           setSavePromptOpen(false);
-          if (pendingAction) {
-            navigate(pendingAction);
-          }
+          if (pendingAction) navigate(pendingAction);
         }}
         confirmText="Yes, Save"
         cancelText="No, Discard"
+      />
+
+      <SaveSemesterModal
+        isOpen={saveModalOpen}
+        cgpa={results.cgpa}
+        credits={results.credits}
+        coursesCount={addedCourses.length}
+        onSave={handlePerformSave}
+        onClose={() => setSaveModalOpen(false)}
+        loading={saveLoading}
       />
 
       <Toast

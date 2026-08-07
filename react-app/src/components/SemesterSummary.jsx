@@ -1,5 +1,7 @@
+import AddLabCourse from './AddLabCourse';
+
 export default function SemesterSummary({
-  results, getGradeColorClass, onClear, onGoToCGPA,
+  results, getGradeColorClass, onClear, onGoToCGPA, onAddLab, gradeThresholds,
 }) {
   return (
     <section className="card semester-summary-section">
@@ -20,8 +22,17 @@ export default function SemesterSummary({
           <div className="empty-state">No subjects added yet.</div>
         ) : (
           results.map((sub, i) => (
-            <div key={i} className="semester-item">
-              <div className="sub-name">{sub.name}</div>
+            <div key={i} className={`semester-item${sub.isLab ? ' lab-item' : ''}`}>
+              <div className="sub-name">
+                {sub.isLab && (
+                  <i
+                    className="fa-solid fa-flask"
+                    title="Lab / Project Course"
+                    style={{ color: '#7C3AED', marginRight: '0.35rem', fontSize: '0.8rem' }}
+                  ></i>
+                )}
+                {sub.name}
+              </div>
               <div className="sub-credits">{sub.credits} CR</div>
               <div className={`sub-grade ${getGradeColorClass(sub.grade)}`}>
                 {sub.grade} ({sub.gp.toFixed(2)})
@@ -30,6 +41,12 @@ export default function SemesterSummary({
           ))
         )}
       </div>
+
+      {/* Lab / Project Course quick-add */}
+      <AddLabCourse
+        gradeThresholds={gradeThresholds}
+        onAdd={onAddLab}
+      />
     </section>
   );
 }

@@ -40,6 +40,19 @@ html, body {
     overflow-x: hidden;
 }
 
+/* Hide number spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+    appearance: textfield;
+}
+
 body {
     background: var(--bg-dark);
     color: var(--text-main);
@@ -606,6 +619,293 @@ tr:hover td {
     border: 1px solid rgba(239, 68, 68, 0.2);
     opacity: 0.6;
 }
+
+/* ===== LAB / PROJECT COURSE QUICK-ADD ===== */
+.lab-add-panel {
+    margin-top: 0.75rem;
+    border-top: 1px solid var(--glass-border);
+    padding-top: 0.75rem;
+}
+
+/* Toggle button */
+.lab-add-toggle-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1rem;
+    background: rgba(124, 58, 237, 0.05);
+    border: 1.5px dashed rgba(124, 58, 237, 0.35);
+    border-radius: 12px;
+    color: #7C3AED;
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    letter-spacing: 0.2px;
+}
+
+.lab-add-toggle-btn:hover {
+    background: rgba(124, 58, 237, 0.12);
+    border-color: rgba(124, 58, 237, 0.6);
+}
+
+.lab-toggle-arrow {
+    margin-left: auto;
+    font-size: 0.7rem;
+    opacity: 0.7;
+}
+
+/* Expanded form card */
+.lab-add-form {
+    background: rgba(124, 58, 237, 0.03);
+    border: 1.5px solid rgba(124, 58, 237, 0.2);
+    border-radius: 16px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.06);
+}
+
+/* Header row */
+.lab-add-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lab-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.lab-icon-badge {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.18) 0%, rgba(124, 58, 237, 0.06) 100%);
+    border: 1px solid rgba(124, 58, 237, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7C3AED;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.lab-header-title {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1.2;
+}
+
+.lab-header-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.lab-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: rgba(35, 33, 44, 0.4);
+    font-size: 1rem;
+    padding: 0.2rem 0.3rem;
+    border-radius: 6px;
+    transition: color 0.2s;
+    line-height: 1;
+}
+.lab-close-btn:hover { color: #C41E3A; }
+
+/* Name + credits row */
+.lab-inputs-row {
+    display: flex;
+    gap: 0.6rem;
+}
+
+.lab-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.lab-input-group label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.lab-input-group input {
+    padding: 0.55rem 0.75rem;
+    font-size: 0.9rem;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.7);
+    border: 1.5px solid var(--glass-border);
+    color: var(--text-main);
+    font-family: inherit;
+    font-weight: 600;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.lab-input-group input:focus {
+    outline: none;
+    border-color: #7C3AED;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15);
+}
+
+/* Grade section */
+.lab-grade-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.lab-grade-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.lab-grade-selected-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.55rem;
+    border-radius: 50px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    background: #7C3AED;
+    color: #fff;
+    margin-left: 0.35rem;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+}
+
+/* Horizontal scroll row of pills */
+.lab-grade-scroll {
+    display: flex;
+    gap: 0.4rem;
+    overflow-x: auto;
+    padding-bottom: 0.4rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(124, 58, 237, 0.3) transparent;
+    -webkit-overflow-scrolling: touch;
+}
+
+.lab-grade-scroll::-webkit-scrollbar {
+    height: 3px;
+}
+.lab-grade-scroll::-webkit-scrollbar-track { background: transparent; }
+.lab-grade-scroll::-webkit-scrollbar-thumb {
+    background: rgba(124, 58, 237, 0.3);
+    border-radius: 4px;
+}
+
+.lab-grade-pill {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.08rem;
+    padding: 0.6rem 0.85rem;
+    background: rgba(255,255,255,0.7);
+    border: 1.5px solid rgba(35, 33, 44, 0.1);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    font-family: inherit;
+    min-width: 54px;
+}
+
+.lab-grade-pill:hover {
+    background: rgba(124, 58, 237, 0.08);
+    border-color: rgba(124, 58, 237, 0.4);
+    transform: translateY(-2px);
+}
+
+.lab-grade-pill.selected {
+    background: #7C3AED !important;
+    border-color: #7C3AED !important;
+    color: #fff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.45);
+}
+
+.lab-pill-grade {
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text-main);
+}
+
+.lab-pill-gp {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    line-height: 1;
+}
+
+.lab-grade-pill.selected .lab-pill-grade,
+.lab-grade-pill.selected .lab-pill-gp {
+    color: #ffffff !important;
+}
+
+/* Add button */
+.lab-add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1rem;
+    background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+}
+
+.lab-add-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
+}
+
+.lab-add-btn:disabled {
+    background: rgba(35,33,44,0.1);
+    color: rgba(35,33,44,0.4);
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Lab item in semester list — purple left accent */
+.semester-item.lab-item {
+    border-left: 3px solid #7C3AED;
+    background: rgba(124, 58, 237, 0.04);
+}
+
 
 /* Grade-specific colors */
 .grade-a-plus { color: var(--grade-a-plus) !important; }

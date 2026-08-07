@@ -78,12 +78,32 @@ export function useCalculator() {
   const isFinalEntered = finalMarks !== '';
 
   const getMilestone = () => {
-    if (isFinalEntered) return { text: `Achieved ${currentGrade.grade}`, cls: getGradeColorClass(currentGrade.grade) };
     const topGrade = gradeThresholds[0];
-    if (topGrade && total >= topGrade.min) return { text: `Perfect! ${topGrade.grade} Achieved`, cls: getGradeColorClass(topGrade.grade) };
-    const next = [...gradeThresholds].reverse().find(t => t.min > total);
-    if (next) return { text: `${formatNum(next.min - total)} more for ${next.grade}`, cls: getGradeColorClass(next.grade) };
-    return { text: 'Max Grade Reached', cls: '' };
+
+    // Already at the top grade
+    if (topGrade && total >= topGrade.min) {
+      return {
+        text: `Top Grade! ${topGrade.grade} Achieved`,
+        cls: getGradeColorClass(topGrade.grade),
+        isTopGrade: true,
+      };
+    }
+
+    // Find the immediate next grade above current
+    // gradeThresholds is ordered highest→lowest, reversed gives lowest→highest
+    const nextUp = [...gradeThresholds].reverse().find(t => t.min > total);
+    if (nextUp) {
+      const needed = formatNum(nextUp.min - total);
+      return {
+        text: `Need ${needed} more for ${nextUp.grade}`,
+        cls: getGradeColorClass(nextUp.grade),
+        needed,
+        targetGrade: nextUp.grade,
+        isTopGrade: false,
+      };
+    }
+
+    return { text: 'Max Grade Reached', cls: '', isTopGrade: true };
   };
 
   const getGradeTargets = () => {

@@ -23,6 +23,7 @@ export function AuthProvider({ children }) {
   const saveCgpaRecord = useCallback(async (userId, record) => {
     try {
       const recordData = {
+        semesterName: record.semesterName || record.title || 'Semester Result',
         cgpa: record.cgpa,
         totalCredits: record.credits || record.totalCredits || 0,
         totalPoints: record.points || record.totalPoints || 0,

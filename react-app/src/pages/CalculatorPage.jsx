@@ -86,6 +86,13 @@ export default function CalculatorPage() {
     navigate('/cgpa-result');
   };
 
+  const handleAddLab = (labEntry) => {
+    const nextResults = [...semesterResults, labEntry];
+    setSemesterResults(nextResults);
+    localStorage.setItem('semesterResults', JSON.stringify(nextResults));
+    showToast(`Added ${labEntry.name} (Lab) to Semester!`, 'success');
+  };
+
   const getWeightsSummary = () => {
     const dist = calc.config.distribution;
     return `Quiz: ${dist.quiz}% | Mid: ${dist.mid}% | Final: ${dist.final}%`;
@@ -286,6 +293,8 @@ export default function CalculatorPage() {
             getGradeColorClass={calc.getGradeColorClass}
             onClear={handleClearSemester}
             onGoToCGPA={handleGoToCGPA}
+            onAddLab={handleAddLab}
+            gradeThresholds={calc.gradeThresholds}
           />
         </div>
       </div>
